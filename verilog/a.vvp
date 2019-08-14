@@ -1,0 +1,24 @@
+#! /opt/local/bin/vvp
+:ivl_version "10.1 (stable)" "(v10_1_1)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x7ff4e8e01c40 .scope module, "and_module" "and_module" 2 1;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "a"
+    .port_info 1 /INPUT 1 "b"
+    .port_info 2 /OUTPUT 1 "c"
+o0x10445a008 .functor BUFZ 1, C4<z>; HiZ drive
+v0x7ff4e8e01da0_0 .net "a", 0 0, o0x10445a008;  0 drivers
+o0x10445a038 .functor BUFZ 1, C4<z>; HiZ drive
+v0x7ff4e8e11d20_0 .net "b", 0 0, o0x10445a038;  0 drivers
+v0x7ff4e8e11dc0_0 .net "c", 0 0, L_0x7ff4e8e11ea0;  1 drivers
+L_0x7ff4e8e11ea0 .arith/sum 1, o0x10445a008, o0x10445a038;
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "a.v";
