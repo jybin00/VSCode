@@ -1,7 +1,7 @@
 module DeMux (In,Out,Sel);
 
-input In;
-output reg [3:0] Out;
+input In; // input에는 net 타입만 할당 가능, net 타입의 종류 중 가장 유명한 net이 wire
+output [3:0] Out;
 input [1:0] Sel;
 
 always @(In,Sel)

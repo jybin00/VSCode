@@ -2,8 +2,8 @@
 
 module Mux_tb;
 
-reg [3:0] In;
-reg [1:0] Sel;
+reg [3:0] In; // 변하는 값은 reg
+reg [1:0] Sel; // 변하는 값은 reg // reg는 initial or alaways 구문 안에서만 할당 가능
 wire Out;
 integer i;
 
