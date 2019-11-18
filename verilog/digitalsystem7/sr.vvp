@@ -1,0 +1,31 @@
+#! /opt/local/bin/vvp
+:ivl_version "10.1 (stable)" "(v10_1_1)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x7f93f3f00500 .scope module, "sr_latch" "sr_latch" 2 1;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "s"
+    .port_info 1 /INPUT 1 "r"
+    .port_info 2 /OUTPUT 1 "Q"
+    .port_info 3 /OUTPUT 1 "nQ"
+o0x10134f0f8 .functor BUFZ 1, C4<z>; HiZ drive
+L_0x7f93f3f12f50 .functor AND 1, o0x10134f0f8, L_0x7f93f3f131e0, C4<1>, C4<1>;
+L_0x7f93f3f13020 .functor NOT 1, L_0x7f93f3f12f50, C4<0>, C4<0>, C4<0>;
+o0x10134f0c8 .functor BUFZ 1, C4<z>; HiZ drive
+L_0x7f93f3f130f0 .functor AND 1, o0x10134f0c8, L_0x7f93f3f13020, C4<1>, C4<1>;
+L_0x7f93f3f131e0 .functor NOT 1, L_0x7f93f3f130f0, C4<0>, C4<0>, C4<0>;
+v0x7f93f3f02c90_0 .net "Q", 0 0, L_0x7f93f3f13020;  1 drivers
+v0x7f93f3f12ba0_0 .net *"_s0", 0 0, L_0x7f93f3f12f50;  1 drivers
+v0x7f93f3f12c40_0 .net *"_s4", 0 0, L_0x7f93f3f130f0;  1 drivers
+v0x7f93f3f12cf0_0 .net "nQ", 0 0, L_0x7f93f3f131e0;  1 drivers
+v0x7f93f3f12d90_0 .net "r", 0 0, o0x10134f0c8;  0 drivers
+v0x7f93f3f12e70_0 .net "s", 0 0, o0x10134f0f8;  0 drivers
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "sr.v";
