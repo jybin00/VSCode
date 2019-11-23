@@ -17,13 +17,16 @@ module rythm(menu1, menu2, // 메뉴 버튼
     integer R_REG, G_REG, B_REG;
 
     reg [3:0] R,G,B;
-    reg state1[2:0];
+    reg state_game[2:0]; // 게임의 스테이트 
+    reg state_lcd[2:0]; // lcde의 스테이트
 
     always @(posedge RESETN) begin
         state1 = 3'b000;
         end
 
-    always @(state1) begin
+    always @(posedge CLK) begin
+        case(state_game) 
+        3'b000 : 
 
     
 
