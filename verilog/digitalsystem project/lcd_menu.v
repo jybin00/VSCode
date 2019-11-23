@@ -226,7 +226,7 @@ begin
                            end
          endcase
     end
-    else if(state_lcd == 3'b001) // 스코어 메뉴 진입
+    else if(state_lcd == 3'b010) // 스코어 메뉴 진입
     begin   
          case(state)
             function_set:    begin

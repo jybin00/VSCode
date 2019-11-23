@@ -13,6 +13,16 @@ module rythm(menu1, menu2, // 메뉴 버튼
 
     output [3:0] R,G,B;
 
+    ///////////////// LCD ////////////////////////////////////
+    output LCD_E,LCD_RS,LCD_RW; // enable read mode, read write
+    output [7:0]LCD_DATA; // 데이터 
+
+    wire LCD_E; // enable
+    reg LCD_RS,LCD_RW; // read mode, read write
+    reg[7:0] LCD_DATA; // data 
+    reg[2:0] state; // 상태
+    ////////////////////////////////////////////////////////
+
     integer CNT;
     integer R_REG, G_REG, B_REG;
 
@@ -20,13 +30,16 @@ module rythm(menu1, menu2, // 메뉴 버튼
     reg state_game[2:0]; // 게임의 스테이트 
     reg state_lcd[2:0]; // lcde의 스테이트
 
+    LCD lcd_menu (RESETN,CLK,state_lcd,LCD_E,LCD_RS,LCD_RW,LCD_DATA);
+
     always @(posedge RESETN) begin
-        state1 = 3'b000;
+        state_game = 3'b000;
         end
 
     always @(posedge CLK) begin
         case(state_game) 
-        3'b000 : 
+        3'b000 : state_lcd = 3'b000;
+        3'b001 : state_lcd = 3'b001;
 
     
 
