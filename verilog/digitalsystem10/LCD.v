@@ -28,7 +28,7 @@ begin
 				entry_mode:		if(CNT==30)state=line1;
 				line1:			if(CNT==20)state=line2;
 				line2:			if(CNT==20)state=delay_t;
-				delay_t:			if(CNT==400)state=clear_disp;
+				delay_t:		if(CNT==400)state=clear_disp;
 				clear_disp: 	if(CNT==200)state=line1;
 				default:			state=delay;
 			endcase
