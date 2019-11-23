@@ -37,9 +37,13 @@ module rythm(menu1, menu2, // 메뉴 버튼
         end
 
     always @(posedge CLK) begin
-        case(state_game) 
-        3'b000 : state_lcd = 3'b000;
-        3'b001 : state_lcd = 3'b001;
+            case(state_game) 
+            3'b000 : state_lcd = 3'b000;  /// 처음 화면
+            3'b001 : state_lcd = 3'b001;  /// 게임 시작 화면
+            3'b010 : state_lcd = 3'b010;  /// 스코어 화면
+            default : state_lcd = 3'b000; /// 디폴트는 처음 화면
+            endcase
+        end
 
     
 

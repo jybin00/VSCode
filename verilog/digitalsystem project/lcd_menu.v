@@ -226,6 +226,160 @@ begin
                            end
          endcase
     end
+    else if(state_lcd == 3'b001) // 게임 메뉴 진입
+       begin   
+         case(state)
+            function_set:    begin
+                              LCD_RS=1'b0;
+                              LCD_RW=1'b0;
+                              LCD_DATA=8'b00111100;
+                           end
+            disp_onoff:      begin
+                              LCD_RS=1'b0;
+                              LCD_RW=1'b0;
+                              LCD_DATA=8'b00001100;
+                           end
+            entry_mode:      begin
+                              LCD_RS=1'b0;
+                              LCD_RW=1'b0;
+                              LCD_DATA=8'b00000110;
+                           end
+            line1:         begin
+                              LCD_RW=1'b0;
+                              case(CNT)
+                                 0:begin
+                                    LCD_RS=1'b0;LCD_DATA=8'b10000000;//address
+                                 end
+                                 1:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00110001;//1
+                                 end
+                                 2:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00101110;//.
+                                 end
+                                 3:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01101101;//m
+                                 end
+                                 4:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01110101;//u
+                                 end
+                                 5:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01110011;//s
+                                 end
+                                 6:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01101001;//i
+                                 end
+                                 7:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01100011;//c
+                                 end
+                                 8:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00110001;//1
+                                 end
+                                 9:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00110010;//2
+                                 end
+                                 10:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00101110;//.
+                                 end
+                                 11:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01101101;//m
+                                 end
+                                 12:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01110101;//u
+                                 end
+                                 13:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01110011;//s
+                                 end
+                                 14:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01101001;//i
+                                 end
+                                 15:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01100011;//c
+                                 end
+                                 16:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00110010;//2
+                                 end
+                                 default:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00100000;//
+                                 end
+                              endcase
+                           end
+            line2:         begin
+                              LCD_RW=1'b0;
+                              case(CNT)
+                                 0:begin
+                                    LCD_RS=1'b0;LCD_DATA=8'b11000000;//address
+                                 end
+                                 1:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00110011;//3
+                                 end
+                                 2:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00101110;//.
+                                 end
+                                 3:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01101101;//m
+                                 end
+                                 4:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01110101;//u
+                                 end
+                                 5:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01110011;//s
+                                 end
+                                 6:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01101001;//i
+                                 end
+                                 7:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b01100011;//c
+                                 end
+                                 8:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00110011;//3
+                                 end
+                                 9:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00100000;//
+                                 end
+                                 10:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00100000;//
+                                 end
+                                 11:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00100000;//
+                                 end
+                                 12:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00100000;//
+                                 end
+                                 13:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00100000;//
+                                 end
+                                 14:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00100000;//
+                                 end
+                                 15:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00100000;//
+                                 end
+                                 16:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00100000;//
+                                 end
+                                 default:begin
+                                    LCD_RS=1'b1;LCD_DATA=8'b00100000;//
+                                 end
+                              endcase
+                           end
+            delay_t:         begin
+                              LCD_RS=1'b0;
+                              LCD_RW=1'b0;
+                              LCD_DATA=8'b00000010;
+                           end
+            clear_disp:    begin
+                              LCD_RS=1'b0;
+                              LCD_RW=1'b0;
+                              LCD_DATA=8'b00000110;
+                           end
+            default:         begin
+                              LCD_RS=1'b1;
+                              LCD_RW=1'b1;
+                              LCD_DATA=8'b00000000;
+                           end
+         endcase
+      end
+
     else if(state_lcd == 3'b010) // 스코어 메뉴 진입
     begin   
          case(state)
