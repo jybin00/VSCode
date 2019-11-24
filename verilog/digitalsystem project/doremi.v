@@ -1,7 +1,7 @@
 `timescale 1us/100ns
-module doremi (reset, clk, key, piezo);
+module doremi (reset, clk, key, piezo, sound_effect);
 
-input clk,reset;
+input clk,reset,sound_effect;
 input [7:0] key;
 output piezo;
 reg buff;
@@ -23,6 +23,18 @@ begin
         8'b00000001: limit = 12'd3822; // 도
         default : limit = 1'b0;
     endcase
+    case(sound_effect)
+        8'b10000000: limit = 12'd1911; // 높은 도
+        8'b01000000: limit = 12'd2025; // 시
+        8'b00100000: limit = 12'd2273; // 라
+        8'b00010000: limit = 12'd2551; // 솔
+        8'b00001000: limit = 12'd2864; // 파
+        8'b00000100: limit = 12'd3034; // 미
+        8'b00000010: limit = 12'd3405; // 레
+        8'b00000001: limit = 12'd3822; // 도
+        default : limit = 1'b0;
+    endcase
+    
 end
 
 always@(posedge clk)
