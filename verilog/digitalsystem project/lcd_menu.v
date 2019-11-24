@@ -1,6 +1,7 @@
 module LCD(resetn,clk,state_lcd,LCD_E,LCD_RS,LCD_RW,LCD_DATA);
 
-input resetn,clk,state_lcd;
+input resetn,clk;
+input [2:0]state_lcd;
 output LCD_E,LCD_RS,LCD_RW;
 output [7:0]LCD_DATA;
 
