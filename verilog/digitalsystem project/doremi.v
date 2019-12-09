@@ -1,68 +1,52 @@
-`timescale 1us/100ns
-module doremi (reset, clk, key, piezo, sound_effect);
 
-input clk,reset,sound_effect;
-input [7:0] key;
+module doremi (reset, clk, key, piezo);
+input clk,reset;
+input[3:0] key;
 output piezo;
 reg buff;
-integer cnt, limit;
+integer cnt_sound, limit;
 wire piezo;
-
-assign piezo = buff;
 
 always@(key)
 begin
-    case(key)
-        8'b10000000: limit = 12'd1911; // 높은 도
-        8'b01000000: limit = 12'd2025; // 시
-        8'b00100000: limit = 12'd2273; // 라
-        8'b00010000: limit = 12'd2551; // 솔
-        8'b00001000: limit = 12'd2864; // 파
-        8'b00000100: limit = 12'd3034; // 미
-        8'b00000010: limit = 12'd3405; // 레
-        8'b00000001: limit = 12'd3822; // 도
-        default : limit = 1'b0;
-    endcase
-    case(sound_effect)
-        8'b10000000: limit = 12'd1911; // 높은 도
-        8'b01000000: limit = 12'd2025; // 시
-        8'b00100000: limit = 12'd2273; // 라
-        8'b00010000: limit = 12'd2551; // 솔
-        8'b00001000: limit = 12'd2864; // 파
-        8'b00000100: limit = 12'd3034; // 미
-        8'b00000010: limit = 12'd3405; // 레
-        8'b00000001: limit = 12'd3822; // 도
-        default : limit = 1'b0;
-    endcase
-    
+      case(key)
+         4'd00:limit = 1911;
+         4'd01:limit = 1702;
+         4'd02:limit = 1516;
+         4'd03:limit = 1431;
+         4'd04:limit = 1275;
+         4'd05:limit = 1136;
+         4'd06:limit = 1012;
+         4'd07:limit = 955;
+         4'd08:limit = 851;
+         4'd09:limit = 758;
+         4'd10:limit = 715;
+         4'd11:limit = 637;
+         4'd12:limit = 568;
+         4'd13:limit = 506;
+         4'd14:limit=0;
+      endcase
 end
 
 always@(posedge clk)
 begin
-    if(reset)
-        begin
-            buff <= 1'b0;
-            cnt <= 1'b0;
-        end
-    else
-        begin
-            if(buff == 1'b0)
+   if(reset)
+      begin
+         buff=1'b0;
+         cnt_sound=0;
+      end
+   else
+      begin
+         if(cnt_sound>=limit)
             begin
-                for(cnt= 1'b0; cnt < limit/2; cnt = cnt +1)
-                begin
-                    #1;
-                end
-                buff <= 1'b1;
+               cnt_sound = 0;
+               buff = ~buff;
             end
-            else 
-            begin
-                for(cnt= 1'b0; cnt < limit/2; cnt = cnt +1)
-                begin
-                    #1;
-                end
-                buff <= 1'b0;
-            end
-        end
+         else
+            cnt_sound = cnt_sound + 1;
+      end
 end
+assign piezo=buff;
 
 endmodule
+   

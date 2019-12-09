@@ -1,8 +1,9 @@
 // 모드 선택, 재생, 정지, 입력, 저장, 채점, 채점 결과 출력
-`include "doremi.v" // 피에조 모듈 사용
-`include "rgb.v"    // full color led 사용
-`include "lcd_menu.v" // Text lcd 사용
-`include "ram.v"    // RAM 사용
+`include "doremi.v" // using piezo module
+`include "rgb.v"    // using full color led 
+`include "lcd_menu.v" // using Text lcd
+`include "ram.v"    // using RAM
+`include "counter.v"
 
 module rythm(menu1, menu2, // 메뉴 버튼
              back, sel, key, CLK, piezo,// 취소, 노래 선택, 음계 입력, 클럭, 피에조 버튼
@@ -14,11 +15,12 @@ module rythm(menu1, menu2, // 메뉴 버튼
     input CLK, RESETN; // 클럭 버튼, reset 버튼, AB11, #
     reg [2:0]state_game; // 게임의 스테이트 
     reg [2:0]state_lcd; // lcd의 스테이트
+    reg [1:0]music; // 
 
     ////////////////////////// piezo //////////////////////////////
     input  [7:0] key;
     output piezo;
-    reg sound_effect;
+    reg [2:0]sound_effect;
     ///////////////////////////////////////////////////////////////
 
     /////////////////////////// LCD ////////////////////////////////
@@ -34,13 +36,11 @@ module rythm(menu1, menu2, // 메뉴 버튼
     reg [1:0] R_IN,G_IN,B_IN;
     ///////////////////////////////////////////////////////////////
 
-    LCD lcd_menu (RESETN,CLK,state_lcd,LCD_E,LCD_RS,LCD_RW,LCD_DATA);
+    LCD lcd_menu (RESETN, C_OUT,state_lcd,LCD_E,LCD_RS,LCD_RW,LCD_DATA);
     doremi doremi  (RESETN, CLK, key, piezo, sound_effect);
     HB_FULL_LED led (RESETN, CLK, R_IN, G_IN, B_IN, R,G,B);
+    counter_10bit counter (RESETN, CLK, C_OUT);
 
-    always @(posedge RESETN) begin
-        state_game = 3'b000;
-        end
 
     always @(posedge CLK) begin
             case(state_game) 
@@ -61,7 +61,17 @@ module rythm(menu1, menu2, // 메뉴 버튼
     end
 
     always @(posedge CLK) begin
-        if(state_game == 3'b000) // 처음 화면일 때
+        case(state_game) 
+            3'b000 : sound_effect <= 3'b000;  /// 처음 화면
+        endcase
+    end
+
+    always @(posedge CLK or posedge RESETN) begin
+        if(RESETN)
+            begin
+                state_game = 3'b000;
+            end
+        else if(state_game == 3'b000) // 처음 화면일 때
             begin
                 if(menu1) begin  // 메뉴 1이 1이면
                     state_game = 3'b001; // 처음 화면 -> 게임 시작
@@ -75,6 +85,14 @@ module rythm(menu1, menu2, // 메뉴 버튼
                 if(back) begin // back 버튼을 누르면 처음 화면으로
                     state_game = 3'b000;
                     end
+                else if(sel) begin
+                    case(sel)
+                        3'b001 : music = 2'b00;
+                        3'b010 : music = 2'b01;
+                        3'b101 : music = 2'b10;
+                        default : music = 2'b11;
+                    endcase
+                    end
             end
         else if(state_game == 3'b010) // 스코어 모드일 때
             begin
@@ -84,8 +102,5 @@ module rythm(menu1, menu2, // 메뉴 버튼
             end
     end
 
-        
-    
-
-
 endmodule
+

@@ -44,8 +44,7 @@ begin
       begin   
          case(state)
             delay:          if(CNT>=70)CNT=0;
-                           else CNT=CNT+1;
-                           
+                           else CNT=CNT+1;             
             function_set:    if(CNT>=30)CNT=0;
                            else CNT=CNT+1;
             disp_onoff:      if(CNT>=30)CNT=0;
