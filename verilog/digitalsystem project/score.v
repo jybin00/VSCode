@@ -4,7 +4,7 @@ input clk,en,reset;
 input [7:0]a,b;
 output [5:0]light;
 reg [7:0]r;
-reg [5:0]q;
+reg [5:0]q = 0;
 reg [5:0]rgb;
 
 assign light = rgb;

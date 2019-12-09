@@ -10,19 +10,19 @@
 `include "score.v"      // score module
 
 module rhythm(menu1, menu2, // menu button
-             back, sel, CLK, piezo, led, key,
+             back, CLK, piezo, led, key,
              RESETN,LCD_E,LCD_RS,LCD_RW,LCD_DATA, // Text LCD button
              R,G,B); // LED 
 
     input menu1, menu2, back; // (dip 1,2, push *)
-    input [2:0]sel; // music select button (dip 3,4,5)
+    //input [2:0]sel; // music select button (dip 3,4,5)
     input [7:0]key; // answer input butoon (push 1,2,3,4,5,6,7,8)
     input CLK, RESETN; // clock, reset button, (AB11, psuh #)
     reg [2:0]state_game; // states of game
     reg [2:0]state_lcd; // states of lcd
     reg en; // when game starts, reset score
     wire [5:0] rgb;
-
+    wire em1,em2,em3;
     ////////////////////////// piezo //////////////////////////////
     output piezo;
     output [7:0] led; // led 1~8
@@ -46,12 +46,12 @@ module rhythm(menu1, menu2, // menu button
     HB_FULL_LED LED (RESETN, CLK, R_IN, G_IN, B_IN, R,G,B); // reset, clk, input rgb, output rgb
     counter_100bit count1(RESETN, CLK, C_OUT);
     counter_100bit  count2(RESETN, C_OUT, C_OUT2); // make frequency 1/100
-    counter_100bit count3(RESETN, C_OUT2, C_OUT3);
+    //counter_100bit count3(RESETN, C_OUT2, C_OUT3);
     led8 led8(CLK, music_input, led); // clk, input music, output led
-    music1 music1(C_OUT3, notes, key[0], em); // if there is posedge sel[1], then notes initialized.
-    music2 music2(C_OUT3, notes2, key[1], em); // clk, output music, reset key, end music, key[1] is number 2
-    music3 music3(C_OUT3, notes3, key[2], em); // clk, output music, reset key, end music,key[2] is number 3
-    score score(C_OUT,RESETN,key,led,rgb,en); // clk, reset, input key, input led, output rgb, input en
+    music1 music1(C_OUT2, notes, key[0], em1); // if there is posedge sel[1], then notes initialized.
+    music2 music2(C_OUT2, notes2, key[1], em2); // clk, output music, reset key, end music, key[1] is number 2
+    music3 music3(C_OUT2, notes3, key[2], em3); // clk, output music, reset key, end music,key[2] is number 3
+    score score(C_OUT2,RESETN,key,led,rgb,en); // clk, reset, input key, input led, output rgb, input en
     // if en is 1 start scoring
     
     always @(posedge CLK) begin
@@ -80,11 +80,11 @@ module rhythm(menu1, menu2, // menu button
 
 
     always @(posedge CLK or posedge RESETN) begin
-         if (RESETN)
+        if (RESETN)
             begin
                state_game = 3'b000;
             end
-         else if(state_game == 3'b000) // when initial screen
+        else if(state_game == 3'b000) // when initial screen
             begin
                 if(menu1) begin  // if menu1 is 1
                     state_game = 3'b001; // initial screen -> game start
@@ -100,16 +100,16 @@ module rhythm(menu1, menu2, // menu button
                     end
                 else if(key) begin // if sel is 1
                     if(key == 8'b00000001) begin
-                        state_game = 3'b011;
-                        music_input = notes;
+                        en = 1'b1;
+                        state_game = 3'b011; // music 1 start
                         end
                     else if(key == 8'b00000010) begin
+                        en = 1'b1;
                         state_game = 3'b100;
-                        music_input = notes2;
                         end
                     else if(key == 8'b00000100) begin
+                        en = 1'b1;
                         state_game = 3'b101;
-                        music_input = notes3;
                         end
                     else begin
                         music_input = 4'd14;
@@ -124,20 +124,38 @@ module rhythm(menu1, menu2, // menu button
             end
         else if(state_game == 3'b011)  // music1
             begin
+                music_input = notes; // 
                 if(back) begin // if we push back button, we come back to initial screen.
+                    en = 1'b0;
                     state_game = 3'b001; //game mode
+                    end
+                else if(em1 == 1'b1) begin
+                    en = 1'b0;
+                    state_game = 3'b001;
                     end
             end
         else if(state_game == 3'b100)  // music2
             begin
+                music_input = notes2; 
                 if(back) begin // if we push back button, we come back to initial screen.
+                    en = 1'b0;
                     state_game = 3'b001; //game mode
+                    end
+                else if(em2 == 1'b1) begin
+                    en = 1'b0;
+                    state_game = 3'b001;
                     end
             end
         else if(state_game == 3'b101)  // music3
             begin
+                music_input = notes3;
                 if(back) begin // if we push back button, we come back to initial screen.
+                    en = 1'b0;
                     state_game = 3'b001; //game mode
+                    end
+                else if(em3 == 1'b1) begin
+                    en = 1'b0;
+                    state_game = 3'b001;
                     end
             end
 

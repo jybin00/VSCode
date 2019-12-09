@@ -3,7 +3,7 @@ module music1 (clk, notes, sel, em);
 input clk,sel;
 output [3:0] notes;
 reg [3:0] note; 
-output reg em;
+output reg em = 0;
 integer freq = 0;
 assign notes = note;
 

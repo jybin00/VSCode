@@ -1,9 +1,9 @@
-module music3 (clk, notes, sel);
+module music3 (clk, notes, sel, em);
 
 input clk,sel;
 output [3:0] notes;
 reg [3:0] note; 
-output reg em; // end music
+output reg em = 0; // end music
 integer freq = 0;
 integer a,b;
 assign notes = note;
