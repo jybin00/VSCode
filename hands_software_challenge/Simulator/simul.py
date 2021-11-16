@@ -30,10 +30,7 @@ class UserRobot(VacuumCleaner):
             postion=postion, 
             vision_sight=vision_sight
         )
-        self.left_side = -1
-        self.right_side = 1
-        self.upside = -1
-        self.downside = 1
+        self.fuel = fuel
         '''
             If you want to store some values, define your variables here.
             Using `self`-based variables, you can re-call the value of previous state easily.
@@ -92,70 +89,128 @@ class UserRobot(VacuumCleaner):
         #START OF EXAMPLE CODE
 
         # Default information from robot and env.
-        robot_x = self.position.x
-        robot_y = self.position.y
-        
-        new_x = robot_x + self.dir_x
-        new_y = robot_y + self.dir_y
+        x = self.position.x
+        y = self.position.y
+        right_side = 1
+        left_side = -1
+        upside = -1
+        downside = 1
+        print(self.fuel)
 
         self.max_h = grid_map.height - 1
         self.max_w = grid_map.width - 1
             
         if self.mode == STAY:
-            self.mode = MOVE
-            self.dir_x = self.left_side
-            self.dir_y = 0
-            if grid_map.map[robot_y][robot_x].req_energy == 0:
-                self.dir_x = self.left_side
+            print("this car is staying...")
+            if grid_map.map[y+1][x].req_energy == inf:
+                print("downside required energy is inf!")
+                self.dir_x = 0
+                self.dir_y = upside
+                if grid_map.map[y][x].req_energy == 0:
+                    self.mode = MOVE
+                else:
+                    self.mode = CLEN
+            if grid_map.map[y-1][x].req_energy == inf:
+                print("upside required energy is inf!")
+                self.dir_x = 0
+                self.dir_y = downside
+                if grid_map.map[y][x].req_energy == 0:
+                    self.mode = MOVE
+                else:
+                    self.mode = CLEN
+            if grid_map.map[y][x+1].req_energy == inf:
+                print("rightside required energy is inf!")
+                self.dir_x = left_side
                 self.dir_y = 0
-        
-        if robot_x == 1:
-            self.dir_x = 0
-            self.dir_y = self.upside
-            if grid_map.map[robot_y][robot_x].req_energy == 0:
-                self.mode = MOVE
+                if grid_map.map[y][x].req_energy == 0:
+                    self.mode = MOVE
+                else:
+                    self.mode = CLEN
+            if grid_map.map[y][x-1].req_energy == inf:
+                print("leftside required energy is inf!")
+                self.dir_x = right_side
+                self.dir_y = 0
+                if grid_map.map[y][x].req_energy == 0:
+                    self.mode = MOVE
+                else:
+                    self.mode = CLEN
             else:
-                self.mode = CLEN
+                print("there are not any obstacles!")
+                self.dir_x = -1
+                self.dir_y = 0
+                if grid_map.map[y][x].req_energy == 0:
+                    self.mode = MOVE
+                else:
+                    self.mode = CLEN
+                    
+        
+        if x == 0:
+            if grid_map.map[y+1][x].req_energy == inf: # 아래쪽에 장애물이 있으면 위로
+                print("downside required energy is inf!")
+                self.dir_x = 0
+                self.dir_y = upside
+                if grid_map.map[y][x].req_energy == 0:
+                    self.mode = MOVE
+                else:
+                    self.mode = CLEN
+            if grid_map.map[y-1][x].req_energy == inf: # 위쪽에 장애물이 있으면 오른쪽으로
+                print("upside required energy is inf!")
+                self.dir_x = right_side
+                self.dir_y = 0
+                if grid_map.map[y][x].req_energy == 0:
+                    self.mode = MOVE
+                else:
+                    self.mode = CLEN
+            else:
+                self.dir_x = upside
+                self.dir_y = 0
+                if grid_map.map[y][x].req_energy == 0:
+                    self.mode = MOVE
+                else:
+                    self.mode = CLEN
                 
-        if robot_x == 2 and robot_y == 2:
+                
+        if x == 2 and y == 2:
             self.dir_x = 1
             self.dir_y = 0
-            if grid_map.map[robot_y][robot_x].req_energy == 0:
+            if grid_map.map[y][x].req_energy == 0:
                 self.mode = MOVE
             else:
                 self.mode = CLEN
 
-        if robot_x == self.max_w - 2:
+        if x == self.max_w - 2:
             self.dir_x = 0
             self.dir_y = 1
-            if grid_map.map[robot_y][robot_x].req_energy == 0:
+            if grid_map.map[y][x].req_energy == 0:
                 self.mode = MOVE
             else:
                 self.mode = CLEN
 
-        if robot_x == self.max_w - 2 and robot_y == self.max_h - 2:
+        if x == self.max_w - 2 and y == self.max_h - 2:
             self.dir_x = -1
             self.dir_y = 0
-            if grid_map.map[robot_y][robot_x].req_energy == 0:
+            if grid_map.map[y][x].req_energy == 0:
                 self.mode = MOVE
             else:
                 self.mode = CLEN
 
-        if robot_x == 2 and robot_y == self.max_h - 2:
+        if x == 2 and y == self.max_h - 2:
             self.dir_x = 0
             self.dir_y = -1
-            if grid_map.map[robot_y][robot_x].req_energy == 0:
+            if grid_map.map[y][x].req_energy == 0:
                 self.mode = MOVE
             else:
                 self.mode = CLEN
 
-        if robot_x == 2 and robot_y == 2:
+        if x == 2 and y == 2:
             self.dir_x = 1
             self.dir_y = 0
-
-        if grid_map.map[new_y][new_x].req_energy == inf:
-            self.dir_x = -self.dir_x
-            self.dir_y = -self.dir_y
+        
+        new_x = x + self.dir_x
+        new_y = y + self.dir_y
+        '''if grid_map.map[new_y][new_x].req_energy == inf:
+            self.dir_x = 0
+            self.dir_y = 0'''
 
         #END OF EXAMPLE CODE
 
