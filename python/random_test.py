@@ -37,3 +37,11 @@ for i in range(17):
     a[i][0] = 1
     a[i][16] = 1
 print(a)
+for i in range(5):
+    print("hi")
+a = [[0 for i in range(10)]for j in range(2)]
+a[0][0] = 1
+print(a)
+b = 1
+for i in range(5):
+    print(i)
