@@ -140,10 +140,9 @@ class UserRobot(VacuumCleaner):
                 else:
                     self.mode = CHAR
                     print("battery charged")
-                    if battery == 3000:
-                        self.NOC = self.NOC + 1
-                        print("self.NOC: " + str(self.NOC))
-                        self.backtowork = 1
+                    self.NOC = self.NOC + 1
+                    print("self.NOC: " + str(self.NOC))
+                    self.backtowork = 1
             self.last_x.append(x)
             self.last_y.append(y)
             if self.mode == CHAR:
