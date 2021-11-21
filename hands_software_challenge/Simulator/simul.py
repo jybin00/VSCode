@@ -34,13 +34,14 @@ class UserRobot(VacuumCleaner):
             If you want to store some values, define your variables here.
             Using `self`-based variables, you can re-call the value of previous state easily.
         '''
-        self.last_x = [] # 경로 저장을 위한 변수
-        self.last_y = []
-        self.detecting_obstacle = [] 
+        self.last_x = [] # 충전을 위한 경로 저장 변수
+        self.last_y = [] # 충전을 위한 경로 저장 변수
+        self.detecting_obstacle = [] # 장애물 발견을 위한 변수
         self.NOC = 0 # 배터리 충전 횟수
-        self.map = [[0 for i in range(17)]for j in range(17)]
-        self.backtowork = 0
-        self.isstart = 0
+        self.map = [[0 for i in range(19)]for j in range(19)] # 맵 저장을 위한 변수
+        self.backtowork = 0 # 충전 후에 복귀를 위한 변수
+        self.isstart = 0 # 첫 시작인지 아닌지 판단하는 변수
+        self.isedge = 0 # 엣지인지 아닌지 판단하는 변수
     def algorithms( self, grid_map: UserMap ):
         
         '''
@@ -98,6 +99,11 @@ class UserRobot(VacuumCleaner):
         upside, downside = -1, 1
         battery = self._fuel
         map = self.map
+        for i in range(19):
+            self.map[0][i] = 2
+            self.map[18][i] = 2
+            self.map[i][0] = 2
+            self.map[i][18] = 2
 
         D_req_E = self.detecting_obstacle
         D_req_E = [(grid_map.map[y][x].req_energy), # current location
@@ -112,36 +118,42 @@ class UserRobot(VacuumCleaner):
                 back_to_field()
             else:
                 if D_req_E[1] == inf:
-                    map[y][x+1] = 2
+                    map[(y)+1][(x+1)+1] = 2
                 if D_req_E[2] == inf:
-                    map[y][x-1] = 2
+                    map[(y)+1][(x-1)+1] = 2
                 if D_req_E[3] == inf:
-                    map[y+1][x] = 2
+                    map[(y+1)+1][(x)+1] = 2
                 if D_req_E[4] == inf:
-                    map[y-1][x] = 2
+                    map[(y-1)+1][(x)+1] = 2
                     
-                map[y][x] = 1
-                if map[y][min(x+1,16)] == 1 and map[max(y-1,0)][x] != 2 and map[max(y-1,0)][x] != 1: # if right block was visited or there is any obstacle, go upside
+                map[(y)+1][(x)+1] = 1
+                if map[(y)+1][(x+1)+1] == 1 and map[(y-1)+1][(x)+1] != 2 and map[(y-1)+1][(x)+1] != 1: # if right block was visited or there is any obstacle, go upside
                     self.dir_x, self.dir_y = 0, upside
                     print("upside")
-                elif map[max(y-1,0)][x] == 1 and map[y][max(x-1,0)] != 2 and map[y][max(x-1,0)] != 1 : # if upside block was visited or there is any obstacle, go leftside
+                elif map[(y-1)+1][(x)+1] == 1 and map[(y)+1][(x-1)+1] != 2 and map[(y)+1][(x-1)+1] != 1 : # if upside block was visited or there is any obstacle, go leftside
                     self.dir_x, self.dir_y = left_side, 0
                     print("leftside")
-                elif map[y][max(x-1,0)] == 1 and map[min(y+1,16)][x] != 2 and map[min(y+1,16)][x] != 1: # if left block was visited or there is any obstacle, go downside
+                elif map[(y)+1][(x-1)+1] == 1 and map[(y+1)+1][(x)+1] != 2 and map[(y+1)+1][(x)+1] != 1: # if left block was visited or there is any obstacle, go downside
                     self.dir_x, self.dir_y = 0, downside
                     print("downside")
-                elif map[min(y+1,16)][x] == 1 and map[y][min(x+1,16)] != 2 and map[y][min(x+1,16)] != 1: # if downside block was visited or there is any obstacle, go rightside
+                elif map[(y+1)+1][(x)+1] == 1 and map[(y)+1][(x+1)+1] != 2 and map[(y)+1][(x+1)+1] != 1: # if downside block was visited or there is any obstacle, go rightside
                     self.dir_x, self.dir_y = right_side, 0
                     print("right")
                 else:
-                    if map[y][max(x-1,0)] == 2 and map[min(y+1,16)][x] != 2: # if left block was visited or there is any obstacle, go downside
+                    if map[(y)+1][(x-1)+1] == 2 and map[(y+1)+1][(x)+1] != 2: # if left block was visited or there is any obstacle, go downside
                         self.dir_x, self.dir_y = 0, downside
-                    elif map[y][min(x+1,16)] == 2 and map[max(y-1,0)][x] != 2: # if right block was visited or there is any obstacle, go upside
+                        print("down")
+                    if map[(y)+1][(x+1)+1] == 2 and map[(y-1)+1][(x)+1] != 2: # if right block was visited or there is any obstacle, go upside
                         self.dir_x, self.dir_y = 0, upside
-                    elif map[max(y-1,0)][x] == 2 and map[y][max(x-1,0)] != 2: # if upside block was visited or there is any obstacle, go leftside
+                        print("up")
+                    if map[(y-1)+1][(x)+1] == 2 and map[(y)+1][(x-1)+1] != 2: # if upside block was visited or there is any obstacle, go leftside
                         self.dir_x, self.dir_y = left_side, 0
-                    elif map[min(y+1,16)][x] == 2 and map[y][min(x+1,16)] != 2: # if downside block was visited or there is any obstacle, go rightside
+                        print("left")
+                    if map[(y+1)+1][(x)+1] == 2 and map[(y)+1][(x+1)+1] != 2: # if downside block was visited or there is any obstacle, go rightside
                         self.dir_x, self.dir_y = right_side, 0
+                        print("right")
+                    for i in range(19):
+                        print(map[i])
                 if D_req_E[0] == 0:
                     self.mode = MOVE
                 else : self.mode = CLEN
@@ -244,15 +256,6 @@ class UserRobot(VacuumCleaner):
         def corner():    
             if x == 0 and y == 0:
                 print("left top corner!")
-                self.dir_x = right_side
-                self.dir_y = 0
-                if D_req_E[0] == 0:
-                    self.mode = MOVE
-                else:
-                    self.mode = CLEN
-                    
-            elif x == 16 and y == 0:
-                print("right top corner!")
                 self.dir_x = 0
                 self.dir_y = downside
                 if D_req_E[0] == 0:
@@ -260,18 +263,27 @@ class UserRobot(VacuumCleaner):
                 else:
                     self.mode = CLEN
                     
+            elif x == 16 and y == 0:
+                print("right top corner!")
+                self.dir_x = left_side
+                self.dir_y = 0
+                if D_req_E[0] == 0:
+                    self.mode = MOVE
+                else:
+                    self.mode = CLEN
+                    
             elif x == 0 and y == 16:
                 print("left down corner!")
-                self.dir_x = 0
-                self.dir_y = upside
+                self.dir_x = right_side
+                self.dir_y = 0
                 if D_req_E[0] == 0:
                     self.mode = MOVE
                 else:
                     self.mode = CLEN
             elif x == 16 and y == 16:
                 print("right down corner!")
-                self.dir_x = left_side
-                self.dir_y = 0
+                self.dir_x = 0
+                self.dir_y = upside
                 if D_req_E[0] == 0:
                     self.mode = MOVE
                 else:
@@ -281,40 +293,24 @@ class UserRobot(VacuumCleaner):
 # Each line      
         def line():      
             if x == 0 and y > 0 and y < 16: # 왼쪽 끝이지만 모서리는 아닐 때
-                if D_req_E[3] == inf: # 아래쪽에 장애물이 있으면 위로
+                if D_req_E[3] == inf: # 아래쪽에 장애물이 있으면 오른쪽으로
                     print("downside required energy is inf!")
-                    self.dir_x = 0
-                    self.dir_y = upside
-                    if D_req_E[0] == 0:
-                        self.mode = MOVE
-                    else:
-                        self.mode = CLEN
-                elif D_req_E[4] == inf: # 위쪽에 장애물이 있으면 오른쪽으로
-                    print("upside required energy is inf!")
                     self.dir_x = right_side
                     self.dir_y = 0
                     if D_req_E[0] == 0:
                         self.mode = MOVE
                     else:
                         self.mode = CLEN
-                else: #아무것도 없으면 위쪽으로 
+                else: #아무것도 없으면 아래쪽으로 
                     self.dir_x = 0
-                    self.dir_y = upside
+                    self.dir_y = downside
                     if D_req_E[0] == 0:
                         self.mode = MOVE
                     else:
                         self.mode = CLEN
                     
             elif x == 16 and y > 0 and y < 16: # 오른쪽 끝까지 갔지만 모서리는 아닐 때
-                if D_req_E[3] == inf: # 아래쪽에 장애물이 있으면 왼쪽으로
-                    print("downside required energy is inf!")
-                    self.dir_x = left_side
-                    self.dir_y = 0
-                    if D_req_E[0] == 0:
-                        self.mode = MOVE
-                    else:
-                        self.mode = CLEN
-                elif D_req_E[4] == inf: # 위쪽에 장애물이 있으면 왼쪽으로
+                if D_req_E[4] == inf: # 위쪽에 장애물이 있으면 왼쪽으로
                     print("upside required energy is inf!")
                     self.dir_x = left_side
                     self.dir_y = 0
@@ -323,9 +319,9 @@ class UserRobot(VacuumCleaner):
                     else:
                         self.mode = CLEN
                 else:
-                    print("there are not any obstacle.") # 장애물 없으면 아래로.
+                    print("there are not any obstacle.") # 장애물 없으면 위로.
                     self.dir_x = 0
-                    self.dir_y = downside
+                    self.dir_y = upside
                     if D_req_E[0] == 0:
                         self.mode = MOVE
                     else:
@@ -339,17 +335,9 @@ class UserRobot(VacuumCleaner):
                     if D_req_E[0] == 0:
                         self.mode = MOVE
                     else:
-                        self.mode = CLEN
-                elif D_req_E[1] == inf: # 오른쪽에 장애물이 있으면 아래쪽으로
-                    print("upside required energy is inf!")
-                    self.dir_x = 0
-                    self.dir_y = downside
-                    if D_req_E[0] == 0:
-                        self.mode = MOVE
-                    else:
-                        self.mode = CLEN          
+                        self.mode = CLEN      
                 else:
-                    self.dir_x = right_side # 아무것도 없으면 오른쪽으로
+                    self.dir_x = left_side # 아무것도 없으면 왼쪽으로
                     self.dir_y = 0
                     if D_req_E[0] == 0:
                         self.mode = MOVE
@@ -357,24 +345,16 @@ class UserRobot(VacuumCleaner):
                         self.mode = CLEN
             
             elif y == 16 and x > 0 and x < 16: # 아래쪽으로 끝까지 갔지만 모서리는 아닐 때
-                if D_req_E[2] == inf: # 왼쪽에 장애물이 있으면 위쪽으로
-                    print("leftside required energy is inf!")
+                if D_req_E[1] == inf: # 오른쪽에 장애물이 있으면 왼쪽으로
+                    print("rightside required energy is inf!")
                     self.dir_x = 0
                     self.dir_y = upside
                     if D_req_E[0] == 0:
                         self.mode = MOVE
                     else:
-                        self.mode = CLEN
-                elif D_req_E[1] == inf: # 오른쪽에 장애물이 있으면 왼쪽으로
-                    print("rightside required energy is inf!")
-                    self.dir_x = left_side
-                    self.dir_y = 0
-                    if D_req_E[0] == 0:
-                        self.mode = MOVE
-                    else:
                         self.mode = CLEN   
                 else:
-                    self.dir_x = left_side
+                    self.dir_x = right_side
                     self.dir_y = 0
                     if D_req_E[0] == 0:
                         self.mode = MOVE
@@ -384,8 +364,11 @@ class UserRobot(VacuumCleaner):
             
         def detecting_edge():
             if x == 0 or x == 16 or y == 0 or y == 16:
+                self.isedge = 1
                 corner()
-                line()   
+                line()
+            else:
+                self.isedge = 0   
             print("6") 
 
         if battery < 300:
@@ -399,10 +382,14 @@ class UserRobot(VacuumCleaner):
         elif self.NOC == 0:
             if self.isstart == 0:
                 start()
-            cleaning()
+            #detecting_edge()
+            if self.isedge == 0:
+                cleaning()
         else:
-            cleaning()
-            detecting_edge()
+            #detecting_edge()
+            if self.isedge == 0:
+                cleaning()
+
         
         new_x = x + self.dir_x
         new_y = y + self.dir_y
