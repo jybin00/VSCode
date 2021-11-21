@@ -30,10 +30,6 @@ class UserRobot(VacuumCleaner):
             postion=postion, 
             vision_sight=vision_sight
         )
-        '''
-            If you want to store some values, define your variables here.
-            Using `self`-based variables, you can re-call the value of previous state easily.
-        '''
         self.last_x = [] # 충전을 위한 경로 저장 변수
         self.last_y = [] # 충전을 위한 경로 저장 변수
         self.detecting_obstacle = [] # 장애물 발견을 위한 변수
@@ -42,56 +38,6 @@ class UserRobot(VacuumCleaner):
         self.backtowork = 0 # 충전 후에 복귀를 위한 변수
         self.isstart = 0 # 첫 시작인지 아닌지 판단하는 변수
     def algorithms( self, grid_map: UserMap ):
-        
-        '''
-            You can code your algorithm using robot.position and map.information. The following
-            introduces accessible data; 1) the position of robot, 2) the information of simulation
-            map.
-
-            Here, you should build an algorithm that determines the next action of 
-            the robot.
-
-            Robot::
-                - position (list-type) : (x, y)
-                - mode (int-type) ::
-                    You can determine robot state using 'self.mode', and we provide 4-state.
-                    (STAY, MOVE, CLEN, CHAR)
-                    Example::
-                        1) You want to move the robot to target position.
-                        >>> self.mode = MOVE
-                        2) Clean-up tail.
-                        >>> self.mode = CLEN
-            
-            map::
-                - grid_map :
-                    grid_map.height : the value of height of map.
-                        Example::
-                            >>> print( grid_map.height )
-
-                    grid_map.width : the value of width of map.
-                        Example::
-                            >>> print( grid_map.width )
-
-                    grid_map[ <height/y> ][ <width/x> ] : the data of map, it consists of 2-array.
-                        - grid_map[<h>][<w>].req_energy : the minimum energy to complete cleaning.
-                            It is assigned randomly, and it is int-type data.
-                        - grid_map[<h>][<w>].charger : is there a charger in this tile? boolean-type data.
-                        Example::
-                            >>> x = self.position.x
-                            >>> y = self.position.y
-                            >>> print( grid_map[y][x].req_energy )
-                            >>> if grid_map[y][x].req_energy > 0:
-                            >>>     self.mode = CLEN
-
-            Tip::
-                - Try to avoid loop-based codes such as `while` as possible. It will make the problem harder to solve.
-        '''
-        #### Code Here! ####
-        
-        #THIS IS AN EXAMPLE CODE. DELETE THIS CODE SEGMENT BEFORE YOU START YOUR OWN CODE.
-        #START OF EXAMPLE CODE
-
-        # Default information from robot and env.
         x = self.position.x # 현재 위치 x
         y = self.position.y # 현재 위치 y
         right_side, left_side = 1, -1
