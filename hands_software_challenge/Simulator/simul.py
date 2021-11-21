@@ -37,11 +37,13 @@ class UserRobot(VacuumCleaner):
         self.map = [[0 for i in range(19)]for j in range(19)] # 맵 저장을 위한 변수
         self.backtowork = 0 # 충전 후에 복귀를 위한 변수
         self.isstart = 0 # 첫 시작인지 아닌지 판단하는 변수
+        
     def algorithms( self, grid_map: UserMap ):
+        
         x = self.position.x # 현재 위치 x
         y = self.position.y # 현재 위치 y
-        right_side, left_side = 1, -1
-        upside, downside = -1, 1
+        right_side, left_side = 1, -1 # 방향을 새로 정의
+        upside, downside = -1, 1 # 방향을 새로 정의
         battery = self._fuel
         map = self.map
         for i in range(19):
@@ -327,13 +329,9 @@ class UserRobot(VacuumCleaner):
         elif self.NOC == 0:
             if self.isstart == 0:
                 start()
-            #detecting_edge()
-            if self.isedge == 0:
-                cleaning()
+            cleaning()
         else:
-            #detecting_edge()
-            if self.isedge == 0:
-                cleaning()
+            cleaning()
 
         
         new_x = x + self.dir_x
