@@ -199,124 +199,6 @@ class UserRobot(VacuumCleaner):
                     else: self.mode = CLEN
             self.isstart = 1
             print("3")
-# Each corner     
-        def corner():    
-            if x == 0 and y == 0:
-                print("left top corner!")
-                self.dir_x = 0
-                self.dir_y = downside
-                if D_req_E[0] == 0:
-                    self.mode = MOVE
-                else:
-                    self.mode = CLEN
-                    
-            elif x == 16 and y == 0:
-                print("right top corner!")
-                self.dir_x = left_side
-                self.dir_y = 0
-                if D_req_E[0] == 0:
-                    self.mode = MOVE
-                else:
-                    self.mode = CLEN
-                    
-            elif x == 0 and y == 16:
-                print("left down corner!")
-                self.dir_x = right_side
-                self.dir_y = 0
-                if D_req_E[0] == 0:
-                    self.mode = MOVE
-                else:
-                    self.mode = CLEN
-            elif x == 16 and y == 16:
-                print("right down corner!")
-                self.dir_x = 0
-                self.dir_y = upside
-                if D_req_E[0] == 0:
-                    self.mode = MOVE
-                else:
-                    self.mode = CLEN
-            print("4")
-
-# Each line      
-        def line():      
-            if x == 0 and y > 0 and y < 16: # 왼쪽 끝이지만 모서리는 아닐 때
-                if D_req_E[3] == inf: # 아래쪽에 장애물이 있으면 오른쪽으로
-                    print("downside required energy is inf!")
-                    self.dir_x = right_side
-                    self.dir_y = 0
-                    if D_req_E[0] == 0:
-                        self.mode = MOVE
-                    else:
-                        self.mode = CLEN
-                else: #아무것도 없으면 아래쪽으로 
-                    self.dir_x = 0
-                    self.dir_y = downside
-                    if D_req_E[0] == 0:
-                        self.mode = MOVE
-                    else:
-                        self.mode = CLEN
-                    
-            elif x == 16 and y > 0 and y < 16: # 오른쪽 끝까지 갔지만 모서리는 아닐 때
-                if D_req_E[4] == inf: # 위쪽에 장애물이 있으면 왼쪽으로
-                    print("upside required energy is inf!")
-                    self.dir_x = left_side
-                    self.dir_y = 0
-                    if D_req_E[0] == 0:
-                        self.mode = MOVE
-                    else:
-                        self.mode = CLEN
-                else:
-                    print("there are not any obstacle.") # 장애물 없으면 위로.
-                    self.dir_x = 0
-                    self.dir_y = upside
-                    if D_req_E[0] == 0:
-                        self.mode = MOVE
-                    else:
-                        self.mode = CLEN
-                        
-            elif y == 0 and x > 0 and x < 16: # 위쪽 끝까지 갔지만 모서리는 아닐 때
-                if D_req_E[2] == inf: # 왼쪽에 장애물이 있으면 아래로
-                    print("downside required energy is inf!")
-                    self.dir_x = 0
-                    self.dir_y = downside
-                    if D_req_E[0] == 0:
-                        self.mode = MOVE
-                    else:
-                        self.mode = CLEN      
-                else:
-                    self.dir_x = left_side # 아무것도 없으면 왼쪽으로
-                    self.dir_y = 0
-                    if D_req_E[0] == 0:
-                        self.mode = MOVE
-                    else:
-                        self.mode = CLEN
-            
-            elif y == 16 and x > 0 and x < 16: # 아래쪽으로 끝까지 갔지만 모서리는 아닐 때
-                if D_req_E[1] == inf: # 오른쪽에 장애물이 있으면 왼쪽으로
-                    print("rightside required energy is inf!")
-                    self.dir_x = 0
-                    self.dir_y = upside
-                    if D_req_E[0] == 0:
-                        self.mode = MOVE
-                    else:
-                        self.mode = CLEN   
-                else:
-                    self.dir_x = right_side
-                    self.dir_y = 0
-                    if D_req_E[0] == 0:
-                        self.mode = MOVE
-                    else:
-                        self.mode = CLEN   
-            print("5") 
-            
-        def detecting_edge():
-            if x == 0 or x == 16 or y == 0 or y == 16:
-                self.isedge = 1
-                corner()
-                line()
-            else:
-                self.isedge = 0   
-            print("6") 
 
         if battery < 300:
             print("battery is not enough")
@@ -333,7 +215,6 @@ class UserRobot(VacuumCleaner):
         else:
             cleaning()
 
-        
         new_x = x + self.dir_x
         new_y = y + self.dir_y
         print("new_x : {}, new_y : {}".format(new_x, new_y))
