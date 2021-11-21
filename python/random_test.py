@@ -35,3 +35,11 @@ a[1][1] = 1
 print(a)
 for i in range(17):
     print(a[i])
+    a[0][i] = 1
+print(a)
+for i in range(17):
+    a[0][i] = 1
+    a[16][i] = 1
+    a[i][0] = 1
+    a[i][16] = 1
+print(a)
