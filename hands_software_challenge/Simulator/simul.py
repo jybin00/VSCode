@@ -45,6 +45,7 @@ class UserRobot(VacuumCleaner):
         right_side, left_side = 1, -1 # 방향을 새로 정의
         upside, downside = -1, 1 # 방향을 새로 정의
         battery = self._fuel
+        print(self._fuel)
         map = self.map
         for i in range(19):
             self.map[0][i] = 2
@@ -63,6 +64,7 @@ class UserRobot(VacuumCleaner):
             print("cleaning...")
             if self.backtowork == 1:
                 back_to_field()
+                print("ho")
             else:
                 if D_req_E[1] == inf:
                     map[(y)+1][(x+1)+1] = 2
@@ -99,8 +101,6 @@ class UserRobot(VacuumCleaner):
                     if map[(y+1)+1][(x)+1] == 2 and map[(y)+1][(x+1)+1] != 2: # if downside block was visited or there is any obstacle, go rightside
                         self.dir_x, self.dir_y = right_side, 0
                         print("right")
-                    for i in range(19):
-                        print(map[i])
                 if D_req_E[0] == 0:
                     self.mode = MOVE
                 else : self.mode = CLEN
@@ -140,6 +140,7 @@ class UserRobot(VacuumCleaner):
                 else:
                     self.mode = CHAR
                     print("battery charged")
+                    #if self._fuel == 3000:
                     self.NOC = self.NOC + 1
                     print("self.NOC: " + str(self.NOC))
                     self.backtowork = 1
@@ -200,9 +201,9 @@ class UserRobot(VacuumCleaner):
             self.isstart = 1
             print("3")
 
-        if battery < 300:
+        if battery < 190:
             print("battery is not enough")
-            if self.NOC == 3:
+            if self.NOC == 2:
                 print("we've done our chance to charge the battery")
                 cleaning()
             else:
