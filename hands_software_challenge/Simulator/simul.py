@@ -41,7 +41,6 @@ class UserRobot(VacuumCleaner):
         self.map = [[0 for i in range(19)]for j in range(19)] # 맵 저장을 위한 변수
         self.backtowork = 0 # 충전 후에 복귀를 위한 변수
         self.isstart = 0 # 첫 시작인지 아닌지 판단하는 변수
-        self.isedge = 0 # 엣지인지 아닌지 판단하는 변수
     def algorithms( self, grid_map: UserMap ):
         
         '''
