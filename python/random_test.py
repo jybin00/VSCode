@@ -45,3 +45,7 @@ print(a)
 b = 1
 for i in range(5):
     print(i)
+    
+k = [[0 for i in range(3)]for j in range(3)]
+k.pop()
+print(k)

@@ -50,7 +50,7 @@ if __name__ == '__main__':
         print("Debug map")
         grid_map.show_real_map()
     print("\nTime : 0 -------")
-    grid_map.show_robot_map()
+    #grid_map.show_robot_map()
 
     simulator = VacuumCleanerSimulator(
         robot,

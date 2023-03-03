@@ -46,6 +46,7 @@ class VacuumCleanerSimulator(_BaseSimulator):
             # Update by new position
             self.robot.action( new_position, self.map )
             self.map.update( self.robot )
+            self.map.show_robot_map()
 
             # Check if simuation is finished.
             if self.terminate():

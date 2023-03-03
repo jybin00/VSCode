@@ -38,12 +38,16 @@ class UserRobot(VacuumCleaner):
         self.isremain = [[0 for i in range(40)]for j in range(2)]
         self.backtowork = 0 # 충전 후에 복귀를 위한 변수
         self.isstart = 0 # 첫 시작인지 아닌지 판단하는 변수
-        self.findremain = 0
-        self.isremain_index = 0
+        self.findremain = 0 # 남은 블록을 찾았는지 안 찾았는지 표현하는 변수
+        self.isremain_index = 0 # 남은 블록 갯수
+        self.k = 0
+        self.challenge = 0 # 남은 블록 찾다가 무한 루프 빠지면 탈출하기 위한 변수
+        self.remove_find_block = 0 # 블록 다 찾으면 리스트에서 제거하기 위한 변수
         
     def algorithms( self, grid_map: UserMap ):
         x = self.position.x # 현재 위치 x
         y = self.position.y # 현재 위치 y
+        k = self.k
         right_side, left_side = 1, -1 # 방향을 새로 정의
         upside, downside = -1, 1 # 방향을 새로 정의
         battery = self._fuel
@@ -65,44 +69,53 @@ class UserRobot(VacuumCleaner):
         def to_remain(to_x, to_y):
             print("moving for remains!")
             print(to_x, to_y)
+            print("challenge : {}".format(self.challenge))
+            if self.challenge > 30:
+                self.findremain += 1
+                self.challenge = 0
             if x > to_x:
-                if y > to_y: # 4사분면, 위쪽으로 가다가 안되면 위로 그것도 안되면 아래로
-                    if D_req_E[4] != inf:
+                self.challenge += 1
+                if y > to_y: # 4사분면, 위쪽으로 가다가 안되면 왼쪽로 그것도 안되면 아래로
+                    if D_req_E[4] != inf and map[y+1-1][x+1] != 2:
                         self.dir_x, self.dir_y = 0, upside
-                    elif D_req_E[2] != inf:
+                    elif D_req_E[2] != inf and map[y+1][x+1-1] != 2:
                         self.dir_x, self.dir_y = left_side, 0
                     else: self.dir_x, self.dir_y = 0, downside
-                else: # 2사분면, 왼쪽으로 가다가 안되면 아래로 그것도 안되면 위로
-                    if D_req_E[2] != inf:
+                else: # 1사분면, 왼쪽으로 가다가 안되면 아래로 그것도 안되면 위로
+                    if D_req_E[2] != inf and map[y+1][x+1-1] != 2:
                         self.dir_x, self.dir_y = left_side, 0
-                    elif D_req_E[3] != inf:
+                    elif D_req_E[3] != inf and map[y+1+1][x+1] != 2:
                         self.dir_x, self.dir_y = 0, downside  
                     else: self.dir_x, self.dir_y = 0, upside 
             elif x < to_x:
+                self.challenge += 1
                 if y > to_y: # 3사분면, 오른쪽으로 가다가 안되면 위로, 그것도 안되면 아래로
-                    if D_req_E[1] != inf:
+                    if D_req_E[1] != inf and map[(y+1)][(x+1)+1] != 2:
                         self.dir_x, self.dir_y = right_side, 0
-                    elif D_req_E[4] != inf:
-                        self.dir_x, self.dir_y = left_side, 0
+                    elif D_req_E[4] != inf and map[y+1-1][x+1] != 2:
+                        self.dir_x, self.dir_y = 0, upside
                     else:
                         self.dir_x, self.dir_y = 0, downside
-                else: # 1사분면, 오른쪽으로 가다가 안되면 아래로, 그것도 안되면 위로
-                    if D_req_E[1] != inf:
+                else: # 2사분면, 오른쪽으로 가다가 안되면 아래로, 그것도 안되면 위로
+                    if D_req_E[1] != inf and map[(y+1)][(x+1)+1] != 2:
                         self.dir_x, self.dir_y = right_side, 0
-                    elif D_req_E[3] != inf:
+                    elif D_req_E[3] != inf and map[y+1+1][x+1] != 2:
                         self.dir_x, self.dir_y = 0, downside
                     else:
                         self.dir_x, self.dir_y = 0, upside
             elif x == to_x:
+                self.challenge += 1
                 if y > to_y: 
-                    if D_req_E[4] != inf: self.dir_x, self.dir_y = 0, upside
-                    elif D_req_E[1] != inf: self.dir_x, self.dir_y = right_side, 0
+                    if D_req_E[4] != inf and map[y+1-1][x+1] != 2: self.dir_x, self.dir_y = 0, upside
+                    elif D_req_E[1] != inf and map[(y+1)][(x+1)+1] != 2: 
+                        self.dir_x, self.dir_y = right_side, 0
                     else: self.dir_x, self.dir_y = left_side, 0
                 elif y < to_y:
-                    if D_req_E[3] != inf: self.dir_x, self.dir_y = 0, downside
-                    elif D_req_E[1] != inf: self.dir_x, self.dir_y = right_side, 0
+                    if D_req_E[3] != inf and map[y+1+1][x+1] != 2: self.dir_x, self.dir_y = 0, downside
+                    elif D_req_E[1] and map[(y+1)][(x+1)+1] != 2: self.dir_x, self.dir_y = right_side, 0
                     else: self.dir_x, self.dir_y = left_side, 0
                 else:
+                    map[(y)+1][(x)+1] = 1
                     self.findremain += 1
                     if D_req_E[0] == 0:
                         self.mode = MOVE
@@ -117,7 +130,7 @@ class UserRobot(VacuumCleaner):
                 for j in range(17):
                     if map[i+1][j+1] == 0:
                         if i+1>1 and i+1<17 and j+1>1 and j+1<17:
-                            print("y: {}, x : {}".format(i+1, j+1))
+                            print("zzz y: {}, x : {}".format(i+1, j+1))
                             self.isremain[0][self.isremain_index] = j+1
                             self.isremain[1][self.isremain_index] = i+1
                             self.isremain_index += 1 
@@ -132,8 +145,8 @@ class UserRobot(VacuumCleaner):
                     find_remains()
                 else:
                     for i in range(self.isremain_index):
-                        if self.findremain == i + 1:
-                            to_remain(self.isremain[0][i], self.isremain[1][i])    
+                        if self.findremain == i + 1: # 남은 블록 먼지 제거하면 하나씩 올라감. to_remain에서!
+                            to_remain(self.isremain[0][i], self.isremain[1][i])   
                         if self.findremain == self.isremain_index:
                             self.findremain = 0
             else:            
@@ -154,15 +167,16 @@ class UserRobot(VacuumCleaner):
                     if map[(y)+1][(x+1)+1] == 1 and map[(y-1)+1][(x)+1] != 2 and map[(y-1)+1][(x)+1] != 1: # if right block was visited or there is any obstacle, go upside
                         self.dir_x, self.dir_y = 0, upside
                         print("upside")
-                    elif map[(y-1)+1][(x)+1] == 1 and map[(y)+1][(x-1)+1] != 2 and map[(y)+1][(x-1)+1] != 1 : # if upside block was visited or there is any obstacle, go leftside
-                        self.dir_x, self.dir_y = left_side, 0
-                        print("leftside")
-                    elif map[(y)+1][(x-1)+1] == 1 and map[(y+1)+1][(x)+1] != 2 and map[(y+1)+1][(x)+1] != 1: # if left block was visited or there is any obstacle, go downside
-                        self.dir_x, self.dir_y = 0, downside
-                        print("downside")
                     elif map[(y+1)+1][(x)+1] == 1 and map[(y)+1][(x+1)+1] != 2 and map[(y)+1][(x+1)+1] != 1: # if downside block was visited or there is any obstacle, go rightside
                         self.dir_x, self.dir_y = right_side, 0
                         print("right")
+                    elif map[(y)+1][(x-1)+1] == 1 and map[(y+1)+1][(x)+1] != 2 and map[(y+1)+1][(x)+1] != 1: # if left block was visited or there is any obstacle, go downside
+                        self.dir_x, self.dir_y = 0, downside
+                        print("downside")
+                    elif map[(y-1)+1][(x)+1] == 1 and map[(y)+1][(x-1)+1] != 2 and map[(y)+1][(x-1)+1] != 1 : # if upside block was visited or there is any obstacle, go leftside
+                        self.dir_x, self.dir_y = left_side, 0
+                        print("leftside")
+
                     else:
                         if map[(y)+1][(x-1)+1] == 2 and map[(y+1)+1][(x)+1] != 2: # if left block was visited or there is any obstacle, go downside
                             self.dir_x, self.dir_y = 0, downside
@@ -291,7 +305,9 @@ class UserRobot(VacuumCleaner):
             
         new_x = x + self.dir_x
         new_y = y + self.dir_y
+        self.k = k + 1
         print("new_x : {}, new_y : {}".format(new_x, new_y))
+        print("k : {}".format(self.k))
         #END OF EXAMPLE CODE
 
         ######################
