@@ -5,7 +5,7 @@ input d, clk, reset;
 
 reg q;
 
-always @ (negedge clk)  // negative edge일 때 아래 실행
+always @ (negedge clk or posedge reset)  // negative edge일 때 아래 실행
 begin 
     if (reset) // rest이 1이면 q에 0을 넣는다.
         q <= 1'b0;

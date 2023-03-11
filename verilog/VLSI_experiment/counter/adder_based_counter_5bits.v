@@ -1,15 +1,16 @@
-module adder_based_counter (q, clk, reset);
+module adder_based_counter_5bits (q, clk, reset);
 
-output [4:0] q;
-input clk, reset;
+output [4:0]    q;
+input           clk, reset;
 
-reg [4:0]
+reg [4:0]       q;
 
-always @ (negedge clk)
+always @(negedge clk)
 begin 
-    if (reset)  q <= 5 b00000;
-    else        q <= q + 1'b1 ;
-else
+    if (reset)  
+        q <= 5'b00000;
+    else        
+        q <= q + 1'b1;
 end
 
 endmodule

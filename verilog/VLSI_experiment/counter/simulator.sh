@@ -11,5 +11,6 @@ echo $filename_vcd
 
 sleep .5
 
+open -a Scansion $filename_vcd
 open -a Gtkwave $filename_vcd
 echo "done"

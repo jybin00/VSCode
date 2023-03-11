@@ -1,15 +1,14 @@
-`include "ripple_carry_counter_5bits.v"
-`timescale 100ns/1ns
+`timescale 1ns/10ps
+`include "adder_based_counter_5bits.v"
 
 module a_counter_tb;
 
-reg clk;
-reg reset;
-wire [4:0] q;
-
+reg         clk;
+reg         reset;
+wire [4:0]  q;
 
 // instatiate the desian block 
-ripple_carry_counter_5bits r1 (.clk(clk), .reset(reset), .q(q));
+adder_based_counter_5bits r1(.clk(clk), .reset(reset), .q(q));
 
 // Control the clk signal that drives the design block.
 // cycle time = 10
@@ -25,6 +24,7 @@ initial
 begin
 $dumpfile("a_counter_tb.vcd");
 $dumpvars(0,a_counter_tb);
+
              reset = 1'b1;
     #15;     reset = 1'b0;
     #180;    reset = 1'b1;
