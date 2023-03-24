@@ -23,7 +23,7 @@ initial
 begin
 	
 	reset = 1'b1;
-	#0 reset = 1'b0;
+	#10 reset = 1'b0;
 	$readmemh("a_input.txt", mat_a_input);
 	$readmemh("b_input.txt", mat_b_input);
 	$readmemh("sum_output.txt", mat_sum_output);

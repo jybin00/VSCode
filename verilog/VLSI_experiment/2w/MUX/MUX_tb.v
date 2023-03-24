@@ -1,16 +1,18 @@
 `include "MUX_8to1_gate.v"
 `include "MUX_8to1_behav.v"
+`include "MUX_8to1_hierarchy.v"
 `timescale 1ns/10ps
 
 module MUX_tb;
     
     reg [7:0]in;
     reg [2:0]s;
-    wire gate_out, behav_out;
+    wire gate_out, behav_out, hierarchy_out;
     integer i = 0;
 
     MUX_8to1_gate mux_gate (gate_out, in, s[2:0]);
     MUX_8to1_behav mux_behav(behav_out, in, s[2:0]);
+    MUX_8to1_hierarchy mux_hierarchy(hierarchy_out, in, s[2:0]);
 
     initial begin
         $dumpfile("MUX_tb.vcd");

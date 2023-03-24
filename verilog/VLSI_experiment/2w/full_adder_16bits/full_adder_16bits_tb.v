@@ -25,7 +25,7 @@ initial begin
 
     i = 0;
     err = 0;
-    #(10);
+    #(1);
 
     for (i = 0; i < 100; i = i + 1)
         begin

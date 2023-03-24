@@ -1,19 +1,24 @@
 // 8 to 1 mux
 
-`include "MUX_2to1.v"
-`include "MUX_4to1.v"
-
 module MUX_8to1_gate (out, a[7:0], s[2:0]);
 
-    output out;     // output 
+    output out;     // output zz
     input [7:0]a;   // input 8bits
     input [2:0]s;   // select 3bits
 
-    wire mux_out[1:0];  // and gate output
+    wire andout[7:0];  // and gate output
 
-    MUX_4to1 mux4_1(mux_out[0], a[3:0], s[1:0]);
-    MUX_4to1 mux4_2(mux_out[1], a[7:4], s[1:0]);
-    MUX_2to1 mux2_1(out, mux_out[0], mux_out[1], s[2]);
+    and a0(andout[0],  s[2], ~s[1], ~s[0], a[0]);
+    and a1(andout[1],  s[2], ~s[1],  s[0], a[1]);
+    and a2(andout[2],  s[2],  s[1], ~s[0], a[2]);
+    and a3(andout[3],  s[2],  s[1],  s[0], a[3]);
+    and a4(andout[4], ~s[2], ~s[1], ~s[0], a[4]);
+    and a5(andout[5], ~s[2], ~s[1],  s[0], a[5]);
+    and a6(andout[6], ~s[2],  s[1], ~s[0], a[6]);
+    and a7(andout[7], ~s[2],  s[1],  s[0], a[7]);
+
+    or or1(out, andout[0], andout[1], andout[2], andout[3], 
+                andout[4], andout[5], andout[6], andout[7]);
 
 endmodule
 
