@@ -1,0 +1,120 @@
+#! /opt/local/bin/vvp
+:ivl_version "10.1 (stable)" "(v10_1_1)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x7faacdf0ba40 .scope module, "mux10to5" "mux10to5" 2 1;
+ .timescale 0 0;
+    .port_info 0 /OUTPUT 5 "out"
+    .port_info 1 /INPUT 5 "a"
+    .port_info 2 /INPUT 5 "b"
+    .port_info 3 /INPUT 1 "s"
+L_0x7faace8147a0 .functor AND 1, L_0x7faace816400, L_0x7faace8164e0, C4<1>, C4<1>;
+o0x7faac0008818 .functor BUFZ 1, C4<z>; HiZ drive
+L_0x7faace8164e0 .functor NOT 1, o0x7faac0008818, C4<0>, C4<0>, C4<0>;
+L_0x7faace816590 .functor AND 1, L_0x7faace8166a0, o0x7faac0008818, C4<1>, C4<1>;
+L_0x7faace816880 .functor OR 1, L_0x7faace816970, L_0x7faace816a50, C4<0>, C4<0>;
+L_0x7faace816b60 .functor AND 1, L_0x7faace816c60, L_0x7faace816d80, C4<1>, C4<1>;
+L_0x7faace816d80 .functor NOT 1, o0x7faac0008818, C4<0>, C4<0>, C4<0>;
+L_0x7faace816e30 .functor AND 1, L_0x7faace816f20, o0x7faac0008818, C4<1>, C4<1>;
+L_0x7faace817120 .functor OR 1, L_0x7faace8171d0, L_0x7faace817340, C4<0>, C4<0>;
+L_0x7faace8173e0 .functor AND 1, L_0x7faace8174a0, L_0x7faace8175a0, C4<1>, C4<1>;
+L_0x7faace8175a0 .functor NOT 1, o0x7faac0008818, C4<0>, C4<0>, C4<0>;
+L_0x7faace817650 .functor AND 1, L_0x7faace817720, o0x7faac0008818, C4<1>, C4<1>;
+L_0x7faace817910 .functor OR 1, L_0x7faace817980, L_0x7faace817a20, C4<0>, C4<0>;
+L_0x7faace8178a0 .functor AND 1, L_0x7faace817c30, L_0x7faace817d90, C4<1>, C4<1>;
+L_0x7faace817d90 .functor NOT 1, o0x7faac0008818, C4<0>, C4<0>, C4<0>;
+L_0x7faace817e00 .functor AND 1, L_0x7faace817f70, o0x7faac0008818, C4<1>, C4<1>;
+L_0x7faace817bc0 .functor OR 1, L_0x7faace8181c0, L_0x7faace8183c0, C4<0>, C4<0>;
+L_0x7faace8186a0 .functor AND 1, L_0x7faace818750, L_0x7faace816ea0, C4<1>, C4<1>;
+L_0x7faace816ea0 .functor NOT 1, o0x7faac0008818, C4<0>, C4<0>, C4<0>;
+L_0x7faace818ac0 .functor AND 1, L_0x7faace8185f0, o0x7faac0008818, C4<1>, C4<1>;
+L_0x7faace818d20 .functor OR 1, L_0x7faace818a00, L_0x7faace818e10, C4<0>, C4<0>;
+v0x7faace8041a0_0 .net *"_s1", 0 0, L_0x7faace8147a0;  1 drivers
+v0x7faace814230_0 .net *"_s11", 0 0, L_0x7faace8166a0;  1 drivers
+v0x7faace8142d0_0 .net *"_s13", 0 0, L_0x7faace816880;  1 drivers
+v0x7faace814360_0 .net *"_s16", 0 0, L_0x7faace816970;  1 drivers
+v0x7faace814410_0 .net *"_s18", 0 0, L_0x7faace816a50;  1 drivers
+v0x7faace814500_0 .net *"_s20", 0 0, L_0x7faace816b60;  1 drivers
+v0x7faace8145b0_0 .net *"_s23", 0 0, L_0x7faace816c60;  1 drivers
+v0x7faace814660_0 .net *"_s24", 0 0, L_0x7faace816d80;  1 drivers
+v0x7faace814710_0 .net *"_s27", 0 0, L_0x7faace816e30;  1 drivers
+v0x7faace814820_0 .net *"_s30", 0 0, L_0x7faace816f20;  1 drivers
+v0x7faace8148d0_0 .net *"_s32", 0 0, L_0x7faace817120;  1 drivers
+v0x7faace814980_0 .net *"_s35", 0 0, L_0x7faace8171d0;  1 drivers
+v0x7faace814a30_0 .net *"_s37", 0 0, L_0x7faace817340;  1 drivers
+v0x7faace814ae0_0 .net *"_s39", 0 0, L_0x7faace8173e0;  1 drivers
+v0x7faace814b90_0 .net *"_s4", 0 0, L_0x7faace816400;  1 drivers
+v0x7faace814c40_0 .net *"_s42", 0 0, L_0x7faace8174a0;  1 drivers
+v0x7faace814cf0_0 .net *"_s43", 0 0, L_0x7faace8175a0;  1 drivers
+v0x7faace814e80_0 .net *"_s46", 0 0, L_0x7faace817650;  1 drivers
+v0x7faace814f10_0 .net *"_s49", 0 0, L_0x7faace817720;  1 drivers
+v0x7faace814fc0_0 .net *"_s5", 0 0, L_0x7faace8164e0;  1 drivers
+v0x7faace815070_0 .net *"_s51", 0 0, L_0x7faace817910;  1 drivers
+v0x7faace815120_0 .net *"_s54", 0 0, L_0x7faace817980;  1 drivers
+v0x7faace8151d0_0 .net *"_s56", 0 0, L_0x7faace817a20;  1 drivers
+v0x7faace815280_0 .net *"_s58", 0 0, L_0x7faace8178a0;  1 drivers
+v0x7faace815330_0 .net *"_s61", 0 0, L_0x7faace817c30;  1 drivers
+v0x7faace8153e0_0 .net *"_s62", 0 0, L_0x7faace817d90;  1 drivers
+v0x7faace815490_0 .net *"_s65", 0 0, L_0x7faace817e00;  1 drivers
+v0x7faace815540_0 .net *"_s68", 0 0, L_0x7faace817f70;  1 drivers
+v0x7faace8155f0_0 .net *"_s70", 0 0, L_0x7faace817bc0;  1 drivers
+v0x7faace8156a0_0 .net *"_s73", 0 0, L_0x7faace8181c0;  1 drivers
+v0x7faace815750_0 .net *"_s75", 0 0, L_0x7faace8183c0;  1 drivers
+v0x7faace815800_0 .net *"_s77", 0 0, L_0x7faace8186a0;  1 drivers
+v0x7faace8158b0_0 .net *"_s8", 0 0, L_0x7faace816590;  1 drivers
+v0x7faace814da0_0 .net *"_s81", 0 0, L_0x7faace818750;  1 drivers
+v0x7faace815b40_0 .net *"_s82", 0 0, L_0x7faace816ea0;  1 drivers
+v0x7faace815bd0_0 .net *"_s85", 0 0, L_0x7faace818ac0;  1 drivers
+v0x7faace815c70_0 .net *"_s89", 0 0, L_0x7faace8185f0;  1 drivers
+v0x7faace815d20_0 .net *"_s91", 0 0, L_0x7faace818d20;  1 drivers
+v0x7faace815dd0_0 .net *"_s94", 0 0, L_0x7faace818a00;  1 drivers
+v0x7faace815e80_0 .net *"_s96", 0 0, L_0x7faace818e10;  1 drivers
+o0x7faac0008788 .functor BUFZ 5, C4<zzzzz>; HiZ drive
+v0x7faace815f30_0 .net "a", 4 0, o0x7faac0008788;  0 drivers
+o0x7faac00087b8 .functor BUFZ 5, C4<zzzzz>; HiZ drive
+v0x7faace815fe0_0 .net "b", 4 0, o0x7faac00087b8;  0 drivers
+RS_0x7faac00087e8 .resolv tri, L_0x7faace816780, L_0x7faace817040, L_0x7faace817800, L_0x7faace818120, L_0x7faace818bb0;
+v0x7faace816090_0 .net8 "out", 4 0, RS_0x7faac00087e8;  5 drivers
+v0x7faace816140_0 .net "s", 0 0, o0x7faac0008818;  0 drivers
+v0x7faace8161e0_0 .net "w1", 4 0, L_0x7faace818460;  1 drivers
+v0x7faace816290_0 .net "w2", 4 0, L_0x7faace818870;  1 drivers
+L_0x7faace816400 .part o0x7faac0008788, 0, 1;
+L_0x7faace8166a0 .part o0x7faac00087b8, 0, 1;
+L_0x7faace816780 .part/pv L_0x7faace816880, 1, 1, 5;
+L_0x7faace816970 .part L_0x7faace818460, 0, 1;
+L_0x7faace816a50 .part L_0x7faace818870, 0, 1;
+L_0x7faace816c60 .part o0x7faac0008788, 1, 1;
+L_0x7faace816f20 .part o0x7faac00087b8, 1, 1;
+L_0x7faace817040 .part/pv L_0x7faace817120, 1, 1, 5;
+L_0x7faace8171d0 .part L_0x7faace818460, 1, 1;
+L_0x7faace817340 .part L_0x7faace818870, 1, 1;
+L_0x7faace8174a0 .part o0x7faac0008788, 2, 1;
+L_0x7faace817720 .part o0x7faac00087b8, 2, 1;
+L_0x7faace817800 .part/pv L_0x7faace817910, 2, 1, 5;
+L_0x7faace817980 .part L_0x7faace818460, 2, 1;
+L_0x7faace817a20 .part L_0x7faace818870, 2, 1;
+L_0x7faace817c30 .part o0x7faac0008788, 3, 1;
+L_0x7faace817f70 .part o0x7faac00087b8, 3, 1;
+L_0x7faace818120 .part/pv L_0x7faace817bc0, 3, 1, 5;
+L_0x7faace8181c0 .part L_0x7faace818460, 3, 1;
+L_0x7faace8183c0 .part L_0x7faace818870, 3, 1;
+LS_0x7faace818460_0_0 .concat8 [ 1 1 1 1], L_0x7faace8147a0, L_0x7faace816b60, L_0x7faace8173e0, L_0x7faace8178a0;
+LS_0x7faace818460_0_4 .concat8 [ 1 0 0 0], L_0x7faace8186a0;
+L_0x7faace818460 .concat8 [ 4 1 0 0], LS_0x7faace818460_0_0, LS_0x7faace818460_0_4;
+L_0x7faace818750 .part o0x7faac0008788, 4, 1;
+LS_0x7faace818870_0_0 .concat8 [ 1 1 1 1], L_0x7faace816590, L_0x7faace816e30, L_0x7faace817650, L_0x7faace817e00;
+LS_0x7faace818870_0_4 .concat8 [ 1 0 0 0], L_0x7faace818ac0;
+L_0x7faace818870 .concat8 [ 4 1 0 0], LS_0x7faace818870_0_0, LS_0x7faace818870_0_4;
+L_0x7faace8185f0 .part o0x7faac00087b8, 4, 1;
+L_0x7faace818bb0 .part/pv L_0x7faace818d20, 4, 1, 5;
+L_0x7faace818a00 .part L_0x7faace818460, 4, 1;
+L_0x7faace818e10 .part L_0x7faace818870, 4, 1;
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "mux10to5.v";
