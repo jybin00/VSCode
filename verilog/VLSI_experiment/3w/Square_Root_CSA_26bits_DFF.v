@@ -15,7 +15,7 @@ module Square_Root_CSA_26bits_DFF (sum_output, a_input, b_input, c_in, clk, rese
     D_FF_26bit dff26_CSA0 ( a, a_input, clk, reset);
     D_FF_26bit dff26_CSA1 ( b, b_input, clk, reset);
 
-    Square_Root_CSA_26bits CSA0 (sum, a, b, 1'b0);
+    Square_Root_CSA_26bits CSA0 (sum, a, b, c_in);
 
     D_FF_27bit dff27_0 ( sum_output, sum, clk, reset);
 
