@@ -1,9 +1,10 @@
 `timescale 1 ns / 1 ns
 //`include "multiplier_rca_26b.v"
-`include "multiplier_csa_26b.v"
+//`include "multiplier_csa_26b.v"
+`include "multiplier_behav_26b.v"
 module stimulus_carry_save_multiplier;
 
-	wire [52-1:0] mul_out_rca, mul_out_csa;
+	wire [52-1:0] mul_out_rca, mul_out_csa, mul_out_beh;
 	reg [26-1:0] a, b;
 	reg clk;
 	reg rstn;
@@ -18,7 +19,8 @@ module stimulus_carry_save_multiplier;
 	integer err;
 
 	//multiplier_rca_26b MULT0(mul_out_rca, a, b, clk, rstn);
-	multiplier_csa_26b MULT1(mul_out_csa, a, b, clk, rstn);
+	//multiplier_csa_26b MULT1(mul_out_csa, a, b, clk, rstn);
+	multiplier_behav_26b MULT2(mul_out_beh, a, b, clk, rstn);
 
 	always #5 clk <= ~clk;
 
@@ -45,7 +47,8 @@ module stimulus_carry_save_multiplier;
 			b = mat_b_input[i];
 			mat_out <= mat_mult_output[i-1];
 			#(5);
-			if((mul_out_rca != mat_out) || (mul_out_csa != mat_out))
+			if((mul_out_beh != mat_out))
+			//if((mul_out_rca != mat_out) || (mul_out_csa != mat_out))
 				err = err + 1;
 			#(5);
 		end

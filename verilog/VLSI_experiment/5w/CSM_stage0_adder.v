@@ -1,4 +1,5 @@
-// stage0는 하프에더로 이뤄져있음.
+// stage0는 하프 에더로 이뤄져있음.
+// 마지막은 어차피 하나의 입력만 있으므로 캐리X, sum도 필요 X
 `include "half_adder_1b.v"
 
 module CSM_stage0_adder (out, cout, a, b);
@@ -32,6 +33,6 @@ module CSM_stage0_adder (out, cout, a, b);
     half_adder_1b h22(out[22], cout[22], a[22], b[22]);
     half_adder_1b h23(out[23], cout[23], a[23], b[23]);
     half_adder_1b h24(out[24], cout[24], a[24], b[24]);
-    and(out[25], b[25], 1);
+    and(out[25], b[25], 1);  // 그대로 다음 스테이지 에더로 보내면 됨.
 
 endmodule

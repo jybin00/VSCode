@@ -1,4 +1,6 @@
-//`include "full_adder_1b.v"
+// 2번째부터 마지막-1 까지는 cin을 받으므로 fa로 구성. 
+// 마지막은 마찬가지로 마지막은 그대로 다음 스테이지 에더로 넣어주면 됨.
+`include "full_adder_1b.v"
 
 module CSM_stageX_adder(out, cout, a, b, cin);
     output [26-1:0] out;
@@ -32,7 +34,7 @@ module CSM_stageX_adder(out, cout, a, b, cin);
     full_adder_1b fa22 (out[22], cout[22], a[22], b[22], cin[22]);
     full_adder_1b fa23 (out[23], cout[23], a[23], b[23], cin[23]);
     full_adder_1b fa24 (out[24], cout[24], a[24], b[24], cin[24]);
-    and(out[25], b[25], 1);
+    and(out[25], b[25], 1); 
 
 
 endmodule

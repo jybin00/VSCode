@@ -1,3 +1,4 @@
+// 마지막은 25bit rca로 머징. 25번째 FA의 cout이 곱셈 결과의 MSB
 `include "full_adder_1b.v"
 
 module srcsa_25b (sum_output, a, b, c_in);

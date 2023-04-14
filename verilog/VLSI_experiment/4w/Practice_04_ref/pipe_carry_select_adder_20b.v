@@ -85,3 +85,4 @@ module pipe_carry_select_adder_20b(
     dff_21b DFF2(.out(sum), .in(sum_d), .clk(clk), .rstn(rstn));
  
     endmodule
+     

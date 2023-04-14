@@ -1,4 +1,5 @@
 // 26-bit Carry Save Multiplier merging adder가 SRCSA인 경우
+// stage마다 각각 wire선언해서 사용하기 
 `include "CSM_stage_and.v"
 `include "CSM_stage0_adder.v"
 `include "CSM_stageX_adder.v"
@@ -207,4 +208,3 @@ always @ (posedge clk) begin
 	    q <= d;
 end
 endmodule
-

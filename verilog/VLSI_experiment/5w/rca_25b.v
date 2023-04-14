@@ -1,4 +1,5 @@
-// full adder 1bit 이어서 26bits adder 만들기
+// full adder 1bit 이어서 25bits adder 만들기
+// 마지막 비트는 cout이 대체하므로 26bit말고 25bit만 만들어도 됨.
 `include "full_adder_1b.v"
 
 module rca_25b(sum, a, b, c_in);
