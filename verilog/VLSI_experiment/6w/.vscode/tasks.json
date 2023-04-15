@@ -6,7 +6,9 @@
 			"label": "Verilog compile",
 			"command": "Practice_06_ref/compiler_md.sh",
 			"args": [
-				"${file}"
+				"${file}",
+				"6w",
+				"Practice_06_ref"
 			],
 			"group": {
 				"kind": "build",
@@ -14,6 +16,22 @@
 			},
 			"problemMatcher": [],
 			"detail": "Verilog compiler"
+		},
+		{
+			"type": "shell",
+			"label": "Verilog test",
+			"command": "Practice_06_ref/simulator_md.sh",
+			"args": [
+				"${file}",
+				"6w",
+				"Practice_06_ref"
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"detail": "Verilog simulator"
 		},
 	]
 }

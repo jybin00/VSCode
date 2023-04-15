@@ -2,7 +2,7 @@
 // 마지막은 어차피 하나의 입력만 있으므로 캐리X, sum도 필요 X
 `include "half_adder_1b.v"
 
-module CSM_stage0_adder (out, cout, a,ı b);
+module CSM_stage0_adder (out, cout, a, b);
     output [26-1:0] out;
     output [25-1:0] cout;
     input [25-1:0] a;
