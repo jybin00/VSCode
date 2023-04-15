@@ -21,12 +21,11 @@ module Top_memory_control(DATA_out, clk, rstn);
     rflp128x52mx4 MEMORY (DO, out, RA, CA, NWRT, NCE, clk);
     
     assign DATA_out = DO;
-    initial begin NCE <= 1'b1; end
-    
+
     always@ (posedge rstn)
-        begin
-            NWRT <= 1'b1; NCE <= 1'b0; {RA, CA} <= ADDR;
-        end
+    begin 
+        NCE <= 1'b0; NWRT <= 1'b1; {RA, CA} <= ADDR;
+    end
 
     always@ (posedge clk)
         begin
