@@ -4,6 +4,7 @@ import numpy as np  # 배열 쉽게 다루기 위해 numpy사용
 import math
 
 source_a = np.random.binomial(1, 1/4, size=1000)  # 소스 바이너리 분포로 만들기
+#source_b = uniform (0, 1, 1)<0.5
 # print("source_a: ", source_a)
 count_prob = np.unique(source_a, return_counts = True)
 print(count_prob ) # 소스 안에 0과 1의 갯수 출력
@@ -48,8 +49,6 @@ while len(heap) > 1:
     for pair in right[1:]:
         pair[1] = '1' + pair[1]
     heappush(heap, [left[0] + right[0]] + left[1:] + right[1:])
-    # 힙 정렬하기.
-    heap = sorted(heap)
 
 # generate codebook
 codebook = dict(heap[0][1:])
@@ -58,6 +57,9 @@ print("Codebook")
 for key, value in codebook.items():
     print(key, value)
 print('\n')
+Huffman_tree = [[value, [key]] for key, value in codebook.items()]
+Huffman_tree = sorted(Huffman_tree)
+print("h",Huffman_tree)
 
 # encode sequence
 binary_string = "".join([codebook[tuple(source_a[i:i+4])] for i in range(0, len(source_a), 4)])
