@@ -1,0 +1,36 @@
+#! /opt/local/bin/vvp
+:ivl_version "10.1 (stable)" "(v10_1_1)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x7f9f08f06850 .scope module, "full_adder_1b" "full_adder_1b" 2 4;
+ .timescale 0 0;
+    .port_info 0 /OUTPUT 1 "sum"
+    .port_info 1 /OUTPUT 1 "c_out"
+    .port_info 2 /INPUT 1 "a"
+    .port_info 3 /INPUT 1 "b"
+    .port_info 4 /INPUT 1 "c_in"
+o0x7f9f10040008 .functor BUFZ 1, C4<z>; HiZ drive
+o0x7f9f10040038 .functor BUFZ 1, C4<z>; HiZ drive
+L_0x7f9f08f16ff0 .functor XOR 1, o0x7f9f10040008, o0x7f9f10040038, C4<0>, C4<0>;
+L_0x7f9f08f170a0 .functor AND 1, o0x7f9f10040008, o0x7f9f10040038, C4<1>, C4<1>;
+o0x7f9f10040098 .functor BUFZ 1, C4<z>; HiZ drive
+L_0x7f9f08f171d0 .functor XOR 1, L_0x7f9f08f16ff0, o0x7f9f10040098, C4<0>, C4<0>;
+L_0x7f9f08f172a0 .functor AND 1, L_0x7f9f08f16ff0, o0x7f9f10040098, C4<1>, C4<1>;
+L_0x7f9f08f17390 .functor XOR 1, L_0x7f9f08f172a0, L_0x7f9f08f170a0, C4<0>, C4<0>;
+v0x7f9f08f06a60_0 .net "a", 0 0, o0x7f9f10040008;  0 drivers
+v0x7f9f08f16ae0_0 .net "b", 0 0, o0x7f9f10040038;  0 drivers
+v0x7f9f08f16b80_0 .net "c1", 0 0, L_0x7f9f08f170a0;  1 drivers
+v0x7f9f08f16c10_0 .net "c_in", 0 0, o0x7f9f10040098;  0 drivers
+v0x7f9f08f16cb0_0 .net "c_out", 0 0, L_0x7f9f08f17390;  1 drivers
+v0x7f9f08f16d90_0 .net "s1", 0 0, L_0x7f9f08f16ff0;  1 drivers
+v0x7f9f08f16e30_0 .net "s2", 0 0, L_0x7f9f08f172a0;  1 drivers
+v0x7f9f08f16ed0_0 .net "sum", 0 0, L_0x7f9f08f171d0;  1 drivers
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "full_adder_1b.v";
