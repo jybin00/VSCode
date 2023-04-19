@@ -12,7 +12,7 @@ One_prob = count_prob[1][1]/1000
 Zero_prob = count_prob[1][0]/1000
 
 source_entropy = Zero_prob*math.log(1/Zero_prob,2) + One_prob*math.log(1/One_prob,2)
-print("entropy bits:", source_entropy*1000)
+print("Original source entropy bits:", source_entropy*1000)
 
 # calculate empirical probabilities
 # 4개씩 끊어서 총 몇 번 나오는지 카운트
@@ -42,35 +42,69 @@ while len(heap) > 1:
     #    print(heap[i], sep='\n')
     #print('\n')
     min0 = heappop(heap); min1 = heappop(heap)
-    min0.code = 0; min1.code = 1
+    min0.code = '0'; min1.code = '1'
     total_prob = min0.freq + min1.freq
     heappush(heap, tree_class.Node(None, total_prob, None, min0, min1))
 
 # generate codebook
-def preorder(node):
-    for i in range(0,16):
-        print(node.code, end=" ")
-        if node.left:
-            preorder(node.left)
-        if node.right:
-            preorder(node.right)
+a = []
+def gen_codebook(node):
+    if node.flag == False:
+        if node.code != None:
+            if node.left:
+                node.left.code =  node.code + "0"
+                gen_codebook(node.left)
+            if node.right:
+                node.right.code = node.code + "1"
+                gen_codebook(node.right)
+            else:
+                node.flag = True
+                a.append((node.symbol, node.code))
         else:
-            print(node.symbol)
-    
-preorder(heap[0])
+            if node.left:
+                node.left.code = "0" 
+                gen_codebook(node.left)
+            if node.right:
+                node.right.code = "1" 
+                gen_codebook(node.right)
+    else:
+        pass
 
+gen_codebook(heap[0])
+a.sort(key=lambda e:len(e[1]))
+codebook = dict(a)
 print("Codebook")
 for key, value in codebook.items():
     print(key, value)
 print('\n')
-Huffman_tree = [[value, [key]] for key, value in codebook.items()]
-Huffman_tree = sorted(Huffman_tree)
-print("huffman tree",Huffman_tree)
-print('\n')
+
 # encode sequence
 binary_string = "".join([codebook[tuple(source_a[i:i+4])] for i in range(0, len(source_a), 4)])
 
-print(binary_string,  sep='\n')
+decoded_bit = []
+head = heap[0]
+for i in range(0,len(binary_string)):
+    b = binary_string[i]
+    if b == '0':
+        head = head.left
+        if head.left is None and head.right is None: # leaf
+            decoded_bit.extend(list(head.symbol))
+            head = heap[0]
+    else:
+        head = head.right
+        if head.left is None and head.right is None: # leaf
+            decoded_bit.extend(list(head.symbol))
+            head = heap[0]
+            
+decoded_bit = [str(e) for e in decoded_bit]
+decoded_bit = ''.join(decoded_bit)
+source_a = ''.join([str(e)for e in source_a])
+print("Encoded_bit", binary_string ,sep='\n')
+print(decoded_bit == source_a)
+print(" \n")
+print("Decoded_bit", decoded_bit, sep='\n')
+
+print("Source bit:", source_a,  sep='\n')
 print('\n')
 
 print("Original source entropy bits:", math.ceil(source_entropy*1000))
