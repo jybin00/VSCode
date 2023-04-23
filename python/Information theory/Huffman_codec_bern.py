@@ -100,12 +100,13 @@ decoded_bit = [str(e) for e in decoded_bit]
 decoded_bit = ''.join(decoded_bit)
 source_a = ''.join([str(e)for e in source_a])
 print("Encoded_bit", binary_string ,sep='\n')
-print(decoded_bit == source_a)
-print(" \n")
+
 print("Decoded_bit", decoded_bit, sep='\n')
 
 print("Source bit:", source_a,  sep='\n')
-print('\n')
+print("\n")
+print("Are decoded bits and source bits same? ->", str(decoded_bit == source_a))
+print("\n")
 
 print("Original source entropy bits:", math.ceil(source_entropy*1000))
 print("Source extention entropy bits:", math.ceil(s_extention_entropy * 250))
