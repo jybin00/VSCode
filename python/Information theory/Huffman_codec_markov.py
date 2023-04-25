@@ -49,9 +49,6 @@ heapq.heapify(heap)
 # while문 돌려서 가장 작은 확률 값을 갖는 노드에 0 그 다음 노드에 1 부여하고 다시 힙에 넣어주기.
 print("build Huffman tree", "\n")
 while len(heap) > 1:
-    #for i in range(len(heap)):
-    #    print(heap[i], sep='\n')
-    #print('\n')
     min0 = heappop(heap); min1 = heappop(heap)
     min0.code = '0'; min1.code = '1'
     total_prob = min0.freq + min1.freq
@@ -116,7 +113,7 @@ print("Decoded_bit", decoded_bit, sep='\n')
 print("\n")
 print("Source bit:", source_b,  sep='\n')
 print('\n')
-print("Are decoded bits and source bits same? ->", str(decoded_bit == source_b))
+print("Are both decoded bits and source bits same? ->", str(decoded_bit == source_b))
 print(" \n")
 
 print("Original source entropy bits:", math.ceil(source_entropy*1000))
