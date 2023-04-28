@@ -32,17 +32,17 @@ module Filter1(direct_out, direct_in, clk, rstn, c0, c1, c2, c3, c4);
 
     wire signed[22-1:0] mul0, mul1, mul2, mul3, mul4;
 
-    // assign mul0 = {tmp0[22], tmp0[22], tmp0[22:3] + {1'b0,tmp0[2]}};
-    // assign mul1 = {tmp1[22], tmp1[22], tmp1[22:3] + {1'b0,tmp1[2]}};
-    // assign mul2 = {tmp2[22], tmp2[22], tmp2[22:3] + {1'b0,tmp2[2]}};
-    // assign mul3 = {tmp3[22], tmp3[22], tmp3[22:3] + {1'b0,tmp3[2]}};
-    // assign mul4 = {tmp4[22], tmp4[22], tmp4[22:3] + {1'b0,tmp4[2]}};
+    assign mul0 = {tmp0[22], tmp0[22], tmp0[22:3] + {1'b0,tmp0[2]}};
+    assign mul1 = {tmp1[22], tmp1[22], tmp1[22:3] + {1'b0,tmp1[2]}};
+    assign mul2 = {tmp2[22], tmp2[22], tmp2[22:3] + {1'b0,tmp2[2]}};
+    assign mul3 = {tmp3[22], tmp3[22], tmp3[22:3] + {1'b0,tmp3[2]}};
+    assign mul4 = {tmp4[22], tmp4[22], tmp4[22:3] + {1'b0,tmp4[2]}};
 
-    assign mul0 = {tmp0[22], tmp0[22], tmp0[22:3]};
-    assign mul1 = {tmp1[22], tmp1[22], tmp1[22:3]};
-    assign mul2 = {tmp2[22], tmp2[22], tmp2[22:3]};
-    assign mul3 = {tmp3[22], tmp3[22], tmp3[22:3]};
-    assign mul4 = {tmp4[22], tmp4[22], tmp4[22:3]};
+    // assign mul0 = {tmp0[22], tmp0[22], tmp0[22:3]};
+    // assign mul1 = {tmp1[22], tmp1[22], tmp1[22:3]};
+    // assign mul2 = {tmp2[22], tmp2[22], tmp2[22:3]};
+    // assign mul3 = {tmp3[22], tmp3[22], tmp3[22:3]};
+    // assign mul4 = {tmp4[22], tmp4[22], tmp4[22:3]};
 
     wire signed[22-1:0] mul_out;
 
