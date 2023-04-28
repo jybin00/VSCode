@@ -1,0 +1,27 @@
+#! /opt/local/bin/vvp
+:ivl_version "10.1 (stable)" "(v10_1_1)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x7fbd94004130 .scope module, "Top_controller" "Top_controller" 2 3;
+ .timescale 0 0;
+    .port_info 0 /OUTPUT 1 "done"
+    .port_info 1 /INPUT 1 "start"
+    .port_info 2 /INPUT 1 "clk"
+    .port_info 3 /INPUT 1 "rstn"
+o0x7fbd88008008 .functor BUFZ 1, C4<z>; HiZ drive
+v0x7fbd94004290_0 .net "clk", 0 0, o0x7fbd88008008;  0 drivers
+o0x7fbd88008038 .functor BUFZ 1, C4<z>; HiZ drive
+v0x7fbd94014d80_0 .net "done", 0 0, o0x7fbd88008038;  0 drivers
+o0x7fbd88008068 .functor BUFZ 1, C4<z>; HiZ drive
+v0x7fbd94014e20_0 .net "rstn", 0 0, o0x7fbd88008068;  0 drivers
+o0x7fbd88008098 .functor BUFZ 1, C4<z>; HiZ drive
+v0x7fbd94014eb0_0 .net "start", 0 0, o0x7fbd88008098;  0 drivers
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "Top_controller.v";

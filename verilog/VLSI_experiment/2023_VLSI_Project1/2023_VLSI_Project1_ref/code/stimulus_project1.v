@@ -1,4 +1,7 @@
 `timescale 1ns / 10ps
+`include "Top_controller.v"
+
+
 module stimulus_project1;
 
 	reg [22-1:0] mat_output [0:4096-1];
@@ -28,9 +31,9 @@ module stimulus_project1;
 	integer i = 0;
 	integer err = 0;
 	
-	initial	$readmemh("vec_a.txt", CON.MEM_A.array);
-	initial	$readmemh("vec_b.txt", CON.MEM_B.array);
-	initial $readmemh("vec_c.txt", mat_output);
+	initial	$readmemh("data/vec_a.txt", CON.MEM_A.array);
+	initial	$readmemh("data/vec_b.txt", CON.MEM_B.array);
+	initial $readmemh("data/vec_c.txt", mat_output);
 
 
 	always @(posedge clk) begin
