@@ -38,6 +38,7 @@ module Top_controller (done, start, clk, rstn);
 
     always@(posedge clk)
     begin
+        // flag on and reset off
         if(flag == 1'b1 && rstn == 1'b1)begin
             NCE <= 1'b0;
         end
