@@ -19,26 +19,27 @@ module stimulus_project1;
 	always #5 clk <= ~clk;
 	
 	initial begin
+		$dumpfile("stimulus_project1.vcd");
+		$dumpvars(0, stimulus_project1);
 		clk = 1; rstn = 0; start = 0;
 		#10
 		rstn = 1;
 		#10 start = 1;
 		#10 start = 0;
 		// #2622000 $stop;
+		$finish;
 	end
 	
 	
 	integer i = 0;
 	integer err = 0;
 	
-	initial	$readmemh("data/vec_a.txt", CON.MEM_A.array);
-	initial	$readmemh("data/vec_b.txt", CON.MEM_B.array);
-	initial $readmemh("data/vec_c.txt", mat_output);
+	initial	$readmemh("vec_a.txt", CON.MEM_A.array);
+	initial	$readmemh("vec_b.txt", CON.MEM_B.array);
+	initial $readmemh("vec_c.txt", mat_output);
 
 
 	always @(posedge clk) begin
-	$dumpfile("stimulus_project1.vcd");
-    $dumpvars(0, stimulus_project1);
 		if(done) begin
 			for(i = 0; i < 4096; i = i + 1) begin
 				#(10);
@@ -48,7 +49,6 @@ module stimulus_project1;
 			end
 			#10 $stop;
 		end
-	$finish;
 	end
 
 
