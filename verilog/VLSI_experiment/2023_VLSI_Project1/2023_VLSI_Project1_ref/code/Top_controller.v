@@ -38,11 +38,15 @@ module Top_controller (done, start, clk, rstn);
 
     always@(posedge clk)
     begin
+        if(cnt_out == 18'b1) begin 
+            done <= 1'b1;
+            flag <= 1'b0;
+        end
         // flag on and reset off
-        if(flag == 1'b1 && rstn == 1'b1)begin
+        else if(flag == 1'b1 && rstn == 1'b1)begin
             // memory A, B start
             NCE <= 1'b0;
-            {nwrt_A, nwrt_B} <= 2'b1;
+            nwrt_A <= 1'b1; nwrt_B <= 1'b1;
             if(cnt_out[6-1:0] == 6'd63) begin
                 NCE_C <= 1'b0;
                 nwrt_C <= 1'b0;
@@ -51,12 +55,8 @@ module Top_controller (done, start, clk, rstn);
                 NCE_C <= 1'b1;
                 nwrt_C <= 1'b1;
             end
+        end
 
-        end
-        else if(cnt_out == 18'b1) begin 
-            done <= 1'b1;
-            flag <= 1'b0;
-        end
         else if(flag == 1'b0) begin
             done <= 1'b0;
         end
