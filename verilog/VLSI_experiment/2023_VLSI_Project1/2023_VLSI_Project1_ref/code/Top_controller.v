@@ -10,10 +10,11 @@ module Top_controller (done, start, clk, rstn);
 
     output done;
     input start, clk, rstn;
-    reg flag;
+    reg flag, NCE;
 
     wire [18-1:0] cnt_out;
-    counter_18b memory_controller(cnt_out, clk, rstn);
+    counter_18b memory_controller(cnt_out, clk, rstn, start);
+    
     wire [8-1:0] Out_A, Out_B;
     wire [22-1:0] Out_C;
 
@@ -22,21 +23,23 @@ module Top_controller (done, start, clk, rstn);
     assign Addr_B = {cnt_out[6-1:0], cnt_out[12-1:6]};
     assign Addr_C = cnt_out[18-1:6];
 
-    rflp4096x8mx4  MEM_A(Out_A, 8'b0, Addr_A[12-1:2], Addr_A[2-1:0], NWRT, NCE, clk);
+    wire nwrt_A, nwrt_B, nwrt_C;
+
+    rflp4096x8mx4  MEM_A(Out_A, 8'b0, Addr_A[12-1:2], Addr_A[2-1:0], nwrt_A, NCE, clk);
 
 
-    rflp4096x8mx4  MEM_B(Out_B, 8'b0, Addr_B[12-1:2], Addr_B[2-1:0], NWRT, NCE, clk);
+    rflp4096x8mx4  MEM_B(Out_B, 8'b0, Addr_B[12-1:2], Addr_B[2-1:0], nwrt_B, NCE, clk);
 
 
-    rflp4096x22mx4 MEM_C(Out_C, 22'b0, Addr_C[12-1:2], Addr_C[2-1:0], NWRT, NCE, clk);
+    rflp4096x22mx4 MEM_C(Out_C, 22'b0, Addr_C[12-1:2], Addr_C[2-1:0], nwrt_C, NCE, clk);
 
     always@(posedge clk)
     begin
         if(flag == 1'b1 && rstn == 1'b1)begin
-
+            NCE <= 1'b0;
         end
 
-        else pass; 
+        else begin end; 
 
     end
     always@(negedge start)
@@ -51,14 +54,39 @@ endmodule
 
 
 // 18bits counter for memory controll 
-module counter_18b(cnt, clk, rstn);
+module counter_18b(cnt, clk, rstn, start);
     output [18-1:0]cnt;
     input clk, rstn;
+    input start;
     reg [18-1:0]cnt;
 
     always@(posedge clk)
     begin
         if(rstn == 1'b0) cnt <= 18'b0;
         else cnt <= cnt + 1;
+    end
+
+    always@(negedge start) cnt <= 18'b0;
+endmodule
+
+module MAC (mul_out, a, b, clk, cnt);
+    output [22-1:0] mul_out;
+    input [8-1:0]a, b;
+    input clk;
+    input [6-1:0] cnt;
+
+    wire [16-1:0]temp_mul;
+    assign temp_mul = a * b;
+
+    reg [22-1:0] matrix_mul_out;
+    reg [22-1:0] mul_out;
+
+    always@(posedge clk) begin
+        if(cnt == 6'h3f) mul_out <= matrix_mul_out;
+        else if(cnt == 6'b0) matrix_mul_out <= temp_mul + 1'b0;
+        else begin
+            matrix_mul_out <= temp_mul + matrix_mul_out;
+            mul_out <= 22'b0;
+        end
     end
 endmodule
