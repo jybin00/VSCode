@@ -37,6 +37,8 @@ module stimulus_project1;
 
 
 	always @(posedge clk) begin
+	$dumpfile("stimulus_project1.vcd");
+    $dumpvars(0, stimulus_project1);
 		if(done) begin
 			for(i = 0; i < 4096; i = i + 1) begin
 				#(10);
@@ -46,6 +48,7 @@ module stimulus_project1;
 			end
 			#10 $stop;
 		end
+	$finish;
 	end
 
 

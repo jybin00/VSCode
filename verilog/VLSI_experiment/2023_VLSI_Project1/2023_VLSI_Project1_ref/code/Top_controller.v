@@ -10,7 +10,9 @@ module Top_controller (done, start, clk, rstn);
 
     output done;
     input start, clk, rstn;
-    reg flag, NCE;
+    // memory control signal
+    reg done, flag, nwrt_A, nwrt_B, nwrt_C, NCE_C, NCE;
+    wire [22-1:0]mul_out;
 
     // counter output
     wire [18-1:0] cnt_out;
@@ -25,8 +27,6 @@ module Top_controller (done, start, clk, rstn);
     assign Addr_A = {cnt_out[18-1:12], cnt_out[6-1:0]};
     assign Addr_B = {cnt_out[6-1:0], cnt_out[12-1:6]};
     assign Addr_C = cnt_out[18-1:6];
-    // memory writing signal
-    wire nwrt_A, nwrt_B, nwrt_C;
 
     // memory module
     rflp4096x8mx4  MEM_A(Out_A, 8'b0, Addr_A[12-1:2], Addr_A[2-1:0], nwrt_A, NCE, clk);
@@ -40,7 +40,25 @@ module Top_controller (done, start, clk, rstn);
     begin
         // flag on and reset off
         if(flag == 1'b1 && rstn == 1'b1)begin
+            // memory A, B start
             NCE <= 1'b0;
+            {nwrt_A, nwrt_B} <= 2'b1;
+            if(cnt_out[6-1:0] == 6'd63) begin
+                NCE_C <= 1'b0;
+                nwrt_C <= 1'b0;
+            end
+            else begin
+                NCE_C <= 1'b1;
+                nwrt_C <= 1'b1;
+            end
+
+        end
+        else if(cnt_out == 18'b1) begin 
+            done <= 1'b1;
+            flag <= 1'b0;
+        end
+        else if(flag == 1'b0) begin
+            done <= 1'b0;
         end
 
         else begin end; 
@@ -49,6 +67,7 @@ module Top_controller (done, start, clk, rstn);
     always@(negedge start)
     begin
         flag <= 1'b1;
+        done <= 1'b0;
     end
 
 endmodule
