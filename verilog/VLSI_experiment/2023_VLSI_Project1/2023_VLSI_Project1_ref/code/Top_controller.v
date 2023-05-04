@@ -32,7 +32,17 @@ module Top_controller (done, start, clk, rstn);
 
     always@(posedge clk)
     begin
-        if(start == 1'b1) 
+        if(flag == 1'b1 && rstn == 1'b1)begin
+
+        end
+
+        else pass; 
+
+    end
+    always@(negedge start)
+    begin
+        flag <= 1'b1;
+    end
 
 
 
