@@ -16,7 +16,7 @@ module Top_controller (done, start, clk, rstn);
 
     // counter output
     wire [18-1:0] cnt_out;
-    counter_18b memory_controller(cnt_out, clk, rstn, start);
+    counter_18b memory_controller(cnt_out, clk, flag, start);
 
     // memory output;
     wire [8-1:0] Out_A, Out_B;
@@ -26,7 +26,7 @@ module Top_controller (done, start, clk, rstn);
     wire [12-1:0] Addr_A, Addr_B, Addr_C;
     assign Addr_A = {cnt_out[18-1:12], cnt_out[6-1:0]};
     assign Addr_B = {cnt_out[6-1:0], cnt_out[12-1:6]};
-    assign Addr_C = cnt_out[18-1:6];
+    assign Addr_C = address_C[18-1:6];
 
     // memory module
     rflp4096x8mx4  MEM_A(Out_A, 8'b0, Addr_A[12-1:2], Addr_A[2-1:0], nwrt_A, NCE, clk);
@@ -35,19 +35,27 @@ module Top_controller (done, start, clk, rstn);
     
     // matrix accumulation
     MAC Matrix_Accumulation(mul_out, Out_A, Out_B, clk, cnt_out[6-1:0]);
+    reg [18-1:0] control_cnt;
+    reg [18-1:0] address_C;
 
-    always @(posedge clk)
-    begin
+    always @(posedge clk) begin
+        control_cnt <= cnt_out;
+        address_C <= control_cnt;
         // Make done flag on if cnt is over
-        if(flag == 1'b1 && cnt_out == 18'h3ffff) begin 
+        if (done == 1'b1) begin
+            NCE <= 1'b1;
+            NCE_C <= 1'b1;
+            done <= 1'b0;
+        end
+        if(flag == 1'b1 && control_cnt == 18'h3ffff) begin 
             done <= 1'b1;
             flag <= 1'b0; end
         // flag on and reset off
         else if(flag == 1'b1 && rstn == 1'b1)begin
             // memory A, B start
             NCE <= 1'b0;
-            nwrt_A <= 1'b1; nwrt_B <= 1'b1;
-            if(cnt_out[6-1:0] == 6'd63) begin
+            nwrt_A <= 1'b1; nwrt_B <= 1'b1; 
+            if(control_cnt[6-1:0] == 6'b111111) begin
                 NCE_C <= 1'b0;
                 nwrt_C <= 1'b0;
             end
@@ -78,30 +86,33 @@ module counter_18b(cnt, clk, rstn, start);
     always@(posedge clk)
     begin
         if(rstn == 1'b0) cnt <= 18'b0;
+        else if(start == 1'b1) cnt <= 18'b0;
         else cnt <= cnt + 1;
     end
-
-    always@(negedge start) cnt <= 18'b0;
 endmodule
 
-module MAC (mul_out, a, b, clk, cnt);
-    output [22-1:0] mul_out;
+module MAC (matrix_mul_out, a, b, clk, q);
+    output [22-1:0] matrix_mul_out;
     input [8-1:0]a, b;
     input clk;
-    input [6-1:0] cnt;
+    input [6-1:0] q;
 
     wire [16-1:0]temp_mul;
     assign temp_mul = a * b;
 
     reg [22-1:0] matrix_mul_out;
-    reg [22-1:0] mul_out;
+    reg [6-1:0] cnt;
 
     always@(posedge clk) begin
-        if(cnt == 6'h3f) mul_out <= matrix_mul_out;
-        else if(cnt == 6'b0) matrix_mul_out <= temp_mul + 1'b0;
+        cnt <= q;
+        if(a >= 0 && b >=0) begin
+            if(cnt == 6'b0) matrix_mul_out <= temp_mul + 1'b0;
+            else begin
+                matrix_mul_out <= matrix_mul_out + temp_mul;
+            end
+        end
         else begin
-            matrix_mul_out <= temp_mul + matrix_mul_out;
-            mul_out <= matrix_mul_out;
+            matrix_mul_out <= 22'b0;
         end
     end
 endmodule

@@ -1,4 +1,4 @@
-`timescale 1ns / 100ps
+`timescale 1ns / 10ps
 `include "Top_controller.v"
 
 
@@ -18,6 +18,16 @@ module stimulus_project1;
 
 	always #5 clk <= ~clk;
 	
+	initial begin
+		clk = 1; rstn = 0; start = 0;
+		#10
+		rstn = 1;
+		#10 start = 1;
+		#10 start = 0;
+		// #2622000 $stop;
+	end
+	
+	
 	integer i = 0;
 	integer err = 0;
 	
@@ -26,29 +36,19 @@ module stimulus_project1;
 	initial $readmemh("vec_c.txt", mat_output);
 
 
-	initial begin
-		$dumpfile("stimulus_project1.vcd");
+	always @(posedge clk) begin
+		$dumpfile("stimulus_project1_1.vcd");
 		$dumpvars(0, stimulus_project1);
-		clk = 1; rstn = 0; start = 0;
-		#10
-		rstn = 1;
-		#10 start = 1;
-		#10 start = ~start;
-		#2622000
 		if(done) begin
 			for(i = 0; i < 4096; i = i + 1) begin
-				
+				#(10);
 				mat_out <= mat_output[i];
 				out     <= CON.MEM_C.array[i];
-				#(2);
 				if(out != mat_out) err = err + 1;
-				#(8);
 			end
-			// #10 $stop;
+			#10 $stop;
 		end
-		#1000 $stop;
 		$finish;
-
 	end
 
 
