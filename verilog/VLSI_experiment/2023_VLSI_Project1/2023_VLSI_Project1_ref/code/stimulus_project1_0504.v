@@ -46,6 +46,7 @@ module stimulus_project1_0504;
 			end
 			#10 $stop;
 		end
+		$finish;
 	end
 
 	
