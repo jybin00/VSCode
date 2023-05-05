@@ -39,10 +39,9 @@ module Top_controller (done, start, clk, rstn);
     always @(posedge clk)
     begin
         // Make done flag on if cnt is over
-        if(flag == 1'b1 && cnt_out == 18'b0) begin 
+        if(flag == 1'b1 && cnt_out == 18'h3ffff) begin 
             done <= 1'b1;
-            flag <= 1'b0;
-        end
+            flag <= 1'b0; end
         // flag on and reset off
         else if(flag == 1'b1 && rstn == 1'b1)begin
             // memory A, B start
@@ -57,13 +56,7 @@ module Top_controller (done, start, clk, rstn);
                 nwrt_C <= 1'b1;
             end
         end
-
-        else if(flag == 1'b0) begin
-            done <= 1'b0;
-        end
-
         else begin end; 
-
     end
 
     always @(posedge start)
@@ -108,7 +101,7 @@ module MAC (mul_out, a, b, clk, cnt);
         else if(cnt == 6'b0) matrix_mul_out <= temp_mul + 1'b0;
         else begin
             matrix_mul_out <= temp_mul + matrix_mul_out;
-            mul_out <= 22'b0;
+            mul_out <= matrix_mul_out;
         end
     end
 endmodule
