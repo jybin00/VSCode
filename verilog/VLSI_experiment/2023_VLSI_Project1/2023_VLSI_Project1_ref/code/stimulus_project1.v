@@ -38,7 +38,7 @@ module stimulus_project1;
 		#10
 		rstn = 1;
 		#10 start = 1;
-		#10 start = 0;
+		#10 start = ~start;
 		if(done) begin
 			for(i = 0; i < 4096; i = i + 1) begin
 				#(10);

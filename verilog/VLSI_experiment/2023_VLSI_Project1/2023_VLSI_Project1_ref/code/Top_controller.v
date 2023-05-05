@@ -36,9 +36,10 @@ module Top_controller (done, start, clk, rstn);
     // matrix accumulation
     MAC Matrix_Accumulation(mul_out, Out_A, Out_B, clk, cnt_out[6-1:0]);
 
-    always@(posedge clk)
+    always @(posedge clk)
     begin
-        if(cnt_out == 18'b1) begin 
+        // Make done flag on if cnt is over
+        if(flag == 1'b1 && cnt_out == 18'b0) begin 
             done <= 1'b1;
             flag <= 1'b0;
         end
@@ -64,7 +65,8 @@ module Top_controller (done, start, clk, rstn);
         else begin end; 
 
     end
-    always@(negedge start)
+
+    always @(posedge start)
     begin
         flag <= 1'b1;
         done <= 1'b0;
