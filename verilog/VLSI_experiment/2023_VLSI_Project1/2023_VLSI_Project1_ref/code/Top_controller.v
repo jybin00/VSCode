@@ -40,6 +40,7 @@ module Top_controller (done, start, clk, rstn);
 
     always @(posedge clk) begin
         control_cnt <= cnt_out;
+        // Address C is needed to be pull one clk.
         address_C <= control_cnt;
         // Make done flag on if cnt is over
         if (done == 1'b1) begin
