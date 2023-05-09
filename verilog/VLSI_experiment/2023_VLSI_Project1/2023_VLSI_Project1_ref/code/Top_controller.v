@@ -26,20 +26,19 @@ module Top_controller (done, start, clk, rstn);
     wire [12-1:0] Addr_A, Addr_B, Addr_C;
     assign Addr_A = {cnt_out[18-1:12], cnt_out[6-1:0]};
     assign Addr_B = {cnt_out[6-1:0], cnt_out[12-1:6]};
-    assign Addr_C = address_C[18-1:6];
 
     // memory module
     rflp4096x8mx4  MEM_A(Out_A, 8'b0, Addr_A[12-1:2], Addr_A[2-1:0], nwrt_A, NCE, clk);
     rflp4096x8mx4  MEM_B(Out_B, 8'b0, Addr_B[12-1:2], Addr_B[2-1:0], nwrt_B, NCE, clk);
-    rflp4096x22mx4 MEM_C(Out_C, mul_out, Addr_C[12-1:2], Addr_C[2-1:0], nwrt_C, NCE, clk);
+    rflp4096x22mx4 MEM_C(Out_C, mul_out, address_C[12-1:2], address_C[2-1:0], nwrt_C, NCE, clk);
     
     // matrix accumulation
-    MAC Matrix_Accumulation(mul_out, Out_A, Out_B, clk, cnt_out[6-1:0]);
-    reg [18-1:0] control_cnt;
-    reg [18-1:0] address_C;
+    MAC Matrix_Accumulation(mul_out, Out_A, Out_B, clk, cnt_out[6-1:0], done, start);
+    reg [12-1:0] control_cnt;
+    reg [12-1:0] address_C;
 
     always @(posedge clk) begin
-        control_cnt <= cnt_out;
+        control_cnt <= cnt_out[18-1:6];
         // Address C is needed to be pull one clk.
         address_C <= control_cnt;
         // Make done flag on if cnt is over
@@ -76,7 +75,6 @@ module Top_controller (done, start, clk, rstn);
 
 endmodule
 
-
 // 18bits counter for memory controll 
 module counter_18b(cnt, clk, rstn, start);
     output [18-1:0]cnt;
@@ -92,10 +90,10 @@ module counter_18b(cnt, clk, rstn, start);
     end
 endmodule
 
-module MAC (matrix_mul_out, a, b, clk, q);
+module MAC (matrix_mul_out, a, b, clk, q, done, start);
     output [22-1:0] matrix_mul_out;
     input [8-1:0]a, b;
-    input clk;
+    input clk, done, start;
     input [6-1:0] q;
 
     wire [16-1:0]temp_mul;
@@ -103,17 +101,23 @@ module MAC (matrix_mul_out, a, b, clk, q);
 
     reg [22-1:0] matrix_mul_out;
     reg [6-1:0] cnt;
+    reg flag;
 
     always@(posedge clk) begin
-        cnt <= q;
-        if(a >= 0 && b >=0) begin
-            if(cnt == 6'b0) matrix_mul_out <= temp_mul + 1'b0;
+        if(flag == 1'b1) begin
+            cnt <= q;
+            if(a >= 0 && b >=0) begin
+                if(cnt == 6'b0) matrix_mul_out <= temp_mul + 1'b0;
+                else begin
+                    matrix_mul_out <= matrix_mul_out + temp_mul;
+                end
+            end
             else begin
-                matrix_mul_out <= matrix_mul_out + temp_mul;
+                matrix_mul_out <= 22'b0;
             end
         end
-        else begin
-            matrix_mul_out <= 22'b0;
-        end
+        else matrix_mul_out <= 22'b0;
     end
+    always@(posedge done) flag <= 1'b0;
+    always@(posedge start) flag <= 1'b1; 
 endmodule
