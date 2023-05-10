@@ -23,48 +23,50 @@ module Top_controller (done, start, clk, rstn);
     wire [22-1:0] Out_C;
 
     // memory address
-    wire [12-1:0] Addr_A, Addr_B, Addr_C;
+    wire [12-1:0] Addr_A, Addr_B;
     assign Addr_A = {cnt_out[18-1:12], cnt_out[6-1:0]};
     assign Addr_B = {cnt_out[6-1:0], cnt_out[12-1:6]};
 
     // memory module
     rflp4096x8mx4  MEM_A(Out_A, 8'b0, Addr_A[12-1:2], Addr_A[2-1:0], nwrt_A, NCE, clk);
     rflp4096x8mx4  MEM_B(Out_B, 8'b0, Addr_B[12-1:2], Addr_B[2-1:0], nwrt_B, NCE, clk);
-    rflp4096x22mx4 MEM_C(Out_C, mul_out, address_C[12-1:2], address_C[2-1:0], nwrt_C, NCE, clk);
+    rflp4096x22mx4 MEM_C(Out_C, mul_out, address_C[12-1:2], address_C[2-1:0], nwrt_C, NCE_C, clk);
     
     // matrix accumulation
     MAC Matrix_Accumulation(mul_out, Out_A, Out_B, clk, cnt_out[6-1:0], done, start);
-    reg [12-1:0] control_cnt;
+    reg [18-1:0] control_cnt;
     reg [12-1:0] address_C;
 
     always @(posedge clk) begin
-        control_cnt <= cnt_out[18-1:6];
+        control_cnt <= cnt_out;
         // Address C is needed to be pull one clk.
-        address_C <= control_cnt;
+        address_C <= control_cnt[18-1:6];
         // Make done flag on if cnt is over
         if (done == 1'b1) begin
             NCE <= 1'b1;
             NCE_C <= 1'b1;
+            nwrt_C <= 1'b1;
             done <= 1'b0;
         end
-        if(flag == 1'b1 && control_cnt == 18'h3ffff) begin 
-            done <= 1'b1;
-            flag <= 1'b0; end
-        // flag on and reset off
-        else if(flag == 1'b1 && rstn == 1'b1)begin
-            // memory A, B start
-            NCE <= 1'b0;
-            nwrt_A <= 1'b1; nwrt_B <= 1'b1; 
-            if(control_cnt[6-1:0] == 6'b111111) begin
-                NCE_C <= 1'b0;
-                nwrt_C <= 1'b0;
+
+        else begin 
+            // flag on and reset off
+            if(flag == 1'b1 && rstn == 1'b1)begin
+                // memory A, B start
+                NCE <= 1'b0;
+                nwrt_A <= 1'b1; nwrt_B <= 1'b1; 
+                if(control_cnt[6-1:0] == 6'b111111) begin
+                    NCE_C <= 1'b0;
+                    nwrt_C <= 1'b0;
+                end
+                else begin
+                    NCE_C <= 1'b1;
+                    nwrt_C <= 1'b1;
+                end
             end
-            else begin
-                NCE_C <= 1'b1;
-                nwrt_C <= 1'b1;
-            end
-        end
-        else begin end; 
+            if(flag == 1'b1 && control_cnt == 18'h3ffff) flag <= 1'b0;
+            if(flag == 1'b0 && control_cnt == 18'b0) done <= 1'b1;
+        end; 
     end
 
     always @(posedge start)
@@ -76,15 +78,15 @@ module Top_controller (done, start, clk, rstn);
 endmodule
 
 // 18bits counter for memory controll 
-module counter_18b(cnt, clk, rstn, start);
+module counter_18b(cnt, clk, stop, start);
     output [18-1:0]cnt;
-    input clk, rstn;
+    input clk, stop;
     input start;
     reg [18-1:0]cnt;
 
     always@(posedge clk)
     begin
-        if(rstn == 1'b0) cnt <= 18'b0;
+        if(stop == 1'b0) cnt <= 18'bx;
         else if(start == 1'b1) cnt <= 18'b0;
         else cnt <= cnt + 1;
     end
@@ -116,7 +118,7 @@ module MAC (matrix_mul_out, a, b, clk, q, done, start);
                 matrix_mul_out <= 22'b0;
             end
         end
-        else matrix_mul_out <= 22'b0;
+        else matrix_mul_out <= 22'bx;
     end
     always@(posedge done) flag <= 1'b0;
     always@(posedge start) flag <= 1'b1; 

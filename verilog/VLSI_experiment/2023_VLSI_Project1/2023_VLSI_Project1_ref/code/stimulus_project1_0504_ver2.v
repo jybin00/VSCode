@@ -1,6 +1,6 @@
 `timescale 1ns / 10ps
-`include "Top_controller.v"
-module stimulus_project1_0504;
+`include "Top_controller_ver2.v"
+module stimulus_project1_0504_ver2;
 
 	reg [22-1:0] mat_output [0:4096-1];
 	reg [22-1:0] mat_out;
@@ -17,8 +17,8 @@ module stimulus_project1_0504;
 	always #5 clk <= ~clk;
 	
 	initial begin
-		$dumpfile("stimulus_project1_0504.vcd");
-		$dumpvars(0, stimulus_project1_0504);
+		$dumpfile("stimulus_project1_0504_ver2.vcd");
+		$dumpvars(0, stimulus_project1_0504_ver2);
 		clk = 1; rstn = 0; start = 0;
 		#10
 		rstn = 1;
@@ -46,7 +46,7 @@ module stimulus_project1_0504;
 			end
 			#10 $stop;
 		end
-		$finish;
+		//$finish;
 	end
 
 	
