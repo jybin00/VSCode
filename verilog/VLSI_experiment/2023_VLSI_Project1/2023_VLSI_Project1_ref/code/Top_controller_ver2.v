@@ -1,3 +1,6 @@
+// ID : 2018170921 Department : Eletrical Engineering Name : Yubeen Jo.
+// Building Matrix Multiplier
+
 `timescale 1ns / 10ps
 // SRAM Module import
 `include "rflp4096x8mx4.v"
@@ -147,6 +150,4 @@ module MAC (matrix_mul_out, a, b, clk, temp_cnt, done, start);
         // If flag = 0 and start = 0 (start or end)
         else matrix_mul_out <= 22'bx;
     end
-    // always@(posedge done) flag <= 1'b0;
-    // always@(posedge start) flag <= 1'b1; 
 endmodule
