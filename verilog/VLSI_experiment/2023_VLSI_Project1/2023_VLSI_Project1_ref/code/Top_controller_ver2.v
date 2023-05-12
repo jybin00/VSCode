@@ -36,7 +36,8 @@ module Top_controller (done, start, clk, rstn);
     // matrix accumulation module import
     // .sth(inner module) -> ()outer wire or reg
     wire [22-1:0] mul_out;
-    MAC Matrix_Accumulation(.matrix_mul_out(mul_out), .a(Out_A), .b(Out_B), .clk(clk), .temp_cnt(cnt_out[6-1:0]), .done(done), .start(start));
+    MAC Matrix_Accumulation(.matrix_mul_out(mul_out), .a(Out_A), .b(Out_B), 
+    .clk(clk), .temp_cnt(cnt_out[6-1:0]), .done(done), .start(start));
     reg  [19-1:0] control_cnt = 19'b0;
 
     // memory module import
@@ -64,7 +65,6 @@ module Top_controller (done, start, clk, rstn);
         end
 
         else begin 
-
             if(control_cnt[19-1] == 1'b0)begin
                 if(rstn == 1'b1)begin
                     // If control_cnt 6bits are 1111111, then
