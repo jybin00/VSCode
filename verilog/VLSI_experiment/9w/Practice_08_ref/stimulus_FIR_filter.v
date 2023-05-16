@@ -12,7 +12,7 @@ module stimulus_FIR_filter;
         wire    [12-1:0] c3 = 12'hca0 ;
         wire    [12-1:0] c4 = 12'h652 ;
 	
-	top_FIR_filter FIR(clk, rstn, c0, c1, c2, c3, c4 );
+	top_FIR_filter FIR(clk, rstn);
 
 	always #5 clk = ~clk;
 	
@@ -25,10 +25,10 @@ module stimulus_FIR_filter;
 	integer i = 0;
 	integer err = 0;
 	
-	initial $readmemh("input_vector_hex.txt", FIR.DIRECT_INPUT_MEM.array); //check the path of memory rocation (module instance)
+	initial $readmemh("vector/input_vector_hex.txt", FIR.DIRECT_INPUT_MEM.array); //check the path of memory rocation (module instance)
 	//initial $readmemh("input_vector_hex.txt", FIR.TRANS_INPUT_MEM.array);  //check the path of memory rocation (module instance)
 
-	initial $readmemh("output_vector_hex.txt", sig_mat);
+	initial $readmemh("vector/output_vector_hex.txt", sig_mat);
 
 
 	initial begin
@@ -39,7 +39,7 @@ module stimulus_FIR_filter;
 			out_mat <= sig_mat[i];
 			#(2);
 			//if((FIR.Filter1.direct_out != out_mat) || (FIR.Filter2.trans_out != out_mat)) err = err + 1;
-			if((FIR.Direct_filter.y_n != out_mat)) err = err + 1;
+			if((FIR.Direct_filter.direct_out != out_mat)) err = err + 1;
 			#(8);
 		end
 		$finish;

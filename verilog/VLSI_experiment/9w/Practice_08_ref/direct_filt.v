@@ -1,19 +1,23 @@
 // Sub-expression Sharing in FIR Filter
 
-module direct_filt(y_n, x_n, clk, rstn, c0, c1, c2, c3, c4);
-    output signed[22-1:0] y_n;
-    input signed [12-1:0] x_n;
+module direct_filt(direct_out, direct_in, clk, rstn, c0, c1, c2, c3, c4);
+
+    // 22.18
+    output signed[22-1:0] direct_out;
+    // 12.10
+    input signed [12-1:0] direct_in;
     input clk, rstn;
+    // 12.11
     input signed[12-1:0] c0, c1, c2, c3, c4;
 
-    wire signed [12-1:0] x_n, x_n_1, x_n_2, x_n_3, x_n_4;
+    wire signed [12-1:0] x_n_1, x_n_2, x_n_3, x_n_4;
     wire signed [22-1:0] x1, x2, x3, x4;
 
     wire signed [22-1:0] x1_1, x1_2, x1_3, x1_4;
     wire signed [22-1:0] x2_1, x2_2, x2_3, x2_4;
     wire signed [22-1:0] x3_1, x3_2, x3_3, x3_4;
 
-    D_FF_12bit FF01(x_n_1, x_n, clk, rstn);
+    D_FF_12bit FF01(x_n_1, direct_in, clk, rstn);
     D_FF_12bit FF02(x_n_2, x_n_1, clk, rstn);
     D_FF_12bit FF03(x_n_3, x_n_2, clk, rstn);
 
@@ -33,7 +37,7 @@ module direct_filt(y_n, x_n, clk, rstn, c0, c1, c2, c3, c4);
     D_FF_22bit FF032(x3_2, x3_1, clk, rstn);
     D_FF_22bit FF033(x3_3, x3_2, clk, rstn);
 
-    assign y_n = x1 + x1_1 << 1 + x1_3 << 1 + x1_4 + x1_4 >> 5 +
+    assign direct_out = x1 + x1_1 << 1 + x1_3 << 1 + x1_4 + x1_4 >> 5 +
                     x2 + x2_1 + x2_2 + x3_1 + x3_3 + x1_4 >> 6;
 
 
