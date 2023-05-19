@@ -25,10 +25,10 @@ module stimulus_FIR_filter;
 	integer i = 0;
 	integer err = 0;
 	
-	initial $readmemh("vector/input_vector_hex.txt", FIR.DIRECT_INPUT_MEM.array); //check the path of memory rocation (module instance)
+	initial $readmemh("new_vector/input_vector_hex.txt", FIR.DIRECT_INPUT_MEM.array); //check the path of memory rocation (module instance)
 	//initial $readmemh("input_vector_hex.txt", FIR.TRANS_INPUT_MEM.array);  //check the path of memory rocation (module instance)
 
-	initial $readmemh("vector/output_vector_hex.txt", sig_mat);
+	initial $readmemh("new_vector/output_vector_hex.txt", sig_mat);
 
 
 	initial begin

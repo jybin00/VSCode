@@ -64,10 +64,10 @@ for k = 1:N-g+1
    filter_out = zeros(N, 1);
    for n = 1:g 
         mult_out = filter_input(g-n+1)*quant_coef(n);
-        quant_mult_out = floor(mult_out*power(2,f)+0.5)/power(2,f);
-        filter_out(k) = filter_out(k) + quant_mult_out;
+        filter_out(k) = filter_out(k) + mult_out;
    end
-   pr_filter_out = filter_out(k)*power(2,f);
+   %% 반올림.
+   pr_filter_out = floor(filter_out(k)*power(2,f) + 0.5);
    %% considering negative numbers for print out
    if(pr_filter_out < 0)
         pr_filter_out = pr_filter_out + power(2,e);
