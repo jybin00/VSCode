@@ -22,7 +22,7 @@ module stimulus_folded_FIR_filter;
 		clk100  <= 1;
 		clk20   <= 1;
 		rstn    <= 0;
-		#40
+		#10
 		rstn    <= 1;
 		#13070 $stop;
 	end

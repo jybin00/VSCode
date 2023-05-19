@@ -19,9 +19,7 @@ module folded_FIR (filter_out, filter_in, clk100, clk20, reset, c0, c1, c2, c3, 
     reg signed [12-1:0] mux_c;
     wire [3-1:0] control_bit;
     //reg [3-1:0] control_bit;
-    wire start;
-    assign start = x1_4[0] + x1_5[0];
-    counter_3b counter(control_bit, clk100, reset, start);
+    counter_3b counter(control_bit, clk100, reset);
     // 중간 계산 값 저장용
     reg signed [22-1:0] filt_temp_out = 22'b0;
     // 곱한 값을 우선 와이어로 받고
@@ -31,28 +29,25 @@ module folded_FIR (filter_out, filter_in, clk100, clk20, reset, c0, c1, c2, c3, 
 
 
     always@(posedge clk100) begin
-        //control_bit <= counter_bit;
-        if(control_bit == 3'b000) begin
-            if(start >= 1'b0) begin
-                filt_temp_out <= mul_out_round;
-                filter_out <= filt_temp_out;
-                mux_x <= x1_1;
-                mux_c <= c0; end
-         
-            //else filt_temp_out <= 22'b0;
-        end
+
+        if(control_bit == 3'b100) begin
+            filt_temp_out <= mul_out_round;
+            filter_out <= filt_temp_out;
+            mux_x <= x1_1;
+            mux_c <= c0; 
+            end
+
         else begin
             if(filt_temp_out >= 22'b0) begin
                 case(control_bit)
-                    3'b001: begin mux_x <= x1_2; mux_c <= c1; filt_temp_out <= filt_temp_out + mul_out_round; end
-                    3'b010: begin mux_x <= x1_3; mux_c <= c2; filt_temp_out <= filt_temp_out + mul_out_round; end
-                    3'b011: begin mux_x <= x1_4; mux_c <= c3; filt_temp_out <= filt_temp_out + mul_out_round; end
-                    3'b100: begin mux_x <= x1_5; mux_c <= c4; filt_temp_out <= filt_temp_out + mul_out_round; end
+                    3'b000: begin mux_x <= x1_2; mux_c <= c1; filt_temp_out <= filt_temp_out + mul_out_round; end
+                    3'b001: begin mux_x <= x1_3; mux_c <= c2; filt_temp_out <= filt_temp_out + mul_out_round; end
+                    3'b010: begin mux_x <= x1_4; mux_c <= c3; filt_temp_out <= filt_temp_out + mul_out_round; end
+                    3'b011: begin mux_x <= x1_5; mux_c <= c4; filt_temp_out <= filt_temp_out + mul_out_round; end
                     default : begin mux_x = 12'b0; mux_c <= 12'b0; filt_temp_out <= 22'b0; end
                 endcase
                 filter_out <= filter_out;
-                end
-            //else filt_temp_out <= 22'b0;
+            end
         end
     end
     // 곱하기.
@@ -90,22 +85,15 @@ module d_ff_22bit(out, q, clk, rstn);
 
 endmodule
 
-module counter_3b(out, clk, rstn, start);
+module counter_3b(out, clk, rstn);
 
     output reg[3-1:0] out;
     input clk, rstn;
-    input start;
     always@ (posedge clk)
     begin
         if(rstn == 1'b0) out<= 3'b0;
-        else if (start >= 1'b0) begin 
-            if(out == 3'b100) out <= 3'b000;
-            else out <= out + 1'b1;
-        end
-        else out <= 3'b0;
-
-        // out이 5 다시 0으로 초기화.
-        
+        else if(out == 3'b100) out <= 3'b000;
+        else out <= out + 1'b1; 
     end
 
 endmodule
