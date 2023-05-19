@@ -38,7 +38,7 @@ module stimulus_folded_FIR_filter;
 	begin		
 		$dumpfile("stimulus_folded_FIR_filter.vcd");
 		$dumpvars(0,stimulus_folded_FIR_filter);
-		#(400);//change the timing if needed
+		#(370);//change the timing if needed
 		for (i=0; i<252; i=i+1)
 		begin
 			out_mat <= sig_mat[i];

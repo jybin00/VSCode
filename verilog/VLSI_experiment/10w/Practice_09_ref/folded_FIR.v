@@ -29,25 +29,20 @@ module folded_FIR (filter_out, filter_in, clk100, clk20, reset, c0, c1, c2, c3, 
 
 
     always@(posedge clk100) begin
-
-        if(control_bit == 3'b100) begin
-            filt_temp_out <= mul_out_round;
-            filter_out <= filt_temp_out;
-            mux_x <= x1_1;
-            mux_c <= c0; 
+        if (control_bit == 3'b00) begin 
+            mux_x <= x1_2; mux_c <= c1; 
+            filt_temp_out <= mul_out_round; 
+            filter_out <= filt_temp_out; 
             end
-
         else begin
-            if(filt_temp_out >= 22'b0) begin
-                case(control_bit)
-                    3'b000: begin mux_x <= x1_2; mux_c <= c1; filt_temp_out <= filt_temp_out + mul_out_round; end
-                    3'b001: begin mux_x <= x1_3; mux_c <= c2; filt_temp_out <= filt_temp_out + mul_out_round; end
-                    3'b010: begin mux_x <= x1_4; mux_c <= c3; filt_temp_out <= filt_temp_out + mul_out_round; end
-                    3'b011: begin mux_x <= x1_5; mux_c <= c4; filt_temp_out <= filt_temp_out + mul_out_round; end
-                    default : begin mux_x = 12'b0; mux_c <= 12'b0; filt_temp_out <= 22'b0; end
-                endcase
-                filter_out <= filter_out;
-            end
+            case(control_bit)
+                3'b001: begin mux_x <= x1_3; mux_c <= c2; filt_temp_out <= filt_temp_out + mul_out_round; end
+                3'b010: begin mux_x <= x1_4; mux_c <= c3; filt_temp_out <= filt_temp_out + mul_out_round; end
+                3'b011: begin mux_x <= x1_5; mux_c <= c4; filt_temp_out <= filt_temp_out + mul_out_round; end
+                3'b100: begin mux_x <= x1_1; mux_c <= c0; filt_temp_out <= filt_temp_out + mul_out_round; end
+                default : begin mux_x = 12'b0; mux_c <= 12'b0; filt_temp_out <= 22'b0; end
+            endcase
+            filter_out <= filter_out;
         end
     end
     // 곱하기.
