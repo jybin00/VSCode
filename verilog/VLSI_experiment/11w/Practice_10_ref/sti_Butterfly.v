@@ -1,4 +1,5 @@
 `timescale 1ns/10ps
+`include "Butterfly.v"
 
 module sti_Butterfly;
 
@@ -18,16 +19,18 @@ module sti_Butterfly;
 	
 	initial
 	begin
-		$readmemh("ArAi.txt", sig_A);
-		$readmemh("BrBi.txt", sig_B);
-		$readmemh("C1rC1i.txt", sig_C1);
-		$readmemh("C2rC2i.txt", sig_C2);
+		$readmemh("complex_add/ArAi.txt", sig_A);
+		$readmemh("complex_add/BrBi.txt", sig_B);
+		$readmemh("complex_add/C1rC1i.txt", sig_C1);
+		$readmemh("complex_add/C2rC2i.txt", sig_C2);
 	end
 	
 	integer i=0;
 	integer err = 0;	
 	initial
 	begin		
+		$dumpfile("sti_Butterfly.vcd");
+		$dumpvars(0, sti_Butterfly);
 		for (i=0; i<1024; i=i+1)
 		begin
 			A = sig_A[i];
@@ -37,6 +40,7 @@ module sti_Butterfly;
 			#(10);
 			if((C1 != C)||(C2 != D)) err = err + 1;
 		end
+		$finish;
 	end
 
 
