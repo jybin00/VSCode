@@ -40,7 +40,7 @@ module folded_FIR (filter_out, filter_in, clk100, clk20, reset, c0, c1, c2, c3, 
                 3'b010: begin mux_x <= x1_4; mux_c <= c3; filt_temp_out <= filt_temp_out + mul_out_round; end
                 3'b011: begin mux_x <= x1_5; mux_c <= c4; filt_temp_out <= filt_temp_out + mul_out_round; end
                 3'b100: begin mux_x <= x1_1; mux_c <= c0; filt_temp_out <= filt_temp_out + mul_out_round; end
-                default : begin mux_x = 12'b0; mux_c <= 12'b0; filt_temp_out <= 22'b0; end
+                default : begin mux_x <= 12'b0; mux_c <= 12'b0; filt_temp_out <= 22'b0; end
             endcase
             filter_out <= filter_out;
         end
@@ -58,7 +58,7 @@ module d_ff_12bit(out, q, clk, rstn);
     input signed[12-1:0] q;
     input clk, rstn;
 
-    always@ (posedge clk or rstn)
+    always@ (posedge clk)
     begin
         if(rstn == 1'b0) out<= 12'b0;
         else out <= q;
@@ -72,7 +72,7 @@ module d_ff_22bit(out, q, clk, rstn);
     input signed[22-1:0] q;
     input clk, rstn;
 
-    always@ (posedge clk or rstn)
+    always@ (posedge clk)
     begin
         if(rstn == 1'b0) out<= 22'b0;
         else out <= q;
