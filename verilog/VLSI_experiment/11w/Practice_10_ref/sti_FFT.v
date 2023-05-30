@@ -48,7 +48,7 @@ module sti_FFT;
 		$dumpvars(0, sti_FFT);
 		$readmemh("fft/output_FFT.txt", mat_out);
 		begin
-			#(200); //change if needed
+			#(120); //change if needed
 			for (j=0; j<1024; j=j+1)
 			begin
 				out_mat <= mat_out[j];
@@ -58,7 +58,6 @@ module sti_FFT;
 		end
 		$finish;
 	end
-
 
 
 
