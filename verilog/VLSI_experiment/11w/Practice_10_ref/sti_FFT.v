@@ -1,5 +1,6 @@
 
 `timescale 1ns/10ps
+`include "top_FFT.v"
 module sti_FFT;
 
 	reg clk, reset;
@@ -28,7 +29,7 @@ module sti_FFT;
 
 	initial
 	begin		
-		$readmemh("input_FFT.txt", mat_in);
+		$readmemh("fft/input_FFT.txt", mat_in);
 		begin
 			#(20);
 			for (i=0; i<1024; i=i+1)
@@ -43,7 +44,9 @@ module sti_FFT;
 	integer err = 0;	
 	initial
 	begin		
-		$readmemh("output_FFT.txt", mat_out);
+		$dumpfile("sti_FFT.vcd");
+		$dumpvars(0, sti_FFT);
+		$readmemh("fft/output_FFT.txt", mat_out);
 		begin
 			#(200); //change if needed
 			for (j=0; j<1024; j=j+1)
@@ -53,6 +56,7 @@ module sti_FFT;
 				#(10);
 			end
 		end
+		$finish;
 	end
 
 

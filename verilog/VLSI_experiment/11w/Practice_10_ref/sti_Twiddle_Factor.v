@@ -1,4 +1,5 @@
 `timescale 1ns/10ps
+`include "Twiddle_Factor.v"
 
 module sti_Twiddle_Factor;
 
@@ -16,15 +17,17 @@ module sti_Twiddle_Factor;
 	
 	initial
 	begin
-		$readmemh("CrCi.txt", sig_C);
-		$readmemh("TrTi.txt", sig_T);
-		$readmemh("OrOi.txt", sig_O);
+		$readmemh("complex_mult/CrCi.txt", sig_C);
+		$readmemh("complex_mult/TrTi.txt", sig_T);
+		$readmemh("complex_mult/OrOi.txt", sig_O);
 	end
 	
 	integer i=0;
 	integer err = 0;	
 	initial
 	begin		
+		$dumpfile("sti_Twiddle_Factor.vcd");
+		$dumpvars(0, sti_Twiddle_Factor);
 		for (i=0; i<1024; i=i+1)
 		begin
 			C = sig_C[i];
@@ -33,6 +36,7 @@ module sti_Twiddle_Factor;
 			#(10);
 			if(out != O) err = err + 1;
 		end
+		$finish;
 	end
 
 
