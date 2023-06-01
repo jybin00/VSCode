@@ -35,9 +35,10 @@ module sti_shift_register;
 			for (i=0; i<1024; i=i+1)
 			begin
 				A = sig_A[i];
-				B = sig_A[i-3];
+				B = sig_A[i-4];
 				#10;
 				if (out != B ) err = err + 1;
+				
 			end
 		end
 		$finish;
