@@ -2,12 +2,12 @@
 
 module top_FFT(out, in, clk, rstn);
 
-    output signed[24-1:0] out;
-    input signed [24-1:0] in;
+    output [24-1:0] out;
+    input [24-1:0] in;
     input clk, rstn;
-    wire signed [12-1:0] out_r, out_i;
-    assign out_r = out[24-1:12];
-    assign out_i = out[12-1:0];
+    //wire signed [12-1:0] out_r, out_i;
+    //assign out_r = out[24-1:12];
+    //assign out_i = out[12-1:0];
 
     wire signed[24-1:0] W0, W1, W2, W3;
     assign W0 = 24'h400000; 
@@ -16,16 +16,16 @@ module top_FFT(out, in, clk, rstn);
     assign W3 = 24'hD2CD2C;
 
     // A는 입력, B는 FIFO 출력.
-    wire signed[24-1:0]A1, A2, A3, B1, B2, B3;
+    wire [24-1:0]A1, A2, A3, B1, B2, B3;
     // C1은 더해서 나온 결과, C2는 빼서 나온 결과.
-    wire signed[24-1:0]C1_1, C1_2, C1_3, C2_1, C2_2, C2_3;
+    wire [24-1:0]C1_1, C1_2, C1_3, C2_1, C2_2, C2_3;
     // FIFO 입력, Twiddle Factor 입력
-    wire signed[24-1:0]F4_in, F2_in, F1_in;
-    wire signed[24-1:0]T1_in, T2_in, T3_in;
-    wire signed[24-1:0]T1_out, T2_out, T3_out;
-    wire signed[24-1:0]st1_out, st2_out, st3_out;
+    wire [24-1:0]F4_in, F2_in, F1_in;
+    wire [24-1:0]T1_in, T2_in, T3_in;
+    wire [24-1:0]T1_out, T2_out, T3_out;
+    wire [24-1:0]st1_out, st2_out, st3_out;
     // twiddle factor
-    reg signed[24-1:0]T1, T2; 
+    reg [24-1:0]T1, T2; 
     // mux select bit
     reg sel1, sel2, sel2_nxt, sel3, sel3_nxt;
     wire st1_cont, st2_cont;
@@ -49,11 +49,10 @@ module top_FFT(out, in, clk, rstn);
     mux M2_1 (T2_in, B2, C1_2, sel2);
     Butterfly BF2(C1_2, C2_2, A2, B2);
     mux M2_2 (F2_in, A2, C2_2, sel2);
-    //Twiddle_Factor TW2(st2_out, T2_in, T2);
     Twiddle_Factor TW2(T2_out, T2_in, T2);
-    //mux M2_3 (st2_out, T2_out, T2_in, sel2);
+    mux M2_3 (st2_out, T2_out, T2_in, sel2);
 
-    // FIFO1 ST3_IN (A3, st2_out, clk, rstn);
+    FIFO1 ST3_IN (A3, st2_out, clk, rstn);
 
     FIFO1 F1 (B3, F1_in, clk, reset);
     mux M3_1 (st3_out, B3, C1_3, sel3);
@@ -134,8 +133,7 @@ module top_FFT(out, in, clk, rstn);
                 sel2 = 1'b1;
                 if(st2_cont == 1'b0) st2_nxt = calc_mult;
                 else begin 
-                    st2_nxt = calc_add; 
-                    assign st2_out = T2_out; end
+                    st2_nxt = calc_add; end
             end
             calc_mult: begin
                 sel2 = 1'b0;
@@ -146,8 +144,7 @@ module top_FFT(out, in, clk, rstn);
                 endcase
                 if(st2_cont == 1'b1) st2_nxt = calc_add;
                 else begin 
-                    st2_nxt = calc_mult; 
-                    assign st2_out = T2_in; end
+                    st2_nxt = calc_mult; end
             end
             finish: begin
                 st2_nxt = idle;
@@ -236,8 +233,8 @@ endmodule
 
 // 2to1 mux
 module mux(out, in0, in1, sel);
-    output signed [24-1:0] out;
-    input signed [24-1:0] in0, in1;
+    output [24-1:0] out;
+    input [24-1:0] in0, in1;
     input sel;
 
     // 0이면 in0, 1이면 in1
@@ -289,8 +286,8 @@ endmodule
 // lattice 구조를 가지는 butterfly module을 설계하고, (진짜 butterfly모듈만, 주변 모듈 x)
 // 이를 이용하여 8 point FFT를 구현한다.
 module Butterfly(C1, C2, A, B);
-    output signed[24-1:0] C1, C2; // C1 = A + B, C2 = B - A 근데 이렇게 하면 test vecot가 안 맞음. => 거꾸로 넣어줘야 할 듯.
-    input signed[24-1:0] A, B; // A = A_r + j*A_i, B = B_r + j*B_i
+    output [24-1:0] C1, C2; // C1 = A + B, C2 = B - A 근데 이렇게 하면 test vecot가 안 맞음. => 거꾸로 넣어줘야 할 듯.
+    input [24-1:0] A, B; // A = A_r + j*A_i, B = B_r + j*B_i
 
     wire signed[12-1:0] A_r, A_i, B_r, B_i;  // A, B 자체는 합쳐져 있어서 signed bit 없지만,
     wire signed[13-1:0] C1_r, C1_i, C2_r, C2_i; // real, imaginary는 signed bit으로 지정.
