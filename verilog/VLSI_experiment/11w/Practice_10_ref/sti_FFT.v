@@ -9,6 +9,8 @@ module sti_FFT;
 	reg [24-1:0] in;
 	reg [24-1:0] mat_out [0:1023];
 	reg [24-1:0] out_mat;
+	wire [12-1:0]out_mat_i, out_mat_r;
+	assign out_mat_i = out_mat[12-1:0], out_mat_r = out_mat[24-1:12];
 
     wire [24-1:0] out;
 	
