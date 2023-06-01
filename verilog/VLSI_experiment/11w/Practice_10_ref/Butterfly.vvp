@@ -6,60 +6,60 @@
 :vpi_module "vhdl_sys";
 :vpi_module "v2005_math";
 :vpi_module "va_math";
-S_0x7fe4e4804220 .scope module, "Butterfly" "Butterfly" 2 4;
+S_0x7fc0758094c0 .scope module, "Butterfly" "Butterfly" 2 4;
  .timescale 0 0;
     .port_info 0 /OUTPUT 24 "C1"
     .port_info 1 /OUTPUT 24 "C2"
     .port_info 2 /INPUT 24 "A"
     .port_info 3 /INPUT 24 "B"
-o0x7fe4c8008008 .functor BUFZ 24, C4<zzzzzzzzzzzzzzzzzzzzzzzz>; HiZ drive
-v0x7fe4e48043e0_0 .net/s "A", 23 0, o0x7fe4c8008008;  0 drivers
-v0x7fe4e4814480_0 .net/s "A_i", 11 0, L_0x7fe4e48156a0;  1 drivers
-v0x7fe4e4814520_0 .net/s "A_r", 11 0, L_0x7fe4e4815600;  1 drivers
-o0x7fe4c8008098 .functor BUFZ 24, C4<zzzzzzzzzzzzzzzzzzzzzzzz>; HiZ drive
-v0x7fe4e48145d0_0 .net/s "B", 23 0, o0x7fe4c8008098;  0 drivers
-v0x7fe4e4814680_0 .net/s "B_i", 11 0, L_0x7fe4e4815800;  1 drivers
-v0x7fe4e4814770_0 .net/s "B_r", 11 0, L_0x7fe4e4815740;  1 drivers
-v0x7fe4e4814820_0 .net/s "C1", 23 0, L_0x7fe4e4816680;  1 drivers
-v0x7fe4e48148d0_0 .net/s "C1_i", 12 0, L_0x7fe4e4815e40;  1 drivers
-v0x7fe4e4814980_0 .net/s "C1_r", 12 0, L_0x7fe4e4815af0;  1 drivers
-v0x7fe4e4814a90_0 .net/s "C2", 23 0, L_0x7fe4e4816760;  1 drivers
-v0x7fe4e4814b40_0 .net/s "C2_i", 12 0, L_0x7fe4e4816410;  1 drivers
-v0x7fe4e4814bf0_0 .net/s "C2_r", 12 0, L_0x7fe4e48160e0;  1 drivers
-v0x7fe4e4814ca0_0 .net/s *"_s10", 12 0, L_0x7fe4e4815a10;  1 drivers
-v0x7fe4e4814d50_0 .net/s *"_s14", 12 0, L_0x7fe4e4815c30;  1 drivers
-v0x7fe4e4814e00_0 .net/s *"_s16", 12 0, L_0x7fe4e4815d10;  1 drivers
-v0x7fe4e4814eb0_0 .net/s *"_s20", 12 0, L_0x7fe4e4815f40;  1 drivers
-v0x7fe4e4814f60_0 .net/s *"_s22", 12 0, L_0x7fe4e4816040;  1 drivers
-v0x7fe4e48150f0_0 .net/s *"_s26", 12 0, L_0x7fe4e4816250;  1 drivers
-v0x7fe4e4815180_0 .net/s *"_s28", 12 0, L_0x7fe4e48162f0;  1 drivers
-v0x7fe4e4815230_0 .net *"_s33", 11 0, L_0x7fe4e48164b0;  1 drivers
-v0x7fe4e48152e0_0 .net *"_s35", 11 0, L_0x7fe4e48165e0;  1 drivers
-v0x7fe4e4815390_0 .net *"_s39", 11 0, L_0x7fe4e4816800;  1 drivers
-v0x7fe4e4815440_0 .net *"_s41", 11 0, L_0x7fe4e48168a0;  1 drivers
-v0x7fe4e48154f0_0 .net/s *"_s8", 12 0, L_0x7fe4e4815900;  1 drivers
-L_0x7fe4e4815600 .part o0x7fe4c8008008, 12, 12;
-L_0x7fe4e48156a0 .part o0x7fe4c8008008, 0, 12;
-L_0x7fe4e4815740 .part o0x7fe4c8008098, 12, 12;
-L_0x7fe4e4815800 .part o0x7fe4c8008098, 0, 12;
-L_0x7fe4e4815900 .extend/s 13, L_0x7fe4e4815600;
-L_0x7fe4e4815a10 .extend/s 13, L_0x7fe4e4815740;
-L_0x7fe4e4815af0 .arith/sum 13, L_0x7fe4e4815900, L_0x7fe4e4815a10;
-L_0x7fe4e4815c30 .extend/s 13, L_0x7fe4e48156a0;
-L_0x7fe4e4815d10 .extend/s 13, L_0x7fe4e4815800;
-L_0x7fe4e4815e40 .arith/sum 13, L_0x7fe4e4815c30, L_0x7fe4e4815d10;
-L_0x7fe4e4815f40 .extend/s 13, L_0x7fe4e4815600;
-L_0x7fe4e4816040 .extend/s 13, L_0x7fe4e4815740;
-L_0x7fe4e48160e0 .arith/sub 13, L_0x7fe4e4815f40, L_0x7fe4e4816040;
-L_0x7fe4e4816250 .extend/s 13, L_0x7fe4e48156a0;
-L_0x7fe4e48162f0 .extend/s 13, L_0x7fe4e4815800;
-L_0x7fe4e4816410 .arith/sub 13, L_0x7fe4e4816250, L_0x7fe4e48162f0;
-L_0x7fe4e48164b0 .part L_0x7fe4e4815af0, 1, 12;
-L_0x7fe4e48165e0 .part L_0x7fe4e4815e40, 1, 12;
-L_0x7fe4e4816680 .concat [ 12 12 0 0], L_0x7fe4e48165e0, L_0x7fe4e48164b0;
-L_0x7fe4e4816800 .part L_0x7fe4e48160e0, 1, 12;
-L_0x7fe4e48168a0 .part L_0x7fe4e4816410, 1, 12;
-L_0x7fe4e4816760 .concat [ 12 12 0 0], L_0x7fe4e48168a0, L_0x7fe4e4816800;
+o0x7fc048008008 .functor BUFZ 24, C4<zzzzzzzzzzzzzzzzzzzzzzzz>; HiZ drive
+v0x7fc074f06510_0 .net/s "A", 23 0, o0x7fc048008008;  0 drivers
+v0x7fc075819990_0 .net/s "A_i", 11 0, L_0x7fc07581abc0;  1 drivers
+v0x7fc075819a50_0 .net/s "A_r", 11 0, L_0x7fc07581ab20;  1 drivers
+o0x7fc048008098 .functor BUFZ 24, C4<zzzzzzzzzzzzzzzzzzzzzzzz>; HiZ drive
+v0x7fc075819af0_0 .net/s "B", 23 0, o0x7fc048008098;  0 drivers
+v0x7fc075819ba0_0 .net/s "B_i", 11 0, L_0x7fc07581ad40;  1 drivers
+v0x7fc075819c90_0 .net/s "B_r", 11 0, L_0x7fc07581ac60;  1 drivers
+v0x7fc075819d40_0 .net/s "C1", 23 0, L_0x7fc07581bda0;  1 drivers
+v0x7fc075819df0_0 .net/s "C1_i", 12 0, L_0x7fc07581b380;  1 drivers
+v0x7fc075819ea0_0 .net/s "C1_itmp", 11 0, L_0x7fc07581bb20;  1 drivers
+v0x7fc075819fb0_0 .net/s "C1_r", 12 0, L_0x7fc07581b030;  1 drivers
+v0x7fc07581a060_0 .net/s "C1_rtmp", 11 0, L_0x7fc07581b9f0;  1 drivers
+v0x7fc07581a110_0 .net/s "C2", 23 0, L_0x7fc07581bc60;  1 drivers
+v0x7fc07581a1c0_0 .net/s "C2_i", 12 0, L_0x7fc07581b950;  1 drivers
+v0x7fc07581a270_0 .net/s "C2_itmp", 11 0, L_0x7fc07581bd00;  1 drivers
+v0x7fc07581a320_0 .net/s "C2_r", 12 0, L_0x7fc07581b620;  1 drivers
+v0x7fc07581a3d0_0 .net/s "C2_rtmp", 11 0, L_0x7fc07581bbc0;  1 drivers
+v0x7fc07581a480_0 .net/s *"_s10", 12 0, L_0x7fc07581af50;  1 drivers
+v0x7fc07581a610_0 .net/s *"_s14", 12 0, L_0x7fc07581b1b0;  1 drivers
+v0x7fc07581a6a0_0 .net/s *"_s16", 12 0, L_0x7fc07581b250;  1 drivers
+v0x7fc07581a750_0 .net/s *"_s20", 12 0, L_0x7fc07581b480;  1 drivers
+v0x7fc07581a800_0 .net/s *"_s22", 12 0, L_0x7fc07581b580;  1 drivers
+v0x7fc07581a8b0_0 .net/s *"_s26", 12 0, L_0x7fc07581b790;  1 drivers
+v0x7fc07581a960_0 .net/s *"_s28", 12 0, L_0x7fc07581b830;  1 drivers
+v0x7fc07581aa10_0 .net/s *"_s8", 12 0, L_0x7fc07581ae40;  1 drivers
+L_0x7fc07581ab20 .part o0x7fc048008008, 12, 12;
+L_0x7fc07581abc0 .part o0x7fc048008008, 0, 12;
+L_0x7fc07581ac60 .part o0x7fc048008098, 12, 12;
+L_0x7fc07581ad40 .part o0x7fc048008098, 0, 12;
+L_0x7fc07581ae40 .extend/s 13, L_0x7fc07581ab20;
+L_0x7fc07581af50 .extend/s 13, L_0x7fc07581ac60;
+L_0x7fc07581b030 .arith/sum 13, L_0x7fc07581ae40, L_0x7fc07581af50;
+L_0x7fc07581b1b0 .extend/s 13, L_0x7fc07581abc0;
+L_0x7fc07581b250 .extend/s 13, L_0x7fc07581ad40;
+L_0x7fc07581b380 .arith/sum 13, L_0x7fc07581b1b0, L_0x7fc07581b250;
+L_0x7fc07581b480 .extend/s 13, L_0x7fc07581ab20;
+L_0x7fc07581b580 .extend/s 13, L_0x7fc07581ac60;
+L_0x7fc07581b620 .arith/sub 13, L_0x7fc07581b480, L_0x7fc07581b580;
+L_0x7fc07581b790 .extend/s 13, L_0x7fc07581abc0;
+L_0x7fc07581b830 .extend/s 13, L_0x7fc07581ad40;
+L_0x7fc07581b950 .arith/sub 13, L_0x7fc07581b790, L_0x7fc07581b830;
+L_0x7fc07581b9f0 .part L_0x7fc07581b030, 1, 12;
+L_0x7fc07581bb20 .part L_0x7fc07581b380, 1, 12;
+L_0x7fc07581bbc0 .part L_0x7fc07581b620, 1, 12;
+L_0x7fc07581bd00 .part L_0x7fc07581b950, 1, 12;
+L_0x7fc07581bda0 .concat [ 12 12 0 0], L_0x7fc07581bb20, L_0x7fc07581b9f0;
+L_0x7fc07581bc60 .concat [ 12 12 0 0], L_0x7fc07581bd00, L_0x7fc07581bbc0;
 # The file index is used to find the file name in the following table.
 :file_names 3;
     "N/A";
