@@ -8,12 +8,12 @@ module Twiddle_Factor(out, C, T);
     input signed[24-1:0] T;
 
     wire signed[12-1:0] C_r, C_i, T_r, T_i;  // (12.10)
-    assign {C_r, C_i} = C;
-    assign {T_r, T_i} = T;
+    assign C_r = C[24-1:12]; assign C_i = C[12-1:0];
+    assign T_r = T[24-1:12]; assign T_i = T[12-1:0];
 
     // 곱셈 임시 변수
     wire signed[24-1:0] tmp_r1, tmp_r2, tmp_i1, tmp_i2;
-    assign tmp_r1 = C_r * T_r;  // (24.20) => 24.22 (실제로는)
+    assign tmp_r1 = C_r * T_r;  // (24.20)
     assign tmp_r2 = C_i * T_i;  // (24.20)
     assign tmp_i1 = C_r * T_i;  // (24.20)
     assign tmp_i2 = C_i * T_r;  // (24.20)
@@ -23,7 +23,7 @@ module Twiddle_Factor(out, C, T);
     assign tmp_r = tmp_r1 - tmp_r2; // (25.20)
     assign tmp_i = tmp_i1 + tmp_i2; // (25.20)
 
-    wire signed[11:0] out_r, out_i;
+    wire signed[12-1:0] out_r, out_i;
     assign out_r = tmp_r[22-1:10];  // (12.10)
     assign out_i = tmp_i[22-1:10];  // (12.10)
 
