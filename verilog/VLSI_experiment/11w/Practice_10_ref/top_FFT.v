@@ -1,4 +1,3 @@
-`include "Butterfly.v"
 `include "Twiddle_Factor.v"
 
 module top_FFT(out, in, clk, rstn);
@@ -6,6 +5,9 @@ module top_FFT(out, in, clk, rstn);
     output signed[24-1:0] out;
     input signed [24-1:0] in;
     input clk, rstn;
+    wire signed [12-1:0] out_r, out_i;
+    assign out_r = out[24-1:12];
+    assign out_i = out[12-1:0];
 
     wire signed[24-1:0] W0, W1, W2, W3;
     assign W0 = 24'h400000; 
@@ -23,11 +25,9 @@ module top_FFT(out, in, clk, rstn);
     wire signed[24-1:0]T1_out, T2_out, T3_out;
     wire signed[24-1:0]st1_out, st2_out, st3_out;
     // twiddle factor
-    reg signed[24-1:0]T1, T2, T3; 
+    reg signed[24-1:0]T1, T2; 
     // mux select bit
     reg sel1, sel2, sel2_nxt, sel3, sel3_nxt;
-    reg st2_stt = 1'b0;
-    reg st2_tmp = 1'b0;
     wire st1_cont, st2_cont;
     wire [3-1:0] cnt1;
     wire [2-1:0] cnt2;
@@ -39,6 +39,7 @@ module top_FFT(out, in, clk, rstn);
     mux M1_1 (T1_in, B1, C1_1, sel1);
     Butterfly BF1(C1_1, C2_1, A1, B1);
     mux M1_2 (F4_in, A1, C2_1, sel1);
+    //Twiddle_Factor TW1(st1_out, T1_in, T1);
     Twiddle_Factor TW1(T1_out, T1_in, T1);
     mux M1_3 (st1_out, T1_out, T1_in, sel1);
 
@@ -48,10 +49,11 @@ module top_FFT(out, in, clk, rstn);
     mux M2_1 (T2_in, B2, C1_2, sel2);
     Butterfly BF2(C1_2, C2_2, A2, B2);
     mux M2_2 (F2_in, A2, C2_2, sel2);
+    //Twiddle_Factor TW2(st2_out, T2_in, T2);
     Twiddle_Factor TW2(T2_out, T2_in, T2);
-    mux M2_3 (st2_out, T2_out, T2_in, sel2);
+    //mux M2_3 (st2_out, T2_out, T2_in, sel2);
 
-    FIFO1 ST3_IN (A3, st2_out, clk, rstn);
+    // FIFO1 ST3_IN (A3, st2_out, clk, rstn);
 
     FIFO1 F1 (B3, F1_in, clk, reset);
     mux M3_1 (st3_out, B3, C1_3, sel3);
@@ -82,7 +84,7 @@ module top_FFT(out, in, clk, rstn);
         end
     end
 
-    always@(st1_cont, st2_cont, st1_cur, st2_cur, st3_cur) begin
+    always@(st1_cur, st2_cur, st3_cur) begin
         st1_nxt = st1_cur;
         st2_nxt = st2_cur;
         st3_nxt = st3_cur;
@@ -98,7 +100,7 @@ module top_FFT(out, in, clk, rstn);
             end
             calc_add: begin
                 sel1 = 1'b1;
-                T1 = 24'h000001;
+                //T1 = 24'h000001;
                 if(st1_cont == 1'b0) st1_nxt = calc_mult;
                 else st1_nxt = calc_add;
             end
@@ -129,10 +131,11 @@ module top_FFT(out, in, clk, rstn);
                 end
             end
             calc_add: begin
-                T2 = 24'h000001;
                 sel2 = 1'b1;
                 if(st2_cont == 1'b0) st2_nxt = calc_mult;
-                else st2_nxt = calc_add;
+                else begin 
+                    st2_nxt = calc_add; 
+                    assign st2_out = T2_out; end
             end
             calc_mult: begin
                 sel2 = 1'b0;
@@ -141,10 +144,10 @@ module top_FFT(out, in, clk, rstn);
                     2'b00: T2 = W2;
                     default : T2 = 24'b1;
                 endcase
-                if(A2 >0 && st2_cont == 1'b1) st2_nxt <= calc_add;
-                else 
-                    if (A2 >= 24'b0) st2_nxt = calc_mult;
-                    else st2_nxt = idle;
+                if(st2_cont == 1'b1) st2_nxt = calc_add;
+                else begin 
+                    st2_nxt = calc_mult; 
+                    assign st2_out = T2_in; end
             end
             finish: begin
                 st2_nxt = idle;
@@ -182,10 +185,10 @@ module FIFO4 (out, in, clk, rstn);
     input clk, rstn;
     always@(posedge clk) begin
         if(~rstn) begin
-            q3 <= 24'b0;
             q0 <= 24'b0;
             q1 <= 24'b0;
             q2 <= 24'b0;
+            q3 <= 24'b0;
         end
         else begin
             q0 <= in;
@@ -238,7 +241,7 @@ module mux(out, in0, in1, sel);
     input sel;
 
     // 0이면 in0, 1이면 in1
-    assign out = ~sel ? in0 : in1;
+    assign out = sel ? in1 : in0;
 endmodule
 
 module cnt4 (cnt, flag, clk, rstn);
@@ -279,4 +282,30 @@ module cnt2 (cnt, flag, clk, rstn);
             else delay <= 1'b0;
         end
     end
+endmodule
+
+
+// butterfly module
+// lattice 구조를 가지는 butterfly module을 설계하고, (진짜 butterfly모듈만, 주변 모듈 x)
+// 이를 이용하여 8 point FFT를 구현한다.
+module Butterfly(C1, C2, A, B);
+    output signed[24-1:0] C1, C2; // C1 = A + B, C2 = B - A 근데 이렇게 하면 test vecot가 안 맞음. => 거꾸로 넣어줘야 할 듯.
+    input signed[24-1:0] A, B; // A = A_r + j*A_i, B = B_r + j*B_i
+
+    wire signed[12-1:0] A_r, A_i, B_r, B_i;  // A, B 자체는 합쳐져 있어서 signed bit 없지만,
+    wire signed[13-1:0] C1_r, C1_i, C2_r, C2_i; // real, imaginary는 signed bit으로 지정.
+
+    assign A_r = A[24-1:12];  assign A_i = A[12-1:0];
+    assign B_r = B[24-1:12];  assign B_i = B[12-1:0];
+    assign C1_r = A_r + B_r;  assign C1_i = A_i + B_i;
+    assign C2_r = -(A_r - B_r);  assign C2_i = -(A_i - B_i);
+
+    wire signed[12-1:0] C1_rtmp, C1_itmp, C2_rtmp, C2_itmp;
+
+    assign C1_rtmp = C1_r[13-1:1]; assign C1_itmp = C1_i[13-1:1];
+    assign C2_rtmp = C2_r[13-1:1]; assign C2_itmp = C2_i[13-1:1];
+
+    assign C1 = {C1_rtmp, C1_itmp}; assign C2 = {C2_rtmp, C2_itmp};
+
+
 endmodule
