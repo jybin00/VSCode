@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%   DCT Coefficient Quantization Function  %%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function  Block_quant = func_DCTquant(Block, num_bin, num_int)
+function  Block_quant = func_DCTquant(Block, num_bin, num_int) % num binary, num integer
 
 for i = 1:16
    for j = 1:16

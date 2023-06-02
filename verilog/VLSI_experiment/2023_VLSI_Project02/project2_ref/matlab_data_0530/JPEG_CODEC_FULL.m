@@ -1,6 +1,7 @@
 clear all
 close all
 clc
+tic
 
 for image_number = 1:8 %-------------"Change this number" to test many different images------
     %---------------------------- Get the Image data Input ----------------------------------
@@ -83,7 +84,8 @@ for image_number = 1:8 %-------------"Change this number" to test many different
      
      % The number of bits for DCT Coefficient Quantization
      % You can "adjust this number" to improve the qualities of images
-     C_quantization_bit =  10;
+     % Original = 10;
+     C_quantization_bit =  6;
      T = func_DCT_Coefficient_quant(C_quantization_bit);
      
      % If you want to check the coefficient value in hex format, please use this and open the txt file.
@@ -99,7 +101,8 @@ for image_number = 1:8 %-------------"Change this number" to test many different
      %---------------------Quatization bit setup-----------------------------
      % The number of bits for Result of 1D-DCT Quantization
      % You can "adjust this number" to improve the qualities of images.
-     Result_1D_DCT_quantization_bit = 14;
+     % Original = 14;
+     Result_1D_DCT_quantization_bit = 11;
      
      % The number of integer bits for Result of 1D-DCT
      num_int = 12;
@@ -110,13 +113,21 @@ for image_number = 1:8 %-------------"Change this number" to test many different
      for i=1:m/16
          for j=1:n/16
              Block_temp = input_image_512x512((16*i-15):16*i,(16*j-15):16*j);
+
              Block_DCT_1D_temp = T*Block_temp';
+
              Block_DCT_1D_quant((16*i-15):16*i,(16*j-15):16*j) = func_DCTquant(Block_DCT_1D_temp, Result_1D_DCT_quantization_bit, num_int);   % result of 1D DCT for debugging
+
              Block_DCT_2D_temp = T*Block_DCT_1D_quant((16*i-15):16*i,(16*j-15):16*j)';
+
              Block_DCT_2D_quant((16*i-15):16*i,(16*j-15):16*j) = (Block_DCT_2D_temp); % result of 2D DCT for debugging
+
              Block_DCT_final((16*i-15):16*i,(16*j-15):16*j) = func_DCTquant_trunc(Block_DCT_2D_quant((16*i-15):16*i,(16*j-15):16*j));
+
              Block_DCT = Block_DCT_final((16*i-15):16*i,(16*j-15):16*j);
+
              Block_r = round(Q_pre.\Block_DCT);
+
              Image_tran((16*i-15):16*i,(16*j-15):16*j) = Block_r;
          end
      end
@@ -307,5 +318,6 @@ for image_number = 1:8 %-------------"Change this number" to test many different
      imshow(Image_restore./255);
      title ( sprintf('Restored image #%d \n PSNR : %d',image_number,PSNR(image_number)) );
  
- end
+end
+toc
  
