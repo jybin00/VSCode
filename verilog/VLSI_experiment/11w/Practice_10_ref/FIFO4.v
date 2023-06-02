@@ -1,6 +1,6 @@
 // Shift register with 4 stages
 module FIFO4 (out, in, clk, rstn);
-    output reg[24-1:0] out;
+    output [24-1:0] out;
     input [24-1:0] in;
     reg [24-1:0] q0, q1, q2, q3;
     input clk, rstn;
@@ -16,7 +16,7 @@ module FIFO4 (out, in, clk, rstn);
             q1 <= q0;
             q2 <= q1;
             q3 <= q2;
-            out <= q3;
         end
     end
+    assign out = q3;
 endmodule
