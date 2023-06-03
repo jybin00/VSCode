@@ -1,9 +1,10 @@
 clear all
-close all
-clc
+%close all
+%clc
 tic
 
 for image_number = 1:8 %-------------"Change this number" to test many different images------
+    fprintf("image %d\n", image_number);
     %---------------------------- Get the Image data Input ----------------------------------
     input_image_512x512 = double( imread( sprintf( 'image_in_%d.tif',image_number ),'tiff' ) );
     [m,n] = size(input_image_512x512);
@@ -85,8 +86,8 @@ for image_number = 1:8 %-------------"Change this number" to test many different
      % The number of bits for DCT Coefficient Quantization
      % You can "adjust this number" to improve the qualities of images
      % Original = 10;
-     C_quantization_bit =  6;
-     T = func_DCT_Coefficient_quant(C_quantization_bit);
+     C_quantization_bit =  7; % (1 . C_quantization_bit -1) 6~7비트 사이 괜찮은 듯.
+     T = func_DCT_Coefficient_quant(C_quantization_bit); % 몇 개로 자를까?
      
      % If you want to check the coefficient value in hex format, please use this and open the txt file.
      filter_coef = fopen('./filt_coeff_T.txt','w');
@@ -102,10 +103,14 @@ for image_number = 1:8 %-------------"Change this number" to test many different
      % The number of bits for Result of 1D-DCT Quantization
      % You can "adjust this number" to improve the qualities of images.
      % Original = 14;
-     Result_1D_DCT_quantization_bit = 11;
+     Result_1D_DCT_quantization_bit = 11; % DCT 결과  = BW
      
      % The number of integer bits for Result of 1D-DCT
-     num_int = 12;
+     % Original = 12;
+     % quantization bit - num_int 한 만큼 소수점 quntization
+     % 생각해보니까 X[k]는 한번 곱해진게 아니라 16번 계수와 곱해진게 더해진거네,, 
+     % 당연히 4정도 곱해지면 정수 부분이 커져야 맞다.
+     num_int = 11; % BW 중에서 int의 범위
      
      %--------------------------- DCT OPERATION -----------------------------
      Image_tran = zeros(m,n);
@@ -114,7 +119,7 @@ for image_number = 1:8 %-------------"Change this number" to test many different
          for j=1:n/16
              Block_temp = input_image_512x512((16*i-15):16*i,(16*j-15):16*j);
 
-             Block_DCT_1D_temp = T*Block_temp';
+             Block_DCT_1D_temp = T*Block_temp'; % T가 DCT 블록임.
 
              Block_DCT_1D_quant((16*i-15):16*i,(16*j-15):16*j) = func_DCTquant(Block_DCT_1D_temp, Result_1D_DCT_quantization_bit, num_int);   % result of 1D DCT for debugging
 
