@@ -1,8 +1,9 @@
 `include "Twiddle_Factor.v"
 
-module top_FFT(out, in, clk, rstn);
+module top_FFT(out, in, clk, rstn, done);
 
     output [24-1:0] out;
+    output reg done = 1'b0;
     input [24-1:0] in;
     input clk, rstn;
     //wire signed [12-1:0] out_r, out_i;
@@ -100,8 +101,10 @@ module top_FFT(out, in, clk, rstn);
             calc_add: begin
                 sel1 = 1'b1;
                 //T1 = 24'h000001;
-                if(st1_cont == 1'b0) st1_nxt = calc_mult;
-                else st1_nxt = calc_add;
+                if(in >= 0 || out >= 0) begin
+                    if(st1_cont == 1'b0) st1_nxt = calc_mult;
+                    else st1_nxt = calc_add; end
+                else st1_nxt = finish;
             end
             calc_mult: begin
                 sel1 = 1'b0;
@@ -112,11 +115,14 @@ module top_FFT(out, in, clk, rstn);
                     3'b000: T1 = W3;
                     default : T1 = 24'b1;
                 endcase
-                if(st1_cont == 1'b1) st1_nxt = calc_add;
-                else st1_nxt = calc_mult;
+                if(in >= 0 || out >= 0) begin
+                    if(st1_cont == 1'b1) st1_nxt = calc_add;
+                    else st1_nxt = calc_mult; end
+                else st1_nxt = finish;
             end
             finish: begin
-                st1_nxt = idle;
+                st1_nxt = finish;
+                done <= 1'b1;
             end
         endcase
         case(st2_cur)
@@ -131,9 +137,10 @@ module top_FFT(out, in, clk, rstn);
             end
             calc_add: begin
                 sel2 = 1'b1;
-                if(st2_cont == 1'b0) st2_nxt = calc_mult;
-                else begin 
-                    st2_nxt = calc_add; end
+                if(st1_cur != finish) begin
+                    if(st2_cont == 1'b0) st2_nxt = calc_mult;
+                    else st2_nxt = calc_add; end
+                else st2_nxt = finish;
             end
             calc_mult: begin
                 sel2 = 1'b0;
@@ -147,7 +154,7 @@ module top_FFT(out, in, clk, rstn);
                     st2_nxt = calc_mult; end
             end
             finish: begin
-                st2_nxt = idle;
+                st2_nxt = finish;
             end
         endcase
         case(st3_cur)
@@ -160,15 +167,17 @@ module top_FFT(out, in, clk, rstn);
                 end
             end
             calc_add: begin
-                sel3_nxt = 1'b0;
-                st3_nxt = calc_mult;
+                if(st2_cur != finish) begin
+                    sel3_nxt = 1'b0;
+                    st3_nxt = calc_mult; end
+                else st3_nxt = finish;
             end
             calc_mult: begin
                 sel3_nxt = 1'b1;
                 st3_nxt = calc_add;
             end
             finish: begin
-                st3_nxt = idle;
+                st3_nxt = finish;
             end
         endcase
     end

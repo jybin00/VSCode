@@ -15,7 +15,7 @@ module sti_FFT;
     wire [24-1:0] out;
 	
 	
-	top_FFT FFT(out, in, clk, reset);
+	top_FFT FFT(out, in, clk, reset, done);
 	
 	initial
 	begin
