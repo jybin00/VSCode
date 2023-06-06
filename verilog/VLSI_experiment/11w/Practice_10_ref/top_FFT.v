@@ -36,7 +36,7 @@ module top_FFT(out, in, clk, rstn, done);
     cnt2 ST2_CNT (cnt2, st2_cont, clk, rstn);
     FIFO1 ST1_IN (A1, in, clk, rstn);
 
-    FIFO4 F4 (B1, F4_in, clk, reset);
+    FIFO4 F4 (B1, F4_in, clk, rstn);
     mux M1_1 (T1_in, B1, C1_1, sel1);
     Butterfly BF1(C1_1, C2_1, A1, B1);
     mux M1_2 (F4_in, A1, C2_1, sel1);
@@ -46,7 +46,7 @@ module top_FFT(out, in, clk, rstn, done);
 
     FIFO1 ST2_IN (A2, st1_out, clk, rstn);
 
-    FIFO2 F2 (B2, F2_in, clk, reset);
+    FIFO2 F2 (B2, F2_in, clk, rstn);
     mux M2_1 (T2_in, B2, C1_2, sel2);
     Butterfly BF2(C1_2, C2_2, A2, B2);
     mux M2_2 (F2_in, A2, C2_2, sel2);
@@ -55,7 +55,7 @@ module top_FFT(out, in, clk, rstn, done);
 
     FIFO1 ST3_IN (A3, st2_out, clk, rstn);
 
-    FIFO1 F1 (B3, F1_in, clk, reset);
+    FIFO1 F1 (B3, F1_in, clk, rstn);
     mux M3_1 (st3_out, B3, C1_3, sel3);
     Butterfly BF3(C1_3, C2_3, A3, B3);
     mux M3_2 (F1_in, A3, C2_3, sel3);
@@ -295,8 +295,8 @@ endmodule
 // lattice 구조를 가지는 butterfly module을 설계하고, (진짜 butterfly모듈만, 주변 모듈 x)
 // 이를 이용하여 8 point FFT를 구현한다.
 module Butterfly(C1, C2, A, B);
-    output [24-1:0] C1, C2; // C1 = A + B, C2 = B - A 근데 이렇게 하면 test vecot가 안 맞음. => 거꾸로 넣어줘야 할 듯.
-    input [24-1:0] A, B; // A = A_r + j*A_i, B = B_r + j*B_i
+    output signed[24-1:0] C1, C2; // C1 = A + B, C2 = B - A 근데 이렇게 하면 test vecot가 안 맞음. => 거꾸로 넣어줘야 할 듯.
+    input signed[24-1:0] A, B; // A = A_r + j*A_i, B = B_r + j*B_i
 
     wire signed[12-1:0] A_r, A_i, B_r, B_i;  // A, B 자체는 합쳐져 있어서 signed bit 없지만,
     wire signed[13-1:0] C1_r, C1_i, C2_r, C2_i; // real, imaginary는 signed bit으로 지정.
@@ -304,7 +304,7 @@ module Butterfly(C1, C2, A, B);
     assign A_r = A[24-1:12];  assign A_i = A[12-1:0];
     assign B_r = B[24-1:12];  assign B_i = B[12-1:0];
     assign C1_r = A_r + B_r;  assign C1_i = A_i + B_i;
-    assign C2_r = -(A_r - B_r);  assign C2_i = -(A_i - B_i);
+    assign C2_r = (-A_r + B_r);  assign C2_i = (-A_i + B_i);
 
     wire signed[12-1:0] C1_rtmp, C1_itmp, C2_rtmp, C2_itmp;
 
