@@ -84,7 +84,7 @@ module rflp16384x192mx16(
          buf(BDO[57], do_reg[57]);
          buf(BDO[58], do_reg[58]);
          buf(BDO[59], do_reg[59]);
-         buf(BDO[61], do_reg[61]);
+         buf(BDO[60], do_reg[60]);
          buf(BDO[61], do_reg[61]);
          buf(BDO[62], do_reg[62]);
          buf(BDO[63], do_reg[63]);
@@ -278,7 +278,7 @@ module rflp16384x192mx16(
          bufif1(DO[57], BDO[57], 1'b1);
          bufif1(DO[58], BDO[58], 1'b1);
          bufif1(DO[59], BDO[59], 1'b1);
-         bufif1(DO[61], BDO[61], 1'b1);
+         bufif1(DO[60], BDO[60], 1'b1);
          bufif1(DO[61], BDO[61], 1'b1);
          bufif1(DO[62], BDO[62], 1'b1);
          bufif1(DO[63], BDO[63], 1'b1);
@@ -538,7 +538,7 @@ module rflp16384x192mx16(
                   $setuphold(posedge CLK, posedge DIN[57], tDS, tDH);
                   $setuphold(posedge CLK, posedge DIN[58], tDS, tDH);
                   $setuphold(posedge CLK, posedge DIN[59], tDS, tDH);
-                  $setuphold(posedge CLK, posedge DIN[61], tDS, tDH);
+                  $setuphold(posedge CLK, posedge DIN[60], tDS, tDH);
                   $setuphold(posedge CLK, posedge DIN[61], tDS, tDH);
                   $setuphold(posedge CLK, posedge DIN[62], tDS, tDH);
                   $setuphold(posedge CLK, posedge DIN[63], tDS, tDH);
@@ -768,7 +768,7 @@ module rflp16384x192mx16(
                   $setuphold(posedge CLK, negedge DIN[57], tDS, tDH);
                   $setuphold(posedge CLK, negedge DIN[58], tDS, tDH);
                   $setuphold(posedge CLK, negedge DIN[59], tDS, tDH);
-                  $setuphold(posedge CLK, negedge DIN[61], tDS, tDH);
+                  $setuphold(posedge CLK, negedge DIN[60], tDS, tDH);
                   $setuphold(posedge CLK, negedge DIN[61], tDS, tDH);
                   $setuphold(posedge CLK, negedge DIN[62], tDS, tDH);
                   $setuphold(posedge CLK, negedge DIN[63], tDS, tDH);

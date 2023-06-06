@@ -1,6 +1,6 @@
 module TPmem_16x16
 #( parameter BW = 8 )
-// 입력 데이터, enable 신호, 입력 클럭, 입력 리셋, 출력 데이ㅓㅌ, 출력 enable 신호
+
 (  input        [16*BW-1:0]	i_data,
    input	   	            i_enable,
    input 	   	            i_clk,
@@ -9,68 +9,59 @@ module TPmem_16x16
    output reg	            o_en
 );
 
-// counter <= 입출력할 때 사용하려고 선언함.
 reg [5-1:0]         counter;
 reg [16*BW-1:0]     array   [16-1:0];
-// Data 출력을 위한 reg
 reg [16*BW-1:0]     data_out;
 
-// col은 말 그대로 column. 
 wire [16*BW-1:0]    col     [16-1:0];
 wire [4-1:0]        index = counter[4-1:0] ;
 
-// Data 츌력 위한 wire
 wire [16*BW-1:0]    w_data;
 wire	            w_en;
 
 always@(posedge i_clk) begin
     if(~i_Reset) begin
-        // counter, o_data, o_en 초기화
-        counter <= 5'b0;
-        o_data  <= {BW{16'b0}};
-        o_en    <= 1'b0; 
+    counter <= 5'b0;
+    o_data  <= {BW{16'b0}};
+    o_en    <= 1'b0; 
     end
-    else begin
-        // o_data에는 w_data를, o_en에는 w_en을 대입
-        o_data  <= w_data ;
-        o_en    <= w_en ;
+    else    begin
+	o_data  <= w_data ;
+	o_en    <= w_en ;
         if(i_enable) 
-            // input이 enable일 때. counter를 1씩 증가시킴.
-            counter     <= counter + 5'b1;
-        else begin  
-            // input이 enable이 아니면서, counter[4]가 1일 때.  
-            // 카운터가 증가하면 index도 1씩 증가함.
-            if(counter[4]==1'b1) counter <= counter + 5'b1;
-    	    else counter <= counter ;
-    	end
+        counter     <= counter + 5'b1;
+        else begin    
+            if(counter[4]==1'b1)
+	    counter     <= counter + 5'b1;
+    	    else    
+    	    counter <= counter ;
+    	    end
     end
 end
 
 always@(posedge i_clk) begin
     if(~i_Reset) begin
-        // array 초기화
-        array[15] <= {BW{8'b0}};
-        array[14] <= {BW{8'b0}};
-        array[13] <= {BW{8'b0}};
-        array[12] <= {BW{8'b0}};
-        array[11] <= {BW{8'b0}};
-        array[10] <= {BW{8'b0}};
-        array[ 9] <= {BW{8'b0}};
-        array[ 8] <= {BW{8'b0}};
-        array[ 7] <= {BW{8'b0}};
-        array[ 6] <= {BW{8'b0}};
-        array[ 5] <= {BW{8'b0}};
-        array[ 4] <= {BW{8'b0}};
-        array[ 3] <= {BW{8'b0}};
-        array[ 2] <= {BW{8'b0}};
-        array[ 1] <= {BW{8'b0}};
-        array[ 0] <= {BW{8'b0}};
+	array[15] <= {BW{16'b0}};
+	array[14] <= {BW{16'b0}};
+	array[13] <= {BW{16'b0}};
+	array[12] <= {BW{16'b0}};
+	array[11] <= {BW{16'b0}};
+	array[10] <= {BW{16'b0}};
+	array[ 9] <= {BW{16'b0}};
+	array[ 8] <= {BW{16'b0}};
+	array[ 7] <= {BW{16'b0}};
+	array[ 6] <= {BW{16'b0}};
+	array[ 5] <= {BW{16'b0}};
+	array[ 4] <= {BW{16'b0}};
+	array[ 3] <= {BW{16'b0}};
+	array[ 2] <= {BW{16'b0}};
+	array[ 1] <= {BW{16'b0}};
+	array[ 0] <= {BW{16'b0}};
     end
-    else begin
-        if(i_enable) begin
-            // reset 아니고 enable일 때, array에 i_data를 대입함.
-            array[index] <= i_data ;
-        end
+    else    begin
+	if(i_enable) begin
+	array[index] <= i_data ;
+	end
     end
 end
 
@@ -92,8 +83,12 @@ assign col[14] = {{array[0][ 2*BW-1: 1*BW]},{array[1][ 2*BW-1: 1*BW]},{array[2][
 assign col[15] = {{array[0][ 1*BW-1: 0*BW]},{array[1][ 1*BW-1: 0*BW]},{array[2][ 1*BW-1: 0*BW]},{array[3][ 1*BW-1: 0*BW]},{array[4][ 1*BW-1: 0*BW]},{array[5][ 1*BW-1: 0*BW]},{array[6][ 1*BW-1: 0*BW]},{array[7][ 1*BW-1: 0*BW]},{array[8][ 1*BW-1: 0*BW]},{array[9][ 1*BW-1: 0*BW]},{array[10][ 1*BW-1: 0*BW]},{array[11][ 1*BW-1: 0*BW]},{array[12][ 1*BW-1: 0*BW]},{array[13][ 1*BW-1: 0*BW]},{array[14][ 1*BW-1: 0*BW]},{array[15][ 1*BW-1: 0*BW]}} ;
 
 always@(*) begin
-    if(counter[4]==1'b1) data_out = col[index] ;
-    else data_out = {BW{16'b0}}; 
+    if(counter[4]==1'b1) begin
+    data_out = col[index] ;
+    end
+    else    begin
+    data_out = {BW{16'b0}}; 
+    end
 end
 
 assign w_en = counter[4] ;
