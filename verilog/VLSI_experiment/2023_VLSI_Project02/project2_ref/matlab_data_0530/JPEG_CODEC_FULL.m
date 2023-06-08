@@ -34,7 +34,7 @@ for image_number = 1:8 %-------------"Change this number" to test many different
      input_vector = fopen(sprintf( 'image_in_%d.txt',image_number), 'w');
 
      for i = 1 : (512*512)
-         fprintf(input_vector, '%s', dec2hex(vector_temp(1,i)));
+         fprintf(input_vector, '%s', dec2hex(vector_temp(1,i),2));
          if(mod(i,16)==0)
              fprintf(input_vector, '\n');
          end
