@@ -27,21 +27,21 @@ module DCT_1D_row
     wire unsigned [8-1:0] x_15 = x_n_in[ 0*8 +: 8];
     // (1.6)
     //wire [7-1:0] C_0  = 7'h10;
-    wire unsigned [7-1:0] C_1  = 7'h17;
-    wire unsigned [7-1:0] C_2  = 7'h16;
-    wire unsigned [7-1:0] C_3  = 7'h16;
-    wire unsigned [7-1:0] C_4  = 7'h15;
-    wire unsigned [7-1:0] C_5  = 7'h14;
-    wire unsigned [7-1:0] C_6  = 7'h13;
-    wire unsigned [7-1:0] C_7  = 7'h11;
-    wire unsigned [7-1:0] C_8  = 7'h10;
-    wire unsigned [7-1:0] C_9  = 7'he; 
-    wire unsigned [7-1:0] C_10 = 7'hd;
-    wire unsigned [7-1:0] C_11 = 7'hb;
-    wire unsigned [7-1:0] C_12 = 7'h9;
-    wire unsigned [7-1:0] C_13 = 7'h7;
-    wire unsigned [7-1:0] C_14 = 7'h4;
-    wire unsigned [7-1:0] C_15 = 7'h2;
+    wire signed [7-1:0] C_1  = 7'h17;
+    wire signed [7-1:0] C_2  = 7'h16;
+    wire signed [7-1:0] C_3  = 7'h16;
+    wire signed [7-1:0] C_4  = 7'h15;
+    wire signed [7-1:0] C_5  = 7'h14;
+    wire signed [7-1:0] C_6  = 7'h13;
+    wire signed [7-1:0] C_7  = 7'h11;
+    wire signed [7-1:0] C_8  = 7'h10;
+    wire signed [7-1:0] C_9  = 7'he; 
+    wire signed [7-1:0] C_10 = 7'hd;
+    wire signed [7-1:0] C_11 = 7'hb;
+    wire signed [7-1:0] C_12 = 7'h9;
+    wire signed [7-1:0] C_13 = 7'h7;
+    wire signed [7-1:0] C_14 = 7'h4;
+    wire signed [7-1:0] C_15 = 7'h2;
     // 실제로는 16개인데 어차피 C0 = C8이어서 그냥 15개로만 계산함.
 
     wire signed[9-1:0] X_0_15_a, X_0_15_s;
@@ -53,10 +53,6 @@ module DCT_1D_row
     wire signed[9-1:0] X_6_9_a, X_6_9_s;
     wire signed[9-1:0] X_7_8_a, X_7_8_s;
 
-    wire signed[12-1:0] Pre_X_0, Pre_X_8;
-    wire signed[19-1:0] X_0, X_8;
-    wire signed[11-1:0] X_0_trunc; 
-    wire signed[10-1:0] X_8_trunc;
 
     wire signed[19-1:0] X_4, X_12;
     wire signed[11-1:0] X_4_trunc, X_12_trunc;
@@ -87,11 +83,16 @@ module DCT_1D_row
 
     // Even의 Even의 Even
     ////////////////////****** X[0], X[8] ******////////////////////
+    wire signed[12-1:0] Pre_X_0, Pre_X_8;
+    wire signed[19-1:0] X_0, X_8;
+    wire signed[11-1:0] X_0_trunc; 
+    wire signed[11-1:0] X_8_trunc;
+
     // 12bit outcome (12.0)
     butterfly_st4 buf4_1 (Pre_X_0, Pre_X_8, X1, X2);
 
-    // 19bit outcome (19.6)
-    assign X_0 = Pre_X_0 * C_8;
+    // 19bit outcome (19.6) 승화가 알려준 꿀팁. $unsigned()
+    assign X_0 = $unsigned(Pre_X_0) * $unsigned(C_8);
     assign X_8 = Pre_X_8 * C_8;
 
     // 11bit (11.0)
@@ -165,9 +166,9 @@ module DCT_1D_row
     wire signed [17-1:0] X3_1, X13_1, X3_2, X13_2, X3_3, X13_3, X3_4, X13_4;
 
     butterfly_st2_mult buf_3_13_1 (X3_1, X13_1, X_0_15_s, -X_7_8_s, C_3, C_13);
-    butterfly_st2_mult buf_3_13_2 (X3_2, X13_2, X_1_14_s, -X_6_9_s, C_7, C_9);
-    butterfly_st2_mult buf_3_13_3 (X3_3, X13_3, X_2_13_s, -X_5_10_s, C_11, C_5);
-    butterfly_st2_mult buf_3_13_4 (X3_4, X13_4, X_3_12_s, X_4_11_s, C_15, C_1);
+    butterfly_st2_mult buf_3_13_2 (X3_2, X13_2, X_1_14_s, -X_6_9_s, C_9, C_7);
+    butterfly_st2_mult buf_3_13_3 (X3_3, X13_3, X_2_13_s, -X_5_10_s, C_15, C_1);
+    butterfly_st2_mult buf_3_13_4 (X3_4, X13_4, X_3_12_s, X_4_11_s, C_11, C_5);
 
     assign Pre_X_3 = X3_1 + X3_2 + X3_3 - X3_4;
     assign Pre_X_13 = X13_1 - X13_2 + X13_3 - X13_4;
@@ -202,8 +203,8 @@ module DCT_1D_row
 
     butterfly_st2_mult buf_7_9_1 (X7_1, X9_1, X_0_15_s, -X_7_8_s, C_7, C_9);
     butterfly_st2_mult buf_7_9_2 (X7_2, X9_2, X_1_14_s, X_6_9_s, C_11, C_5);
-    butterfly_st2_mult buf_7_9_3 (X7_3, X9_3, X_2_13_s, -X_5_10_s, C_15, C_1);
-    butterfly_st2_mult buf_7_9_4 (X7_4, X9_4, X_3_12_s, -X_4_11_s, C_3, C_13);
+    butterfly_st2_mult buf_7_9_3 (X7_3, X9_3, X_2_13_s, -X_5_10_s, C_3, C_13);
+    butterfly_st2_mult buf_7_9_4 (X7_4, X9_4, X_3_12_s, -X_4_11_s, C_15, C_1);
 
     assign Pre_X_7 = X7_1 + X7_2 + X7_3 - X7_4;
     assign Pre_X_9 = X9_1 - X9_2 + X9_3 - X9_4;
@@ -243,7 +244,7 @@ endmodule
 module butterfly_st2_mult(Out_add, Out_sub, in1, in2, c1, c2);
     output signed[17-1:0] Out_add;
     output signed[17-1:0] Out_sub;
-    input [7-1:0] c1, c2;
+    input signed[7-1:0] c1, c2;
     input signed[9-1:0] in1;
     input signed[9-1:0] in2;
 
@@ -266,7 +267,7 @@ endmodule
 module butterfly_st3_mult (Out_add, Out_sub, in1, in2, c1, c2);
     output signed[18-1:0] Out_add;
     output signed[18-1:0] Out_sub;
-    input [7-1:0] c1, c2;
+    input signed[7-1:0] c1, c2;
     input signed[10-1:0] in1;
     input signed[10-1:0] in2;
 
@@ -289,7 +290,7 @@ endmodule
 module butterfly_st4_mult(Out_add, Out_sub, in1, in2, c1, c2);
     output signed[19-1:0] Out_add;
     output signed[19-1:0] Out_sub;
-    input [7-1:0] c1, c2;
+    input signed[7-1:0] c1, c2;
     input signed[11-1:0] in1, in2;
 
     assign Out_add = in1 * c1 + in2 * c2;
