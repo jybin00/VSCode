@@ -204,10 +204,10 @@ module DCT_1D_row
     butterfly_st2_mult buf_7_9_1 (X7_1, X9_1, X_0_15_s, -X_7_8_s, C_7, C_9);
     butterfly_st2_mult buf_7_9_2 (X7_2, X9_2, X_1_14_s, X_6_9_s, C_11, C_5);
     butterfly_st2_mult buf_7_9_3 (X7_3, X9_3, X_2_13_s, -X_5_10_s, C_3, C_13);
-    butterfly_st2_mult buf_7_9_4 (X7_4, X9_4, X_3_12_s, -X_4_11_s, C_15, C_1);
+    butterfly_st2_mult buf_7_9_4 (X7_4, X9_4, X_3_12_s, X_4_11_s, C_15, C_1);
 
-    assign Pre_X_7 = X7_1 + X7_2 + X7_3 - X7_4;
-    assign Pre_X_9 = X9_1 - X9_2 + X9_3 - X9_4;
+    assign Pre_X_7 = X7_1 - X7_2 - X7_3 + X7_4;
+    assign Pre_X_9 = X9_1 - X9_2 - X9_3 + X9_4;
 
     // 11bit truncation
     wire signed [11-1:0] X_7_trunc, X_9_trunc;
