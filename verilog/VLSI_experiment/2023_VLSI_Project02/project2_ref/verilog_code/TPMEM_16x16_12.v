@@ -1,4 +1,4 @@
-module TPmem_16x16
+module TPmem_16x16_12
 #( parameter BW = 12 )
 // 입력 데이터, enable 신호, 입력 클럭, 입력 리셋, 출력 데이ㅓㅌ, 출력 enable 신호
 (  input        [16*BW-1:0]	i_data,

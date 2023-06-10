@@ -1,5 +1,5 @@
-module TPmem_16x16
-#( parameter BW = 8 )
+module TPmem_16x16_11
+#( parameter BW = 11 )
 
 (  input        [16*BW-1:0]	i_data,
    input	   	            i_enable,
