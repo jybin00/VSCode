@@ -1,7 +1,7 @@
 // stimulus에 들어가는 모듈
 `include "rflp16384x128mx16.v"
 //`include "rfsp16384x192mx16.v"
-`include "DCT_1D_row.v"
+`include "DCT_1D_row_low_cost.v"
 
 module top_memory_test(clk, reset);
     input clk, reset;
