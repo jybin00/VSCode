@@ -90,9 +90,9 @@ for image_number = 1:8 %-------------"Change this number" to test many different
      T = func_DCT_Coefficient_quant(C_quantization_bit); % 몇 개로 자를까?
      
      % If you want to check the coefficient value in hex format, please use this and open the txt file.
-     filter_coef = fopen('./filt_coeff_T.txt','w');
+     image1_X_k = fopen('./filt_coeff_T.txt','w');
      for k = 1:16
-         fprintf(filter_coef,'%x \n',T(k,1)*2^(C_quantization_bit-1));
+         fprintf(image1_X_k,'%x \n',T(k,1)*2^(C_quantization_bit-1));
      end
 
 
@@ -116,12 +116,24 @@ for image_number = 1:8 %-------------"Change this number" to test many different
      Image_tran = zeros(m,n);
      
      for i=1:m/16
+         image1_X_k = fopen('./image_1_Xk.txt','w');
          for j=1:n/16
              Block_temp = input_image_512x512((16*i-15):16*i,(16*j-15):16*j);
 
              Block_DCT_1D_temp = T*Block_temp'; % T가 DCT 블록임.
 
              Block_DCT_1D_quant((16*i-15):16*i,(16*j-15):16*j) = func_DCTquant(Block_DCT_1D_temp, Result_1D_DCT_quantization_bit, num_int);   % result of 1D DCT for debugging
+             
+             for k = 1:16
+                 for l = 1:16
+                     DCT_quant = Block_DCT_1D_quant(l,k+(j-1)*16);
+                     if(DCT_quant <0)
+                         DCT_quant = DCT_quant + power(2, Result_1D_DCT_quantization_bit);
+                     end
+                    fprintf(image1_X_k,'%X ', DCT_quant);
+                 end
+                fprintf(image1_X_k,'\n');
+             end
 
              Block_DCT_2D_temp = T*Block_DCT_1D_quant((16*i-15):16*i,(16*j-15):16*j)';
 

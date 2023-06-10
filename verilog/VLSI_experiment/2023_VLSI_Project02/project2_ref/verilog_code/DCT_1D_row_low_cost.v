@@ -93,10 +93,10 @@ module DCT_1D_row
     butterfly_st4 buf4_1 (Pre_X_0, Pre_X_8, X1, X2);
 
     // 16bit outcome (16.4) 승화가 알려준 꿀팁. $unsigned()
-    assign X_0 = $unsigned(Pre_X_0) * C_8;
+    assign X_0 = $unsigned(Pre_X_0) <<4;
     //assign X_0 = X_0 <<< 1;
     // 19bit outcome
-    assign X_8 = (Pre_X_8) * $signed(C_8);
+    assign X_8 = Pre_X_8 <<< 4;
 
     // 11bit (11.0)
     assign X_0_trunc = X_0[17-1:6];
@@ -105,10 +105,10 @@ module DCT_1D_row
     // Even의 Even의 Odd
     ////////////////////****** X[4], X[12] ******////////////////////
     // 19bit outcome (19.6)
-    butterfly_st4_mult buf4_2 (X_4, X_12, X3, X4, C_4, C_12);
+    //butterfly_st4_mult buf4_2 (X_4, X_12, X3, X4, C_4, C_12);
 
-    //assign X_4 = (X3 << 4) + (X3 << 2) + X3 + (X4 << 3) + X4;
-    //assign X_12 = (X3 << 3) + (X3) - ((X4 << 4) + (X4 << 2) + X4);
+    assign X_4 = (X3 << 4) + (X3 << 2) + X3 + (X4 << 3) + X4;
+    assign X_12 = (X3 << 3) + (X3) - ((X4 << 4) + (X4 << 2) + X4);
     
     // 11bit (11.0) 앞에서 2비트, 뒤에서 6비트 자르기
     assign X_4_trunc = X_4[17-1:6];

@@ -16,7 +16,7 @@ initial begin
 	rstn = 1;
 end
 
-initial	$readmemh("image_in_1.txt", TEST.MEM_IN.array); //input image, check the path of memory rocation (module instance)
+initial	$readmem("image_in_1.txt", TEST.MEM_IN.array); //input image, check the path of memory rocation (module instance)
 
 
 integer i;
