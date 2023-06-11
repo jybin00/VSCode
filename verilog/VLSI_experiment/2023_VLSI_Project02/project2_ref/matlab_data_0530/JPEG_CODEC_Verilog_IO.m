@@ -2,7 +2,7 @@ clear all
 close all
 clc
 
-for image_number = 2 %-------------"Change this number" to test many different images------
+for image_number = 1:4 %-------------"Change this number" to test many different images------
     %---------------------------- Get the Image data Input ----------------------------------
     input_image_512x512 = double( imread( sprintf( 'image_in_%d.tif',image_number ),'tiff' ) );
     [m,n] = size(input_image_512x512);
@@ -18,6 +18,7 @@ for image_number = 2 %-------------"Change this number" to test many different i
      M = textread(sprintf('DCT_image_%d.txt',image_number),'%12c');
      M_2 = char(zeros(262144,16));
 
+     
      for i=1:262144
          M_2(i,1)= M(i,1);
          M_2(i,2)= M(i,1);

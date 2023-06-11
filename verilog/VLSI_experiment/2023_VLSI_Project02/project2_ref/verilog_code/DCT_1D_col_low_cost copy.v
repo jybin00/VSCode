@@ -86,7 +86,7 @@ module DCT_1D_col
     ////////////////////****** X[0], X[8] ******////////////////////
     wire signed[15-1:0] Pre_X_0;
     wire signed[15-1:0] Pre_X_8;
-    wire signed[16-1:0] X_0;
+    wire signed[15-1:0] X_0;
     wire signed[20-1:0] X_8;
     wire signed[12-1:0] X_0_trunc; 
     wire signed[12-1:0] X_8_trunc;
@@ -97,14 +97,14 @@ module DCT_1D_col
 
     // 19bit outcome (19.4) 승화가 알려준 꿀팁. $unsigned()
     assign overflow = ((Pre_X_0[13] & ~X1[13] & ~X2[13]));
-    //assign X_0 = overflow ? 15'b001111111111111 : $signed(Pre_X_0);
+    assign X_0 = overflow ? 15'b000111111111111 : $signed(Pre_X_0) >>> 1;
     //assign X_0 = $signed(Pre_X_0 <<< 4);
-    assign X_0 = $signed(Pre_X_0);
+    //assign X_0 = X_0 <<< 1;
     // 19bit outcome
     assign X_8 = $signed(Pre_X_8 << 4);
 
     // 12bit (12.0)
-    assign X_0_trunc = block_flag ? X_0[15-1:3] : X_0[13-1:1];
+    assign X_0_trunc = block_flag ? X_0[13-1:1] : X_0[12-1:0];
     assign X_8_trunc = X_8[17-1:5];
 
     // Even의 Even의 Odd
