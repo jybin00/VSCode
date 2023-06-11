@@ -133,7 +133,7 @@ for image_number = 1 %-------------"Change this number" to test many different i
 
              for k = 1:16
                  for l = 1:16
-                     DCT_quant = Block_DCT_final(l,k+(j-1)*16);
+                     DCT_quant = 2*Block_DCT_final(l,k+(j-1)*16);
                      if(DCT_quant <0)
                          DCT_quant = DCT_quant + power(2, Result_1D_DCT_quantization_bit);
                      end

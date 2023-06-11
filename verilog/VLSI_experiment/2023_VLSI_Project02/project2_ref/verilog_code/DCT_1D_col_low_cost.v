@@ -6,25 +6,26 @@ module DCT_1D_col
     (X_k_out, x_n_in, clk, rstn, block_flag);
 
     output [16*BW-1:0]X_k_out;
-    input [16*11-1:0]x_n_in;  // unsigned input
+    input [16*11-1:0]x_n_in;  
     input clk, rstn, block_flag;
-    //(8.0)
-    wire signed[11-1:0] x_0  = x_n_in[15*11 +: 11];
-    wire signed[11-1:0] x_1  = x_n_in[14*11 +: 11];
-    wire signed[11-1:0] x_2  = x_n_in[13*11 +: 11];
-    wire signed[11-1:0] x_3  = x_n_in[12*11 +: 11];
-    wire signed[11-1:0] x_4  = x_n_in[11*11 +: 11];
-    wire signed[11-1:0] x_5  = x_n_in[10*11 +: 11];
-    wire signed[11-1:0] x_6  = x_n_in[ 9*11 +: 11];
-    wire signed[11-1:0] x_7  = x_n_in[ 8*11 +: 11];
-    wire signed[11-1:0] x_8  = x_n_in[ 7*11 +: 11];
-    wire signed[11-1:0] x_9  = x_n_in[ 6*11 +: 11];
-    wire signed[11-1:0] x_10 = x_n_in[ 5*11 +: 11];
-    wire signed[11-1:0] x_11 = x_n_in[ 4*11 +: 11];
-    wire signed[11-1:0] x_12 = x_n_in[ 3*11 +: 11];
-    wire signed[11-1:0] x_13 = x_n_in[ 2*11 +: 11];
-    wire signed[11-1:0] x_14 = x_n_in[ 1*11 +: 11];
-    wire signed[11-1:0] x_15 = x_n_in[ 0*11 +: 11];
+
+    //(11.0)
+    wire signed[11-1:0] x_0  = $signed(x_n_in[15*11 +: 11]);
+    wire signed[11-1:0] x_1  = $signed(x_n_in[14*11 +: 11]);
+    wire signed[11-1:0] x_2  = $signed(x_n_in[13*11 +: 11]);
+    wire signed[11-1:0] x_3  = $signed(x_n_in[12*11 +: 11]);
+    wire signed[11-1:0] x_4  = $signed(x_n_in[11*11 +: 11]);
+    wire signed[11-1:0] x_5  = $signed(x_n_in[10*11 +: 11]);
+    wire signed[11-1:0] x_6  = $signed(x_n_in[ 9*11 +: 11]);
+    wire signed[11-1:0] x_7  = $signed(x_n_in[ 8*11 +: 11]);
+    wire signed[11-1:0] x_8  = $signed(x_n_in[ 7*11 +: 11]);
+    wire signed[11-1:0] x_9  = $signed(x_n_in[ 6*11 +: 11]);
+    wire signed[11-1:0] x_10 = $signed(x_n_in[ 5*11 +: 11]);
+    wire signed[11-1:0] x_11 = $signed(x_n_in[ 4*11 +: 11]);
+    wire signed[11-1:0] x_12 = $signed(x_n_in[ 3*11 +: 11]);
+    wire signed[11-1:0] x_13 = $signed(x_n_in[ 2*11 +: 11]);
+    wire signed[11-1:0] x_14 = $signed(x_n_in[ 1*11 +: 11]);
+    wire signed[11-1:0] x_15 = $signed(x_n_in[ 0*11 +: 11]);
     // (1.6)
     //wire [7-1:0] C_0  = 7'h10;
     // wire [7-1:0] C_1  = 7'h17;
@@ -57,7 +58,7 @@ module DCT_1D_col
     wire signed[22-1:0] X_4, X_12;
     wire signed[12-1:0] X_4_trunc, X_12_trunc;
 
-    // Common stage (Even, Odd) (9.0)
+    // Common stage (Even, Odd) (12.0)
     buf_col_st1 buf1( X_0_15_a, X_0_15_s, x_0, x_15);
     buf_col_st1 buf2( X_1_14_a, X_1_14_s, x_1, x_14);
     buf_col_st1 buf3( X_2_13_a, X_2_13_s, x_2, x_13);
@@ -70,36 +71,40 @@ module DCT_1D_col
     wire signed[13-1:0] X_0_7_8_15_a, X_1_6_9_14_a, X_2_5_10_13_a, X_3_4_11_12_a;
     wire signed[13-1:0] X_0_7_8_15_s, X_1_6_9_14_s, X_2_5_10_13_s, X_3_4_11_12_s;
 
-    // Even stage (10.0)
+    // Even stage (13.0)
     buf_col_st2 buf2_1 (X_0_7_8_15_a,  X_0_7_8_15_s,  X_0_15_a, X_7_8_a);
     buf_col_st2 buf2_2 (X_1_6_9_14_a,  X_1_6_9_14_s,  X_1_14_a, X_6_9_a);
     buf_col_st2 buf2_3 (X_2_5_10_13_a, X_2_5_10_13_s, X_2_13_a, X_5_10_a);
     buf_col_st2 buf2_4 (X_3_4_11_12_a, X_3_4_11_12_s, X_3_12_a, X_4_11_a);
 
     wire signed[14-1:0] X1, X2, X3, X4;
-    // 11 bit outcome (11.0)
+    // 11 bit outcome (14.0)
     buf_col_st3 buf3_1 (X2, X4, X_1_6_9_14_a, X_2_5_10_13_a);
     buf_col_st3 buf3_2 (X1, X3, X_0_7_8_15_a,  X_3_4_11_12_a);
 
     // Even의 Even의 Even
     ////////////////////****** X[0], X[8] ******////////////////////
-    wire signed[15-1:0] Pre_X_0, Pre_X_8;
-    wire signed[22-1:0] X_0;
-    wire signed[22-1:0] X_8;
+    wire signed[15-1:0] Pre_X_0;
+    wire signed[15-1:0] Pre_X_8;
+    wire signed[15-1:0] X_0;
+    wire signed[20-1:0] X_8;
     wire signed[12-1:0] X_0_trunc; 
     wire signed[12-1:0] X_8_trunc;
+    wire overflow;
 
-    // 12bit outcome (12.0)
+    // 15bit outcome (15.0)
     buf_col_st4 buf4_1 (Pre_X_0, Pre_X_8, X1, X2);
 
-    // 16bit outcome (16.4) 승화가 알려준 꿀팁. $unsigned()
-    assign X_0 = Pre_X_0 <<< 4;
+    // 19bit outcome (19.4) 승화가 알려준 꿀팁. $unsigned()
+    assign overflow = ((Pre_X_0[13] & ~X1[13] & ~X2[13]));
+    assign X_0 = overflow ? 15'b000111111111111 : $signed(Pre_X_0) >>> 1;
+    //assign X_0 = $signed(Pre_X_0 <<< 4);
     //assign X_0 = X_0 <<< 1;
     // 19bit outcome
-    assign X_8 = Pre_X_8 <<< 4;
+    assign X_8 = $signed(Pre_X_8 << 4);
 
-    // 12bit (11.0)
-    assign X_0_trunc = block_flag ? X_0[19-1:7] : X_0[17-1:5];
+    // 12bit (12.0)
+    assign X_0_trunc = block_flag ? X_0[13-1:1] : X_0[12-1:0];
     assign X_8_trunc = X_8[17-1:5];
 
     // Even의 Even의 Odd
@@ -107,10 +112,10 @@ module DCT_1D_col
     // 19bit outcome (19.6)
     //buf_col_st4_mult buf4_2 (X_4, X_12, X3, X4, C_4, C_12);
 
-    assign X_4 = (X3 << 4) + (X3 << 2) + X3 + (X4 << 3) + X4;
-    assign X_12 = (X3 << 3) + (X3) - ((X4 << 4) + (X4 << 2) + X4);
+    assign X_4 = $signed((X3 << 4)) + $signed((X3 << 2)) + $signed(X3) + $signed(X4 << 3) + $signed(X4);
+    assign X_12 = (X3 <<< 3) + (X3) - ((X4 <<< 4) + (X4 <<< 2) + X4);
     
-    // 11bit (11.0) 앞에서 2비트, 뒤에서 6비트 자르기
+    // 12bit (12.1) 앞에서 6비트, 뒤에서 5비트 자르기
     assign X_4_trunc = X_4[17-1:5];
     assign X_12_trunc = X_12[17-1:5];
 
@@ -133,13 +138,13 @@ module DCT_1D_col
     assign Pre_X_6_2 = (X_1_6_9_14_s <<< 2)  + (X_2_5_10_13_s <<< 4) + (X_2_5_10_13_s <<< 2) + (X_2_5_10_13_s <<< 1);
     assign Pre_X_10_2 = -((X_2_5_10_13_s <<< 2)) + ((X_1_6_9_14_s <<< 4) + (X_1_6_9_14_s <<< 2) + (X_1_6_9_14_s <<< 1));
     
-    // 19.6
+    // 22.6
     wire signed [22-1:0] X_10, X_6;
-    // 19bit outcome
+    // 22bit outcome
     assign X_10 = Pre_X_10_1 - Pre_X_10_2;
     assign X_6 = Pre_X_6_1 - Pre_X_6_2;
 
-    // 11bit truncation
+    // 12bit truncation
     wire signed [12-1:0] X_10_trunc, X_6_trunc;
     assign X_10_trunc = X_10[17-1:5];
     assign X_6_trunc = X_6[17-1:5];
@@ -166,7 +171,7 @@ module DCT_1D_col
     assign X_2 = Pre_X_2_1 + Pre_X_2_2;
     assign X_14 = Pre_X_14_1 + Pre_X_14_2;
 
-    // 11bit truncation
+    // 12bit truncation
     wire signed [12-1:0] X_2_trunc, X_14_trunc;
     assign X_2_trunc = X_2[17-1:5];
     assign X_14_trunc = X_14[17-1:5];
@@ -206,7 +211,7 @@ module DCT_1D_col
     assign X1_4 = (X_3_12_s <<< 4) + (X_3_12_s) + (X_4_11_s <<< 3) + (X_4_11_s <<< 2) + (X_4_11_s <<< 1);
     assign X15_4 = -((X_4_11_s <<< 4) + (X_4_11_s)) + ((X_3_12_s <<< 3) + (X_3_12_s <<< 2) + (X_3_12_s <<< 1));
 
-    assign Pre_X_1 = $signed(X1_1 + X1_2 + X1_3 + X1_4);
+    assign Pre_X_1 = X1_1 + X1_2 + X1_3 + X1_4;
     assign Pre_X_15 = X15_1 - X15_2 + X15_3 - X15_4;
 
     // 11bit truncation
@@ -357,8 +362,8 @@ module buf_col_st1(Out_add, Out_sub, in1, in2);
     input [11-1:0] in1;
     input [11-1:0] in2;
 
-    assign Out_add = $unsigned(in1) + $unsigned(in2);
-    assign Out_sub = $unsigned(in1) - $unsigned(in2);
+    assign Out_add = $signed(in1) + $signed(in2);
+    assign Out_sub = $signed(in1) - $signed(in2);
 
 endmodule
 
@@ -369,8 +374,8 @@ module buf_col_st2(Out_add, Out_sub, in1, in2);
     input signed[12-1:0] in1;
     input signed[12-1:0] in2;
 
-    assign Out_add = $unsigned(in1) + $unsigned(in2);
-    assign Out_sub = $unsigned(in1) - $unsigned(in2);
+    assign Out_add = $signed(in1) + $signed(in2);
+    assign Out_sub = $signed(in1) - $signed(in2);
 
 endmodule
 
@@ -392,8 +397,8 @@ module buf_col_st3(Out_add, Out_sub, in1, in2);
     input signed[13-1:0] in1;
     input signed[13-1:0] in2;
 
-    assign Out_add = $unsigned(in1) + $unsigned(in2);
-    assign Out_sub = $unsigned(in1) - $unsigned(in2);
+    assign Out_add = $signed(in1) + $signed(in2);
+    assign Out_sub = $signed(in1) - $signed(in2);
 
 endmodule
 // // Even의 Odd X[2], X[6], X[10], X[14]를 위한 butterfly 모듈
@@ -414,8 +419,8 @@ module buf_col_st4(Out_add, Out_sub, in1, in2);
     output signed[15-1:0] Out_sub;
     input signed[14-1:0] in1, in2;
 
-    assign Out_add = $unsigned(in1) + $unsigned(in2);
-    assign Out_sub = $unsigned(in1) - $unsigned(in2);
+    assign Out_add = $signed(in1) + $signed(in2);
+    assign Out_sub = $signed(in1) - $signed(in2);
 
 endmodule
 

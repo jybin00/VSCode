@@ -1,7 +1,7 @@
 `include "top_memory_test.v"
 `timescale 1ns / 10ps
 
-module DCT_sti;
+module DCT_2D_sti;
 
 reg clk;
 reg rstn;
@@ -10,24 +10,24 @@ wire [176-1:0] X_k_out;
 wire [128-1:0] x_n_in;
 reg [11-1:0] test_vec [0:512*16];
 
-reg [11-1:0] X0;
-reg [11-1:0] X1;
-reg [11-1:0] X2;
-reg [11-1:0] X3;
-reg [11-1:0] X4;
-reg [11-1:0] X5;
-reg [11-1:0] X6;
-reg [11-1:0] X7;
-reg [11-1:0] X8;
-reg [11-1:0] X9;
-reg [11-1:0] X10;
-reg [11-1:0] X11;
-reg [11-1:0] X12;
-reg [11-1:0] X13;
-reg [11-1:0] X14;
-reg [11-1:0] X15;
-wire [11-1:0] test_X0, test_X1, test_X2, test_X3, test_X4, test_X5, test_X6, test_X7, test_X8;
-wire [11-1:0] test_X9, test_X10, test_X11, test_X12, test_X13, test_X14, test_X15;
+reg [12-1:0] X0;
+reg [12-1:0] X1;
+reg [12-1:0] X2;
+reg [12-1:0] X3;
+reg [12-1:0] X4;
+reg [12-1:0] X5;
+reg [12-1:0] X6;
+reg [12-1:0] X7;
+reg [12-1:0] X8;
+reg [12-1:0] X9;
+reg [12-1:0] X10;
+reg [12-1:0] X11;
+reg [12-1:0] X12;
+reg [12-1:0] X13;
+reg [12-1:0] X14;
+reg [12-1:0] X15;
+wire [12-1:0] test_X0, test_X1, test_X2, test_X3, test_X4, test_X5, test_X6, test_X7, test_X8;
+wire [12-1:0] test_X9, test_X10, test_X11, test_X12, test_X13, test_X14, test_X15;
 
 top_memory_test TEST(clk, rstn); // define input & output ports of your top module by youself 
 
@@ -37,8 +37,8 @@ always #5 clk <= ~clk;
 initial $readmemh("../matlab_data_0530/image1_2D_Xk.txt", test_vec);
 
 initial begin
-	$dumpfile("DCT_sti.vcd");
-	$dumpvars(0, DCT_sti);
+	$dumpfile("DCT_2D_sti.vcd");
+	$dumpvars(0, DCT_2D_sti);
 	clk = 1; rstn = 0;
 	#10;
 	rstn = 1;
@@ -72,7 +72,7 @@ assign test_X15 = TEST.DCT.DCT_col.X_15_trunc;
 
 
 initial begin
-	#10;
+	#190;
 	// X0 ~ X15 are the input of your DCT module
 	for (i = 0; i < 512; i=i+1) begin
 		//test_X0 <= TEST.DCT.X_0_trunc;
@@ -103,7 +103,7 @@ initial begin
 		#(10);
 	end
 
-	#36000;
+	#1600;
 
 	$finish;
 end
