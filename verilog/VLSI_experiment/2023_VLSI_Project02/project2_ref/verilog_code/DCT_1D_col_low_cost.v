@@ -108,7 +108,7 @@ module DCT_1D_col
     assign X_0_test = block_flag ? X_0 >>> 3 : X_0 >>> 1;
     xor(overflow0, X_0_test[12-1], Pre_X_0[15-1]);
     // + 150 -50
-    assign X_0_trunc = overflow0 ? (X_0_test[12-1] ? ~X_0_test : ~X_0_test) : X_0_test;
+    assign X_0_trunc = overflow0 ? (X_0_test[12-1] ? 12'b011111111111 : 12'b100000000000) : X_0_test;
     assign X_8_trunc = X_8[17-1:5];
 
     // Even의 Even의 Odd
@@ -225,7 +225,7 @@ module DCT_1D_col
 
     // 11bit truncation
     wire signed [12-1:0] X_1_trunc, X_15_trunc;
-    assign X_1_trunc = overflow_chk1? (X_1_test[12-1] ? ~X_1_test : ~X_1_test) : X_1_test;
+    assign X_1_trunc = overflow_chk1? (X_1_test[12-1] ? 12'b011111111111 : 12'b100000000000) : X_1_test;
     assign X_15_trunc = Pre_X_15[17-1:5];
 
 
