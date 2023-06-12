@@ -116,7 +116,7 @@ for image_number = 5 %-------------"Change this number" to test many different i
      Image_tran = zeros(m,n);
      
      for i=1:m/16
-         image1_X_k = fopen('./image1_2D_Xk.txt','w');
+         image5_X_k = fopen('./image5_1D_Xk.txt','w');
          for j=1:n/16
              Block_temp = input_image_512x512((16*i-15):16*i,(16*j-15):16*j);
 
@@ -131,16 +131,17 @@ for image_number = 5 %-------------"Change this number" to test many different i
 
              Block_DCT_final((16*i-15):16*i,(16*j-15):16*j) = func_DCTquant_trunc(Block_DCT_2D_quant((16*i-15):16*i,(16*j-15):16*j));
 
-%              for k = 1:16
-%                  for l = 1:16
-%                      DCT_quant = ceil(Block_DCT_final(l,k+(j-1)*16))
-%                      if(DCT_quant <0)
-%                          DCT_quant = ceil(DCT_quant + power(2, Result_1D_DCT_quantization_bit));
-%                      end
-%                     fprintf(image1_X_k,'%X ', DCT_quant);
-%                  end
-%                 fprintf(image1_X_k,'\n');
-%              end
+             for k = 1:16
+                 for l = 1:16
+                     DCT_quant = (Block_DCT_1D_quant(l,k+(j-1)*16));
+                     if(DCT_quant <0)
+                         DCT_quant = (DCT_quant + power(2, Result_1D_DCT_quantization_bit));
+                     end
+                    fprintf(image5_X_k,'%X ', DCT_quant);
+                 end
+                fprintf(image5_X_k,'\n');
+             end
+
              Block_DCT = Block_DCT_final((16*i-15):16*i,(16*j-15):16*j);
 
              Block_r = round(Q_pre.\Block_DCT);

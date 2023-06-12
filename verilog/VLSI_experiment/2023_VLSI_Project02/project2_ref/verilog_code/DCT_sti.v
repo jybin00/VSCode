@@ -34,7 +34,7 @@ top_memory_test TEST(clk, rstn); // define input & output ports of your top modu
 
 always #5 clk <= ~clk;
 
-initial $readmemh("../matlab_data_0530/image1_2D_Xk.txt", test_vec);
+initial $readmemh("../matlab_data_0530/image5_1D_Xk.txt", test_vec);
 
 initial begin
 	$dumpfile("DCT_sti.vcd");
@@ -44,7 +44,7 @@ initial begin
 	rstn = 1;
 end
 
-initial	$readmemh("../matlab_data_0530/image_in_1.txt", TEST.MEM_IN.array); //input image, check the path of memory rocation (module instance)
+initial	$readmemh("../matlab_data_0530/image_in_5.txt", TEST.MEM_IN.array); //input image, check the path of memory rocation (module instance)
 
 
 integer i = 0;
@@ -52,27 +52,27 @@ integer fp;
 integer err1 = 0;
 integer err2 = 0;
 
-assign test_X0 = TEST.DCT.DCT_col.X_0_trunc;
-assign test_X1 = TEST.DCT.DCT_col.X_1_trunc;
-assign test_X2 = TEST.DCT.DCT_col.X_2_trunc;
-assign test_X3 = TEST.DCT.DCT_col.X_3_trunc;
-assign test_X4 = TEST.DCT.DCT_col.X_4_trunc;
-assign test_X5 = TEST.DCT.DCT_col.X_5_trunc;
-assign test_X6 = TEST.DCT.DCT_col.X_6_trunc;
-assign test_X7 = TEST.DCT.DCT_col.X_7_trunc;
-assign test_X8 = TEST.DCT.DCT_col.X_8_trunc;
-assign test_X9 = TEST.DCT.DCT_col.X_9_trunc;
-assign test_X10 = TEST.DCT.DCT_col.X_10_trunc;
-assign test_X11 = TEST.DCT.DCT_col.X_11_trunc;
-assign test_X12 = TEST.DCT.DCT_col.X_12_trunc;
-assign test_X13 = TEST.DCT.DCT_col.X_13_trunc;
-assign test_X14 = TEST.DCT.DCT_col.X_14_trunc;
-assign test_X15 = TEST.DCT.DCT_col.X_15_trunc;
+assign test_X0 = TEST.DCT.DCT_row.X_0_trunc;
+assign test_X1 = TEST.DCT.DCT_row.X_1_trunc;
+assign test_X2 = TEST.DCT.DCT_row.X_2_trunc;
+assign test_X3 = TEST.DCT.DCT_row.X_3_trunc;
+assign test_X4 = TEST.DCT.DCT_row.X_4_trunc;
+assign test_X5 = TEST.DCT.DCT_row.X_5_trunc;
+assign test_X6 = TEST.DCT.DCT_row.X_6_trunc;
+assign test_X7 = TEST.DCT.DCT_row.X_7_trunc;
+assign test_X8 = TEST.DCT.DCT_row.X_8_trunc;
+assign test_X9 = TEST.DCT.DCT_row.X_9_trunc;
+assign test_X10 = TEST.DCT.DCT_row.X_10_trunc;
+assign test_X11 = TEST.DCT.DCT_row.X_11_trunc;
+assign test_X12 = TEST.DCT.DCT_row.X_12_trunc;
+assign test_X13 = TEST.DCT.DCT_row.X_13_trunc;
+assign test_X14 = TEST.DCT.DCT_row.X_14_trunc;
+assign test_X15 = TEST.DCT.DCT_row.X_15_trunc;
 
 
 
 initial begin
-	#10;
+	#20;
 	// X0 ~ X15 are the input of your DCT module
 	for (i = 0; i < 512; i=i+1) begin
 		//test_X0 <= TEST.DCT.X_0_trunc;

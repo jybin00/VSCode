@@ -126,7 +126,7 @@ module DCT_1D_col
     // Even의 Odd
     ////////////////////****** X[2], X[6], X[10], X[14] ******////////////////////
     // 18.6
-    wire signed [21-1:0] Pre_X_10_1, Pre_X_6_1, Pre_X_10_2, Pre_X_6_2;
+    wire signed [22-1:0] Pre_X_10_1, Pre_X_6_1, Pre_X_10_2, Pre_X_6_2;
     //buf_col_st3_mult buf3_3 (Pre_X_10_1, Pre_X_6_1, X_0_7_8_15_s, X_3_4_11_12_s, C_10, C_6);
     //buf_col_st3_mult buf3_4 (Pre_X_6_2, Pre_X_10_2, X_1_6_9_14_s, X_2_5_10_13_s, C_14, C_2);
 
@@ -142,8 +142,8 @@ module DCT_1D_col
     assign Pre_X_6_2 = (X_1_6_9_14_s <<< 2)  + (X_2_5_10_13_s <<< 4) + (X_2_5_10_13_s <<< 2) + (X_2_5_10_13_s <<< 1);
     assign Pre_X_10_2 = -((X_2_5_10_13_s <<< 2)) + ((X_1_6_9_14_s <<< 4) + (X_1_6_9_14_s <<< 2) + (X_1_6_9_14_s <<< 1));
     
-    // 22.6
-    wire signed [22-1:0] X_10, X_6;
+    // 23.7
+    wire signed [23-1:0] X_10, X_6;
     // 22bit outcome
     assign X_10 = Pre_X_10_1 - Pre_X_10_2;
     assign X_6 = Pre_X_6_1 - Pre_X_6_2;
@@ -154,7 +154,7 @@ module DCT_1D_col
     assign X_6_trunc = X_6[18-1:6];
 
     // X[2], X[6]
-    wire signed [21-1:0] Pre_X_2_1, Pre_X_14_1, Pre_X_2_2, Pre_X_14_2;
+    wire signed [22-1:0] Pre_X_2_1, Pre_X_14_1, Pre_X_2_2, Pre_X_14_2;
     //buf_col_st3_mult buf3_5 (Pre_X_2_1, Pre_X_14_1, X_0_7_8_15_s, X_3_4_11_12_s, C_2, C_14);
     //buf_col_st3_mult buf3_6 (Pre_X_2_2, Pre_X_14_2, X_2_5_10_13_s, X_1_6_9_14_s, C_10, C_6);
 
@@ -170,7 +170,7 @@ module DCT_1D_col
     assign Pre_X_2_2 = (X_2_5_10_13_s <<< 4) + (X_2_5_10_13_s <<< 3) + (X_2_5_10_13_s) + (X_1_6_9_14_s <<< 5) + (X_1_6_9_14_s <<< 2) + (X_1_6_9_14_s <<< 1);
     assign Pre_X_14_2 = -((X_1_6_9_14_s <<< 4) + (X_1_6_9_14_s <<< 3) + (X_1_6_9_14_s)) + ((X_2_5_10_13_s <<< 5) + (X_2_5_10_13_s <<< 2) + (X_2_5_10_13_s <<< 1));
 
-    wire signed [22-1:0] X_2, X_14;
+    wire signed [23-1:0] X_2, X_14;
     // 19bit outcome
     assign X_2 = Pre_X_2_1 + Pre_X_2_2;
     assign X_14 = Pre_X_14_1 + Pre_X_14_2;
@@ -183,8 +183,8 @@ module DCT_1D_col
     // Odd part
     ////////////////////****** X[1], X[15] ******////////////////////
 
-    wire signed [22-1:0] Pre_X_1, Pre_X_15;
-    wire signed [20-1:0] X1_1, X15_1, X1_2, X15_2, X1_3, X15_3, X1_4, X15_4;
+    wire signed [23-1:0] Pre_X_1, Pre_X_15;
+    wire signed [21-1:0] X1_1, X15_1, X1_2, X15_2, X1_3, X15_3, X1_4, X15_4;
     wire signed [12-1:0] X_1_test;
     wire overflow_chk1;
     
@@ -231,8 +231,8 @@ module DCT_1D_col
 
     ////////////////////****** X[3], X[13] ******////////////////////
 
-    wire signed [23-1:0] Pre_X_3, Pre_X_13;
-    wire signed [20-1:0] X3_1, X13_1, X3_2, X13_2, X3_3, X13_3, X3_4, X13_4;
+    wire signed [24-1:0] Pre_X_3, Pre_X_13;
+    wire signed [21-1:0] X3_1, X13_1, X3_2, X13_2, X3_3, X13_3, X3_4, X13_4;
 
     //buf_col_st2_mult buf_3_13_1 (X3_1, X13_1, X_0_15_s, -X_7_8_s, C_3, C_13);
     //buf_col_st2_mult buf_3_13_2 (X3_2, X13_2, X_1_14_s, -X_6_9_s, C_9, C_7);
@@ -276,8 +276,8 @@ module DCT_1D_col
 
     ////////////////////****** X[5], X[11] ******////////////////////
 
-    wire signed [23-1:0] Pre_X_5, Pre_X_11;
-    wire signed [20-1:0] X5_1, X11_1, X5_2, X11_2, X5_3, X11_3, X5_4, X11_4;
+    wire signed [24-1:0] Pre_X_5, Pre_X_11;
+    wire signed [21-1:0] X5_1, X11_1, X5_2, X11_2, X5_3, X11_3, X5_4, X11_4;
     
     //buf_col_st2_mult buf_5_11_1 (X5_1, X11_1, X_0_15_s, X_7_8_s, C_5, C_11);
     //buf_col_st2_mult buf_5_11_2 (X5_2, X11_2, X_1_14_s, X_6_9_s, C_15, C_1);
@@ -318,8 +318,8 @@ module DCT_1D_col
 
     ////////////////////****** X[7], X[9] ******////////////////////
 
-    wire signed [23-1:0] Pre_X_7, Pre_X_9;
-    wire signed [20-1:0] X7_1, X9_1, X7_2, X9_2, X7_3, X9_3, X7_4, X9_4;
+    wire signed [24-1:0] Pre_X_7, Pre_X_9;
+    wire signed [21-1:0] X7_1, X9_1, X7_2, X9_2, X7_3, X9_3, X7_4, X9_4;
 
     //buf_col_st2_mult buf_7_9_1 (X7_1, X9_1, X_0_15_s, -X_7_8_s, C_7, C_9);
     //buf_col_st2_mult buf_7_9_2 (X7_2, X9_2, X_1_14_s, X_6_9_s, C_11, C_5);
