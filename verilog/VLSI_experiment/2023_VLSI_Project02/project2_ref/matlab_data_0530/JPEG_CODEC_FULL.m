@@ -3,7 +3,7 @@ clear all
 %clc
 tic
 
-for image_number = 1 %-------------"Change this number" to test many different images------
+for image_number = 3 %-------------"Change this number" to test many different images------
     fprintf("image %d\n", image_number);
     %---------------------------- Get the Image data Input ----------------------------------
     input_image_512x512 = double( imread( sprintf( 'image_in_%d.tif',image_number ),'tiff' ) );
@@ -103,14 +103,14 @@ for image_number = 1 %-------------"Change this number" to test many different i
      % The number of bits for Result of 1D-DCT Quantization
      % You can "adjust this number" to improve the qualities of images.
      % Original = 14;
-     Result_1D_DCT_quantization_bit = 11; % DCT 결과  = BW
+     Result_1D_DCT_quantization_bit = 13; % DCT 결과  = BW
      
      % The number of integer bits for Result of 1D-DCT
      % Original = 12;
      % quantization bit - num_int 한 만큼 소수점 quntization
      % 생각해보니까 X[k]는 한번 곱해진게 아니라 16번 계수와 곱해진게 더해진거네,, 
      % 당연히 4정도 곱해지면 정수 부분이 커져야 맞다.
-     num_int = 11; % BW 중에서 int의 범위
+     num_int = 12; % BW 중에서 int의 범위
      
      %--------------------------- DCT OPERATION -----------------------------
      Image_tran = zeros(m,n);
@@ -131,16 +131,16 @@ for image_number = 1 %-------------"Change this number" to test many different i
 
              Block_DCT_final((16*i-15):16*i,(16*j-15):16*j) = func_DCTquant_trunc(Block_DCT_2D_quant((16*i-15):16*i,(16*j-15):16*j));
 
-             for k = 1:16
-                 for l = 1:16
-                     DCT_quant = ceil(Block_DCT_final(l,k+(j-1)*16))
-                     if(DCT_quant <0)
-                         DCT_quant = ceil(DCT_quant + power(2, Result_1D_DCT_quantization_bit));
-                     end
-                    fprintf(image1_X_k,'%X ', DCT_quant);
-                 end
-                fprintf(image1_X_k,'\n');
-             end
+%              for k = 1:16
+%                  for l = 1:16
+%                      DCT_quant = ceil(Block_DCT_final(l,k+(j-1)*16))
+%                      if(DCT_quant <0)
+%                          DCT_quant = ceil(DCT_quant + power(2, Result_1D_DCT_quantization_bit));
+%                      end
+%                     fprintf(image1_X_k,'%X ', DCT_quant);
+%                  end
+%                 fprintf(image1_X_k,'\n');
+%              end
              Block_DCT = Block_DCT_final((16*i-15):16*i,(16*j-15):16*j);
 
              Block_r = round(Q_pre.\Block_DCT);

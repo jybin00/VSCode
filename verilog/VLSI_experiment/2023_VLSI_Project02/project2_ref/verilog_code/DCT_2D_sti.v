@@ -44,7 +44,7 @@ initial begin
 	rstn = 1;
 end
 
-initial	$readmemh("../matlab_data_0530/image_in_1.txt", TEST.MEM_IN.array); //input image, check the path of memory rocation (module instance)
+initial	$readmemh("../matlab_data_0530/image_in_3.txt", TEST.MEM_IN.array); //input image, check the path of memory rocation (module instance)
 
 
 integer i = 0;
@@ -74,7 +74,7 @@ assign test_X15 = TEST.DCT.DCT_col.X_15_trunc;
 initial begin
 	#190;
 	// X0 ~ X15 are the input of your DCT module
-	for (i = 0; i < 512; i=i+1) begin
+	for (i = 0; i < 18000; i=i+1) begin
 		//test_X0 <= TEST.DCT.X_0_trunc;
 		X0  <= $signed(test_vec[i*12+ 0]);
 		X1  <= $signed(test_vec[i*12+ 1]);
@@ -103,7 +103,7 @@ initial begin
 		#(10);
 	end
 
-	#1600;
+	#18000;
 
 	$finish;
 end

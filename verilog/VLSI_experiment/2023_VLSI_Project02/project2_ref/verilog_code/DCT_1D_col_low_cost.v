@@ -90,21 +90,25 @@ module DCT_1D_col
     wire signed[20-1:0] X_8;
     wire signed[12-1:0] X_0_trunc; 
     wire signed[12-1:0] X_8_trunc;
-    wire overflow;
+    wire signed[12-1:0] X_0_test;
+    wire overflow0, overflow1;
 
     // 15bit outcome (15.0)
     buf_col_st4 buf4_1 (Pre_X_0, Pre_X_8, X1, X2);
 
     // 19bit outcome (19.4) 승화가 알려준 꿀팁. $unsigned()
-    assign overflow = ((Pre_X_0[13] & ~X1[13] & ~X2[13]));
+    ///assign overflow0 = ((Pre_X_0[15-1] & ~X1[14-1] & ~X2[14-1])) || ((~Pre_X_0[15-1] & X1[14-1] & X2[14-1]));
     //assign X_0 = overflow ? 15'b001111111111111 : $signed(Pre_X_0);
-    //assign X_0 = $signed(Pre_X_0 <<< 4);
+    
     assign X_0 = $signed(Pre_X_0);
     // 19bit outcome
     assign X_8 = $signed(Pre_X_8 << 4);
 
     // 12bit (12.0)
-    assign X_0_trunc = block_flag ? X_0[15-1:3] : X_0[13-1:1];
+    assign X_0_test = block_flag ? X_0 >>> 3 : X_0 >>> 1;
+    xor(overflow0, X_0_test[12-1], Pre_X_0[15-1]);
+    // + 150 -50
+    assign X_0_trunc = overflow0 ? (X_0_test[12-1] ? ~X_0_test : ~X_0_test) : X_0_test;
     assign X_8_trunc = X_8[17-1:5];
 
     // Even의 Even의 Odd
@@ -179,8 +183,10 @@ module DCT_1D_col
     // Odd part
     ////////////////////****** X[1], X[15] ******////////////////////
 
-    wire signed [23-1:0] Pre_X_1, Pre_X_15;
+    wire signed [22-1:0] Pre_X_1, Pre_X_15;
     wire signed [20-1:0] X1_1, X15_1, X1_2, X15_2, X1_3, X15_3, X1_4, X15_4;
+    wire signed [12-1:0] X_1_test;
+    wire overflow_chk1;
     
     //buf_col_st2_mult buf_1_15_1 (X1_1, X15_1, X_0_15_s, X_7_8_s, C_1, C_15);
     //buf_col_st2_mult buf_1_15_2 (X1_2, X15_2, X_1_14_s, X_6_9_s, C_3, C_13);
@@ -212,11 +218,14 @@ module DCT_1D_col
     assign X15_4 = -((X_4_11_s <<< 4) + (X_4_11_s)) + ((X_3_12_s <<< 3) + (X_3_12_s <<< 2) + (X_3_12_s <<< 1));
 
     assign Pre_X_1 = X1_1 + X1_2 + X1_3 + X1_4;
+    assign X_1_test = Pre_X_1[17-1:5];
     assign Pre_X_15 = X15_1 - X15_2 + X15_3 - X15_4;
+
+    xor(overflow_chk1, X_1_test[12-1], Pre_X_1[22-1]);
 
     // 11bit truncation
     wire signed [12-1:0] X_1_trunc, X_15_trunc;
-    assign X_1_trunc = Pre_X_1[17-1:5];
+    assign X_1_trunc = overflow_chk1? (X_1_test[12-1] ? ~X_1_test : ~X_1_test) : X_1_test;
     assign X_15_trunc = Pre_X_15[17-1:5];
 
 
