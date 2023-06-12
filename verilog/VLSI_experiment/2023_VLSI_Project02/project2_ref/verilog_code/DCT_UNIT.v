@@ -1,5 +1,5 @@
-`include "DCT_1D_row_low_cost.v"
-`include "DCT_1D_col_low_cost.v"
+`include "DCT_1D_row_low_cost_8.v"
+`include "DCT_1D_col_low_cost_8.v"
 `include "TPMEM_16X16_11.v"
 `include "TPMEM_16X16_12.v"
 

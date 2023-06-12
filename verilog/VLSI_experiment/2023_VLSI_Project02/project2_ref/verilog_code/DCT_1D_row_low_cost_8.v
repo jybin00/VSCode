@@ -27,21 +27,21 @@ module DCT_1D_row
     wire [8-1:0] x_15 = x_n_in[ 0*8 +: 8];
     // (8.7)
     //wire [8-1:0] C_0  = 8'h20;
-    wire [8-1:0] C_1  = 8'b00101101;
-    wire [8-1:0] C_2  = 8'b00101100;
-    wire [8-1:0] C_3  = 8'b00101011;
-    wire [8-1:0] C_4  = 8'b00101010;
-    wire [8-1:0] C_5  = 8'b00101000;
-    wire [8-1:0] C_6  = 8'b00100110;
-    wire [8-1:0] C_7  = 8'b00100011;
-    wire [8-1:0] C_8  = 8'b00100000;
-    wire [8-1:0] C_9  = 8'b00011101;
-    wire [8-1:0] C_10 = 8'b00011001;
-    wire [8-1:0] C_11 = 8'b00010101;
-    wire [8-1:0] C_12 = 8'b00010001;
-    wire [8-1:0] C_13 = 8'b00001101;
-    wire [8-1:0] C_14 = 8'b00001001;
-    wire [8-1:0] C_15 = 8'b00000100;
+    // wire [8-1:0] C_1  = 8'b00101101;
+    // wire [8-1:0] C_2  = 8'b00101100;
+    // wire [8-1:0] C_3  = 8'b00101011;
+    // wire [8-1:0] C_4  = 8'b00101010;
+    // wire [8-1:0] C_5  = 8'b00101000;
+    // wire [8-1:0] C_6  = 8'b00100110;
+    // wire [8-1:0] C_7  = 8'b00100011;
+    // wire [8-1:0] C_8  = 8'b00100000;
+    // wire [8-1:0] C_9  = 8'b00011101;
+    // wire [8-1:0] C_10 = 8'b00011001;
+    // wire [8-1:0] C_11 = 8'b00010101;
+    // wire [8-1:0] C_12 = 8'b00010001;
+    // wire [8-1:0] C_13 = 8'b00001101;
+    // wire [8-1:0] C_14 = 8'b00001001;
+    // wire [8-1:0] C_15 = 8'b00000100;
     // 실제로는 16개인데 어차피 C0 = C8이어서 그냥 15개로만 계산함.
 
     wire signed[9-1:0] X_0_15_a, X_0_15_s;
@@ -93,26 +93,28 @@ module DCT_1D_row
     butterfly_st4 buf4_1 (Pre_X_0, Pre_X_8, X1, X2);
 
     // 16bit outcome (16.4) 승화가 알려준 꿀팁. $unsigned()
-    assign X_0 = $unsigned(Pre_X_0) <<4;
+    assign X_0 = $unsigned(Pre_X_0) << 4;
     //assign X_0 = X_0 <<< 1;
     // 19bit outcome
     assign X_8 = Pre_X_8 <<< 4;
 
     // 11bit (11.0)
-    assign X_0_trunc = X_0[17-1:6];
-    assign X_8_trunc = X_8[17-1:6];
+    assign X_0_trunc = X_0[18-1:7];
+    assign X_8_trunc = X_8[18-1:7];
 
     // Even의 Even의 Odd
     ////////////////////****** X[4], X[12] ******////////////////////
     // 19bit outcome (19.6)
     //butterfly_st4_mult buf4_2 (X_4, X_12, X3, X4, C_4, C_12);
-    // C4 = 0010101, C12 = 0001001
-    assign X_4 = (X3 << 4) + (X3 << 2) + X3 + ( (X4 << 3) + X4 );
-    assign X_12 = ( (X3 << 3) + (X3) ) - ( (X4 << 4) + (X4 << 2) + X4 );
+    // C4 = 00101010, C12 = 00010001
+    // C4 * X3 + C12 * X4
+    // -C4 * X4 + C12 * X3
+    assign X_4 = (X3 << 5) + (X3 << 3) + X3 << 1 + ( (X4 << 4) + X4 );
+    assign X_12 = -( (X4 << 5) + (X4 << 3) + X4 << 1 ) + ( (X3 << 4) + (X3));
     
     // 11bit (11.0) 앞에서 2비트, 뒤에서 6비트 자르기
-    assign X_4_trunc = X_4[17-1:6];
-    assign X_12_trunc = X_12[17-1:6];
+    assign X_4_trunc = X_4[18-1:7];
+    assign X_12_trunc = X_12[18-1:7];
 
     // Even의 Odd
     ////////////////////****** X[2], X[6], X[10], X[14] ******////////////////////
@@ -141,8 +143,8 @@ module DCT_1D_row
 
     // 11bit truncation
     wire signed [11-1:0] X_10_trunc, X_6_trunc;
-    assign X_10_trunc = X_10[17-1:6];
-    assign X_6_trunc = X_6[17-1:6];
+    assign X_10_trunc = X_10[18-1:7];
+    assign X_6_trunc = X_6[18-1:7];
 
     // X[2], X[6]
     wire signed [18-1:0] Pre_X_2_1, Pre_X_14_1, Pre_X_2_2, Pre_X_14_2;
@@ -168,8 +170,8 @@ module DCT_1D_row
 
     // 11bit truncation
     wire signed [11-1:0] X_2_trunc, X_14_trunc;
-    assign X_2_trunc = X_2[17-1:6];
-    assign X_14_trunc = X_14[17-1:6];
+    assign X_2_trunc = X_2[18-1:7];
+    assign X_14_trunc = X_14[18-1:7];
 
     // Odd part
     ////////////////////****** X[1], X[15] ******////////////////////
@@ -211,8 +213,8 @@ module DCT_1D_row
 
     // 11bit truncation
     wire signed [11-1:0] X_1_trunc, X_15_trunc;
-    assign X_1_trunc = Pre_X_1[17-1:6];
-    assign X_15_trunc = Pre_X_15[17-1:6];
+    assign X_1_trunc = Pre_X_1[18-1:7];
+    assign X_15_trunc = Pre_X_15[18-1:7];
 
 
     ////////////////////****** X[3], X[13] ******////////////////////
@@ -257,8 +259,8 @@ module DCT_1D_row
 
     // 11bit truncation
     wire signed [11-1:0] X_3_trunc, X_13_trunc;
-    assign X_3_trunc = Pre_X_3[17-1:6];
-    assign X_13_trunc = Pre_X_13[17-1:6];
+    assign X_3_trunc = Pre_X_3[18-1:7];
+    assign X_13_trunc = Pre_X_13[18-1:7];
 
     ////////////////////****** X[5], X[11] ******////////////////////
 
@@ -299,8 +301,8 @@ module DCT_1D_row
 
     // 11bit truncation
     wire signed [11-1:0] X_5_trunc, X_11_trunc;
-    assign X_5_trunc = Pre_X_5[17-1:6];
-    assign X_11_trunc = Pre_X_11[17-1:6];
+    assign X_5_trunc = Pre_X_5[18-1:7];
+    assign X_11_trunc = Pre_X_11[18-1:7];
 
     ////////////////////****** X[7], X[9] ******////////////////////
 
@@ -343,8 +345,8 @@ module DCT_1D_row
 
     // 11bit truncation
     wire signed [11-1:0] X_7_trunc, X_9_trunc;
-    assign X_7_trunc = Pre_X_7[17-1:6];
-    assign X_9_trunc = Pre_X_9[17-1:6];
+    assign X_7_trunc = Pre_X_7[18-1:7];
+    assign X_9_trunc = Pre_X_9[18-1:7];
 
     assign X_k_out = {X_0_trunc, X_1_trunc, X_2_trunc, X_3_trunc, X_4_trunc, X_5_trunc, X_6_trunc, X_7_trunc, X_8_trunc, X_9_trunc, X_10_trunc, X_11_trunc, X_12_trunc, X_13_trunc, X_14_trunc, X_15_trunc};
 
