@@ -19,14 +19,14 @@ initial begin
 	rstn = 1;
 end
 
-initial	$readmemh("../matlab_data_0530/image_in_3.txt", TEST.MEM_IN.array); //input image, check the path of memory rocation (module instance)
+initial	$readmemh("../matlab_data_0530/image_in_5.txt", TEST.MEM_IN.array); //input image, check the path of memory rocation (module instance)
 
 
 integer i;
 integer fp;
 
 initial begin
-	fp = $fopen("DCT_image_3.txt","w"); //output image, this is the output file that finished 2D-DCT operations.
+	fp = $fopen("DCT_image_5.txt","w"); //output image, this is the output file that finished 2D-DCT operations.
 
 	//#328040; //change if you need
 	//#30000;
@@ -34,7 +34,7 @@ initial begin
 	//# 16384; //change if you need
 
 	for (i = 0; i<16384; i=i+1)	begin
-		$display("DATA %b", TEST.MEM_OUT.array[i]); //check the path of memory rocation (module instance)
+		//$display("DATA %b", TEST.MEM_OUT.array[i]); //check the path of memory rocation (module instance)
 		$fwrite(fp,"%b\n",   TEST.MEM_OUT.array[i]); //check the path of memory rocation (module instance)
 	end
    

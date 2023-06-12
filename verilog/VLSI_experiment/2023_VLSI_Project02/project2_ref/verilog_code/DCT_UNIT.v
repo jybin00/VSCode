@@ -13,7 +13,7 @@ module DCT_UNIT(X_k_out, x_n_in, clk, rstn, flag, o_en3, o_en4);
 
     wire [16*11-1:0] Xk_row_out;
     wire [16*11-1:0] Xk_row_tp, Xk_row_tp1, Xk_row_tp2;
-    wire [16*12-1:0] Xk_col_in;
+    wire [16*11-1:0] Xk_col_in;
     wire [192-1:0] Xk_out;
     wire [192-1:0] X_k_out3, X_k_out4;
 
@@ -26,8 +26,8 @@ module DCT_UNIT(X_k_out, x_n_in, clk, rstn, flag, o_en3, o_en4);
 
     DCT_1D_row DCT_row (Xk_row_out, x_n_in, clk, rstn);
 
-    TPmem_16X16_11 TPMEM1 (Xk_row_out, i_en1, clk, rstn, Xk_row_tp1, o_en1);
-    TPmem_16X16_11 TPMEM2 (Xk_row_out, i_en2, clk, rstn, Xk_row_tp2, o_en2);
+    TPmem_16x16_11 TPMEM1 (Xk_row_out, i_en1, clk, rstn, Xk_row_tp1, o_en1);
+    TPmem_16x16_11 TPMEM2 (Xk_row_out, i_en2, clk, rstn, Xk_row_tp2, o_en2);
     
     assign dct_col_in = o_en1 ? Xk_row_tp1 : Xk_row_tp2;
 

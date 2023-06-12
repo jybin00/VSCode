@@ -1,9 +1,9 @@
 clear all
-%close all
+close all
 %clc
 tic
 
-for image_number = 1:8 %-------------"Change this number" to test many different images------
+for image_number = 5 %-------------"Change this number" to test many different images------
     fprintf("image %d\n", image_number);
     %---------------------------- Get the Image data Input ----------------------------------
     input_image_512x512 = double( imread( sprintf( 'image_in_%d.tif',image_number ),'tiff' ) );
@@ -86,7 +86,7 @@ for image_number = 1:8 %-------------"Change this number" to test many different
      % The number of bits for DCT Coefficient Quantization
      % You can "adjust this number" to improve the qualities of images
      % Original = 10;
-     C_quantization_bit =  7; % (1 . C_quantization_bit -1) 6~7비트 사이 괜찮은 듯.
+     C_quantization_bit =  8; % (1 . C_quantization_bit -1) 6~7비트 사이 괜찮은 듯.
      T = func_DCT_Coefficient_quant(C_quantization_bit); % 몇 개로 자를까?
      
      % If you want to check the coefficient value in hex format, please use this and open the txt file.
