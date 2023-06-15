@@ -9,22 +9,22 @@ module DCT_1D_row
     input [128-1:0]x_n_in;  // unsigned input
     input clk, rstn;
     //(8.0)
-    wire [8-1:0] x_0  = (x_n_in[15*8 +: 8]);
-    wire [8-1:0] x_1  = (x_n_in[14*8 +: 8]);
-    wire [8-1:0] x_2  = (x_n_in[13*8 +: 8]);
-    wire [8-1:0] x_3  = (x_n_in[12*8 +: 8]);
-    wire [8-1:0] x_4  = (x_n_in[11*8 +: 8]);
-    wire [8-1:0] x_5  = (x_n_in[10*8 +: 8]);
-    wire [8-1:0] x_6  = (x_n_in[ 9*8 +: 8]);
-    wire [8-1:0] x_7  = (x_n_in[ 8*8 +: 8]);
-    wire [8-1:0] x_8  = (x_n_in[ 7*8 +: 8]);
-    wire [8-1:0] x_9  = (x_n_in[ 6*8 +: 8]);
-    wire [8-1:0] x_10 = (x_n_in[ 5*8 +: 8]);
-    wire [8-1:0] x_11 = (x_n_in[ 4*8 +: 8]);
-    wire [8-1:0] x_12 = (x_n_in[ 3*8 +: 8]);
-    wire [8-1:0] x_13 = (x_n_in[ 2*8 +: 8]);
-    wire [8-1:0] x_14 = (x_n_in[ 1*8 +: 8]);
-    wire [8-1:0] x_15 = (x_n_in[ 0*8 +: 8]);
+    wire signed [9-1:0] x_0  = $signed ({1'b0, (x_n_in[15*8 +: 8])} );
+    wire signed [9-1:0] x_1  = $signed ({1'b0, (x_n_in[14*8 +: 8])} );
+    wire signed [9-1:0] x_2  = $signed ({1'b0, (x_n_in[13*8 +: 8])} );
+    wire signed [9-1:0] x_3  = $signed ({1'b0, (x_n_in[12*8 +: 8])} );
+    wire signed [9-1:0] x_4  = $signed ({1'b0, (x_n_in[11*8 +: 8])} );
+    wire signed [9-1:0] x_5  = $signed ({1'b0, (x_n_in[10*8 +: 8])} );
+    wire signed [9-1:0] x_6  = $signed ({1'b0, (x_n_in[ 9*8 +: 8])} );
+    wire signed [9-1:0] x_7  = $signed ({1'b0, (x_n_in[ 8*8 +: 8])} );
+    wire signed [9-1:0] x_8  = $signed ({1'b0, (x_n_in[ 7*8 +: 8])} );
+    wire signed [9-1:0] x_9  = $signed ({1'b0, (x_n_in[ 6*8 +: 8])} );
+    wire signed [9-1:0] x_10 = $signed ({1'b0, (x_n_in[ 5*8 +: 8])} );
+    wire signed [9-1:0] x_11 = $signed ({1'b0, (x_n_in[ 4*8 +: 8])} );
+    wire signed [9-1:0] x_12 = $signed ({1'b0, (x_n_in[ 3*8 +: 8])} );
+    wire signed [9-1:0] x_13 = $signed ({1'b0, (x_n_in[ 2*8 +: 8])} );
+    wire signed [9-1:0] x_14 = $signed ({1'b0, (x_n_in[ 1*8 +: 8])} );
+    wire signed [9-1:0] x_15 = $signed ({1'b0, (x_n_in[ 0*8 +: 8])} );
 
     // wire [7-1:0] C_0  = 7'h10;
     // wire [7-1:0] C_1  = 7'h17;
@@ -43,14 +43,14 @@ module DCT_1D_row
     // wire [7-1:0] C_14 = 7'h4;
     // wire [7-1:0] C_15 = 7'h2;
 
-    wire signed[9-1:0] X_0_15_a, X_0_15_s;
-    wire signed[9-1:0] X_1_14_a, X_1_14_s;
-    wire signed[9-1:0] X_2_13_a, X_2_13_s;
-    wire signed[9-1:0] X_3_12_a, X_3_12_s;
-    wire signed[9-1:0] X_4_11_a, X_4_11_s;
-    wire signed[9-1:0] X_5_10_a, X_5_10_s;
-    wire signed[9-1:0] X_6_9_a, X_6_9_s;
-    wire signed[9-1:0] X_7_8_a, X_7_8_s;
+    wire signed[10-1:0] X_0_15_a, X_0_15_s;
+    wire signed[10-1:0] X_1_14_a, X_1_14_s;
+    wire signed[10-1:0] X_2_13_a, X_2_13_s;
+    wire signed[10-1:0] X_3_12_a, X_3_12_s;
+    wire signed[10-1:0] X_4_11_a, X_4_11_s;
+    wire signed[10-1:0] X_5_10_a, X_5_10_s;
+    wire signed[10-1:0] X_6_9_a, X_6_9_s;
+    wire signed[10-1:0] X_7_8_a, X_7_8_s;
 
 
     wire signed[19-1:0] X_4, X_12;
@@ -66,8 +66,8 @@ module DCT_1D_row
     butterfly_st1 buf7( X_6_9_a,  X_6_9_s,  x_6, x_9);
     butterfly_st1 buf8( X_7_8_a,  X_7_8_s,  x_7, x_8);
 
-    wire signed[10-1:0] X_0_7_8_15_a, X_1_6_9_14_a, X_2_5_10_13_a, X_3_4_11_12_a;
-    wire signed[10-1:0] X_0_7_8_15_s, X_1_6_9_14_s, X_2_5_10_13_s, X_3_4_11_12_s;
+    wire signed[11-1:0] X_0_7_8_15_a, X_1_6_9_14_a, X_2_5_10_13_a, X_3_4_11_12_a;
+    wire signed[11-1:0] X_0_7_8_15_s, X_1_6_9_14_s, X_2_5_10_13_s, X_3_4_11_12_s;
 
     // Even stage (10.0)
     butterfly_st2 buf2_1 (X_0_7_8_15_a,  X_0_7_8_15_s,  X_0_15_a, X_7_8_a);
@@ -75,14 +75,14 @@ module DCT_1D_row
     butterfly_st2 buf2_3 (X_2_5_10_13_a, X_2_5_10_13_s, X_2_13_a, X_5_10_a);
     butterfly_st2 buf2_4 (X_3_4_11_12_a, X_3_4_11_12_s, X_3_12_a, X_4_11_a);
 
-    wire signed[11-1:0] X1, X2, X3, X4;
+    wire signed[12-1:0] X1, X2, X3, X4;
     // 11 bit outcome (11.0)
     butterfly_st3 buf3_1 (X2, X4, X_1_6_9_14_a, X_2_5_10_13_a);
     butterfly_st3 buf3_2 (X1, X3, X_0_7_8_15_a,  X_3_4_11_12_a);
 
     // Even의 Even의 Even
     ////////////////////****** X[0], X[8] ******////////////////////
-    wire signed[12-1:0] Pre_X_0, Pre_X_8;
+    wire signed[13-1:0] Pre_X_0, Pre_X_8;
     wire signed[19-1:0] X_0;
     wire signed[19-1:0] X_8;
     wire signed[11-1:0] X_0_trunc; 
@@ -354,22 +354,22 @@ module DCT_1D_row
 endmodule
 
 module butterfly_st1(Out_add, Out_sub, in1, in2);
-    output signed[9-1:0] Out_add;
-    output signed[9-1:0] Out_sub;
-    input unsigned[8-1:0] in1;
-    input unsigned[8-1:0] in2;
+    output signed[10-1:0] Out_add;
+    output signed[10-1:0] Out_sub;
+    input signed [9-1:0] in1;
+    input signed [9-1:0] in2;
 
-    assign Out_add = $unsigned(in1) + $unsigned(in2);
-    assign Out_sub = $unsigned(in1) - $unsigned(in2);
+    assign Out_add = in1 + in2;
+    assign Out_sub = in1 - in2;
 
 endmodule
 
 // 여전히 여기 output도 unsigned로 계산해야함.
 module butterfly_st2(Out_add, Out_sub, in1, in2);
-    output signed[10-1:0] Out_add;
-    output signed[10-1:0] Out_sub;
-    input signed[9-1:0] in1;
-    input signed[9-1:0] in2;
+    output signed[11-1:0] Out_add;
+    output signed[11-1:0] Out_sub;
+    input signed[10-1:0] in1;
+    input signed[10-1:0] in2;
 
     assign Out_add = in1 + in2;
     assign Out_sub = in1 - in2;
@@ -389,10 +389,10 @@ endmodule
 // endmodule
 
 module butterfly_st3(Out_add, Out_sub, in1, in2);
-    output signed[11-1:0] Out_add;
-    output signed[11-1:0] Out_sub;
-    input signed[10-1:0] in1;
-    input signed[10-1:0] in2;
+    output signed[12-1:0] Out_add;
+    output signed[12-1:0] Out_sub;
+    input signed[11-1:0] in1;
+    input signed[11-1:0] in2;
 
     assign Out_add = in1 + in2;
     assign Out_sub = in1 - in2;
@@ -412,9 +412,9 @@ endmodule
 // endmodule
 
 module butterfly_st4(Out_add, Out_sub, in1, in2);
-    output signed[12-1:0] Out_add;
-    output signed[12-1:0] Out_sub;
-    input signed[11-1:0] in1, in2;
+    output signed[13-1:0] Out_add;
+    output signed[13-1:0] Out_sub;
+    input signed[12-1:0] in1, in2;
 
     assign Out_add = in1 + in2;
     assign Out_sub = in1 - in2;

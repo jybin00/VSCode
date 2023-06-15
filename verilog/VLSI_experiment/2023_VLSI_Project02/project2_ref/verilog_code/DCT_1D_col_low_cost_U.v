@@ -100,9 +100,9 @@ module DCT_1D_col
     ///assign overflow0 = ((Pre_X_0[15-1] & ~X1[14-1] & ~X2[14-1])) || ((~Pre_X_0[15-1] & X1[14-1] & X2[14-1]));
     //assign X_0 = overflow ? 15'b001111111111111 : $signed(Pre_X_0);
     
-    assign X_0 = $signed(Pre_X_0);
+    assign X_0 = (Pre_X_0);
     // 19bit outcome
-    assign X_8 = $signed(Pre_X_8 << 4);
+    assign X_8 = (Pre_X_8 << 4);
 
     // 12bit (12.0)
     assign X_0_test = block_flag ? X_0 >>> 3 : X_0 >>> 1;
@@ -116,7 +116,7 @@ module DCT_1D_col
     // 19bit outcome (19.6)
     //buf_col_st4_mult buf4_2 (X_4, X_12, X3, X4, C_4, C_12);
 
-    assign X_4 = $signed((X3 << 4)) + $signed((X3 << 2)) + $signed(X3) + $signed(X4 << 3) + $signed(X4);
+    assign X_4 = ((X3 << 4)) + ((X3 << 2)) + (X3) + (X4 << 3) + (X4);
     assign X_12 = (X3 << 3) + (X3) - ((X4 << 4) + (X4 << 2) + X4);
     
     // 12bit (12.1) 앞에서 6비트, 뒤에서 5비트 자르기
@@ -368,11 +368,11 @@ endmodule
 module buf_col_st1(Out_add, Out_sub, in1, in2);
     output signed[12-1:0] Out_add;
     output signed[12-1:0] Out_sub;
-    input [11-1:0] in1;
-    input [11-1:0] in2;
+    input signed [11-1:0] in1;
+    input signed [11-1:0] in2;
 
-    assign Out_add = $signed(in1) + $signed(in2);
-    assign Out_sub = $signed(in1) - $signed(in2);
+    assign Out_add = in1 + in2;
+    assign Out_sub = in1 - in2;
 
 endmodule
 
@@ -383,8 +383,8 @@ module buf_col_st2(Out_add, Out_sub, in1, in2);
     input signed[12-1:0] in1;
     input signed[12-1:0] in2;
 
-    assign Out_add = $signed(in1) + $signed(in2);
-    assign Out_sub = $signed(in1) - $signed(in2);
+    assign Out_add = in1 + in2;
+    assign Out_sub = in1 - in2;
 
 endmodule
 
@@ -406,8 +406,8 @@ module buf_col_st3(Out_add, Out_sub, in1, in2);
     input signed[13-1:0] in1;
     input signed[13-1:0] in2;
 
-    assign Out_add = $signed(in1) + $signed(in2);
-    assign Out_sub = $signed(in1) - $signed(in2);
+    assign Out_add = in1 + in2;
+    assign Out_sub = in1 - in2;
 
 endmodule
 // // Even의 Odd X[2], X[6], X[10], X[14]를 위한 butterfly 모듈
@@ -428,8 +428,8 @@ module buf_col_st4(Out_add, Out_sub, in1, in2);
     output signed[15-1:0] Out_sub;
     input signed[14-1:0] in1, in2;
 
-    assign Out_add = $signed(in1) + $signed(in2);
-    assign Out_sub = $signed(in1) - $signed(in2);
+    assign Out_add = in1 + in2;
+    assign Out_sub = in1 - in2;
 
 endmodule
 
