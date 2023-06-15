@@ -114,9 +114,9 @@ for image_number = 5 %-------------"Change this number" to test many different i
      
      %--------------------------- DCT OPERATION -----------------------------
      Image_tran = zeros(m,n);
-     
+     image5_X_k = fopen('./image5_2D_Xk.txt','w');
      for i=1:m/16
-         image5_X_k = fopen('./image5_2D_Xk.txt','w');
+         
          for j=1:n/16
              Block_temp = input_image_512x512((16*i-15):16*i,(16*j-15):16*j);
 

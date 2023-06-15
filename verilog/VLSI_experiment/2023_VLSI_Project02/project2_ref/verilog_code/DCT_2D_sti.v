@@ -8,7 +8,7 @@ reg rstn;
 
 wire [176-1:0] X_k_out;
 wire [128-1:0] x_n_in;
-reg [12-1:0] test_vec [0:512*16];
+reg [12-1:0] test_vec [0:16*16384];
 
 reg signed [12-1:0] X0;
 reg signed [12-1:0] X1;
