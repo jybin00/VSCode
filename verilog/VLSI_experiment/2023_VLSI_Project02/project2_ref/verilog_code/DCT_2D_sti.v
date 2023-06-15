@@ -8,7 +8,7 @@ reg rstn;
 
 wire [176-1:0] X_k_out;
 wire [128-1:0] x_n_in;
-reg [11-1:0] test_vec [0:512*16];
+reg [12-1:0] test_vec [0:512*16];
 
 reg signed [12-1:0] X0;
 reg signed [12-1:0] X1;
@@ -76,22 +76,22 @@ initial begin
 	// X0 ~ X15 are the input of your DCT module
 	for (i = 0; i < 18000; i=i+1) begin
 		//test_X0 <= TEST.DCT.X_0_trunc;
-		X0  <= $signed(test_vec[i*12+ 0]);
-		X1  <= $signed(test_vec[i*12+ 1]);
-		X2  <= $signed(test_vec[i*12+ 2]);
-		X3  <= $signed(test_vec[i*12+ 3]);
-		X4  <= $signed(test_vec[i*12+ 4]);
-		X5  <= $signed(test_vec[i*12+ 5]);
-		X6  <= $signed(test_vec[i*12+ 6]);
-		X7  <= $signed(test_vec[i*12+ 7]);
-		X8  <= $signed(test_vec[i*12+ 8]);
-		X9  <= $signed(test_vec[i*12+ 9]);
-		X10 <= $signed(test_vec[i*12+10]);
-		X11 <= $signed(test_vec[i*12+11]);
-		X12 <= $signed(test_vec[i*12+12]);
-		X13 <= $signed(test_vec[i*12+13]);
-		X14 <= $signed(test_vec[i*12+14]);
-		X15 <= $signed(test_vec[i*12+15]);
+		X0  <= (test_vec[i*16+ 0]);
+		X1  <= (test_vec[i*16+ 1]);
+		X2  <= (test_vec[i*16+ 2]);
+		X3  <= (test_vec[i*16+ 3]);
+		X4  <= (test_vec[i*16+ 4]);
+		X5  <= (test_vec[i*16+ 5]);
+		X6  <= (test_vec[i*16+ 6]);
+		X7  <= (test_vec[i*16+ 7]);
+		X8  <= (test_vec[i*16+ 8]);
+		X9  <= (test_vec[i*16+ 9]);
+		X10 <= (test_vec[i*16+10]);
+		X11 <= (test_vec[i*16+11]);
+		X12 <= (test_vec[i*16+12]);
+		X13 <= (test_vec[i*16+13]);
+		X14 <= (test_vec[i*16+14]);
+		X15 <= (test_vec[i*16+15]);
 	 	if(X1 != test_X1 || X2 != test_X2 || X3 != test_X3 || X4 != test_X4 || X5 != test_X5 || X6 != test_X6 || X7 != test_X7) begin
 	 		//$display("X0 error at %d", i);
 	 		err1 = err1 + 1;	
@@ -104,7 +104,7 @@ initial begin
 	 	#(10);
 	end
 
-	#160000;
+	#16000;
 
 	$finish;
 end
