@@ -92,6 +92,7 @@ initial begin
 		X13 <= test_vec[i*16+13];
 		X14 <= test_vec[i*16+14];
 		X15 <= test_vec[i*16+15];
+		#2;
 		if(X0 != test_X0 || X1 != test_X1 || X2 != test_X2 || X3 != test_X3 || X4 != test_X4 || X5 != test_X5 || X6 != test_X6 || X7 != test_X7) begin
 			//$display("X0 error at %d", i);
 			err1 = err1 + 1;
@@ -100,7 +101,7 @@ initial begin
 			//$display("X0 error at %d", i);
 			err2 = err2 + 1;
 		end
-		#(10);
+		#(8);
 	end
 
 	#36000;

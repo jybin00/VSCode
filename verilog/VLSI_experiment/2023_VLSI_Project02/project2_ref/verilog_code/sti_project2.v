@@ -34,7 +34,7 @@ initial begin
 	//# 16384; //change if you need
 
 	for (i = 0; i<16384; i=i+1)	begin
-		//$display("DATA %b", TEST.MEM_OUT.array[i]); //check the path of memory rocation (module instance)
+		$display("DATA %b", TEST.MEM_OUT.array[i]); //check the path of memory rocation (module instance)
 		$fwrite(fp,"%b\n",   TEST.MEM_OUT.array[i]); //check the path of memory rocation (module instance)
 	end
    
