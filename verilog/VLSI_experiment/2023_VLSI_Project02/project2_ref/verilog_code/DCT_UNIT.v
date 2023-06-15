@@ -1,7 +1,7 @@
 `include "DCT_1D_row_low_cost_U.v"
 `include "DCT_1D_col_low_cost_U.v"
-`include "TPMEM_16X16_11.v"
-`include "TPMEM_16X16_12.v"
+`include "tpmem_st1.v"
+`include "tpmem_st2.v"
 
 // DCT UNIT
 module DCT_UNIT(X_k_out, x_n_in, clk, rstn, flag, o_en3, o_en4);
@@ -26,8 +26,8 @@ module DCT_UNIT(X_k_out, x_n_in, clk, rstn, flag, o_en3, o_en4);
 
     DCT_1D_row DCT_row (Xk_row_out, x_n_in, clk, rstn);
 
-    TPmem_16x16_11 TPMEM1 (Xk_row_out, i_en1, clk, rstn, Xk_row_tp1, o_en1);
-    TPmem_16x16_11 TPMEM2 (Xk_row_out, i_en2, clk, rstn, Xk_row_tp2, o_en2);
+    tpmem_st1 TPMEM1 (Xk_row_out, i_en1, clk, rstn, Xk_row_tp1, o_en1);
+    tpmem_st1 TPMEM2 (Xk_row_out, i_en2, clk, rstn, Xk_row_tp2, o_en2);
     
     assign dct_col_in = o_en1 ? Xk_row_tp1 : Xk_row_tp2;
 
@@ -35,8 +35,8 @@ module DCT_UNIT(X_k_out, x_n_in, clk, rstn, flag, o_en3, o_en4);
 
     xor(int, i_en2, i_en3);
     
-    TPmem_16x16_12 TPMEM3 (Xk_out, i_en3, clk, rstn, X_k_out3, o_en3);
-    TPmem_16x16_12 TPMEM4 (Xk_out, i_en4, clk, rstn, X_k_out4, o_en4);
+    tpmem_st2 TPMEM3 (Xk_out, i_en3, clk, rstn, X_k_out3, o_en3);
+    tpmem_st2 TPMEM4 (Xk_out, i_en4, clk, rstn, X_k_out4, o_en4);
 
     assign X_k_out = o_en3 ? X_k_out3 : X_k_out4;
 
