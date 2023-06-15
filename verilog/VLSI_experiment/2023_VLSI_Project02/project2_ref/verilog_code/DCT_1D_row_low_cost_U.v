@@ -9,22 +9,22 @@ module DCT_1D_row
     input [128-1:0]x_n_in;  // unsigned input
     input clk, rstn;
     //(8.0)
-    wire [8-1:0] x_0  = x_n_in[15*8 +: 8];
-    wire [8-1:0] x_1  = x_n_in[14*8 +: 8];
-    wire [8-1:0] x_2  = x_n_in[13*8 +: 8];
-    wire [8-1:0] x_3  = x_n_in[12*8 +: 8];
-    wire [8-1:0] x_4  = x_n_in[11*8 +: 8];
-    wire [8-1:0] x_5  = x_n_in[10*8 +: 8];
-    wire [8-1:0] x_6  = x_n_in[ 9*8 +: 8];
-    wire [8-1:0] x_7  = x_n_in[ 8*8 +: 8];
-    wire [8-1:0] x_8  = x_n_in[ 7*8 +: 8];
-    wire [8-1:0] x_9  = x_n_in[ 6*8 +: 8];
-    wire [8-1:0] x_10 = x_n_in[ 5*8 +: 8];
-    wire [8-1:0] x_11 = x_n_in[ 4*8 +: 8];
-    wire [8-1:0] x_12 = x_n_in[ 3*8 +: 8];
-    wire [8-1:0] x_13 = x_n_in[ 2*8 +: 8];
-    wire [8-1:0] x_14 = x_n_in[ 1*8 +: 8];
-    wire [8-1:0] x_15 = x_n_in[ 0*8 +: 8];
+    wire [9-1:0] x_0  = {1'b0, (x_n_in[15*8 +: 8]));
+    wire [9-1:0] x_1  = {1'b0, (x_n_in[14*8 +: 8]));
+    wire [9-1:0] x_2  = {1'b0, (x_n_in[13*8 +: 8]));
+    wire [9-1:0] x_3  = {1'b0, (x_n_in[12*8 +: 8]));
+    wire [9-1:0] x_4  = {1'b0, (x_n_in[11*8 +: 8]));
+    wire [9-1:0] x_5  = {1'b0, (x_n_in[10*8 +: 8]));
+    wire [9-1:0] x_6  = {1'b0, (x_n_in[ 9*8 +: 8]));
+    wire [9-1:0] x_7  = {1'b0, (x_n_in[ 8*8 +: 8]));
+    wire [9-1:0] x_8  = {1'b0, (x_n_in[ 7*8 +: 8]));
+    wire [9-1:0] x_9  = {1'b0, (x_n_in[ 6*8 +: 8]));
+    wire [9-1:0] x_10 = {1'b0, (x_n_in[ 5*8 +: 8]));
+    wire [9-1:0] x_11 = {1'b0, (x_n_in[ 4*8 +: 8]));
+    wire [9-1:0] x_12 = {1'b0, (x_n_in[ 3*8 +: 8]));
+    wire [9-1:0] x_13 = {1'b0, (x_n_in[ 2*8 +: 8]));
+    wire [9-1:0] x_14 = {1'b0, (x_n_in[ 1*8 +: 8]));
+    wire [9-1:0] x_15 = {1'b0, (x_n_in[ 0*8 +: 8]));
     // (8.7)
     //wire [8-1:0] C_0  = 8'h20;
     // wire [8-1:0] C_1  = 8'h2d;
@@ -93,7 +93,7 @@ module DCT_1D_row
     butterfly_st4 buf4_1 (Pre_X_0, Pre_X_8, X1, X2);
 
     // 16bit outcome (16.4) 승화가 알려준 꿀팁. $unsigned()
-    assign X_0 = $unsigned(Pre_X_0) <<4;
+    assign X_0 = Pre_X_0 << 4;
     //assign X_0 = X_0 << 1;
     // 19bit outcome
     assign X_8 = Pre_X_8 << 4;
@@ -206,7 +206,7 @@ module DCT_1D_row
     assign X1_4 = (X_3_12_s << 4) + (X_3_12_s) + (X_4_11_s << 3) + (X_4_11_s << 2) + (X_4_11_s << 1);
     assign X15_4 = -((X_4_11_s << 4) + (X_4_11_s)) + ((X_3_12_s << 3) + (X_3_12_s << 2) + (X_3_12_s << 1));
 
-    assign Pre_X_1 = $signed(X1_1 + X1_2 + X1_3 + X1_4);
+    assign Pre_X_1 = X1_1 + X1_2 + X1_3 + X1_4;
     assign Pre_X_15 = X15_1 - X15_2 + X15_3 - X15_4;
 
     // 11bit truncation
@@ -313,8 +313,8 @@ module DCT_1D_row
     //butterfly_st2_mult buf_7_9_4 (X7_4, X9_4, X_3_12_s, X_4_11_s, C_15, C_1);
 
     // C7 = 0010001, C9 = 0001110
-    // C7 * X_0_15_s + C9 * X_7_8_s
-    // -C7 * X_7_8_s + C9 * X_0_15_s
+    // C7 * X_0_15_s - C9 * X_7_8_s
+    // C7 * X_7_8_s + C9 * X_0_15_s
     //assign X_7_8_s = -X_7_8_s;
     assign X7_1 = (X_0_15_s << 4) + (X_0_15_s) - ((X_7_8_s << 3) + (X_7_8_s << 2) + (X_7_8_s << 1));
     assign X9_1 = ((X_7_8_s << 4) + (X_7_8_s)) + ((X_0_15_s << 3) + (X_0_15_s << 2) + (X_0_15_s << 1));
@@ -326,8 +326,8 @@ module DCT_1D_row
     assign X9_2 = -((X_6_9_s << 3) + (X_6_9_s << 1) + (X_6_9_s)) + ((X_1_14_s << 4) + (X_1_14_s << 2));
 
     // C3 = 0010110, C13 = 0000111
-    // C3 * X_2_13_s + C13 * X_5_10_s
-    // -C3 * X_5_10_s + C13 * X_2_13_s
+    // C3 * X_2_13_s - C13 * X_5_10_s
+    // C3 * X_5_10_s + C13 * X_2_13_s
     //assign X_5_10_s = -X_5_10_s;
     assign X7_3 = (X_2_13_s << 4) + (X_2_13_s << 2) + (X_2_13_s << 1) - ((X_5_10_s << 2) + (X_5_10_s << 1) + X_5_10_s);
     assign X9_3 = ((X_5_10_s << 4) + (X_5_10_s << 2) + (X_5_10_s << 1)) + ((X_2_13_s << 2) + (X_2_13_s << 1) + X_2_13_s);
@@ -357,8 +357,8 @@ module butterfly_st1(Out_add, Out_sub, in1, in2);
     input [8-1:0] in1;
     input [8-1:0] in2;
 
-    assign Out_add = $unsigned(in1) + $unsigned(in2);
-    assign Out_sub = $unsigned(in1) - $unsigned(in2);
+    assign Out_add = in1 + in2;
+    assign Out_sub = in1 - in2;
 
 endmodule
 
@@ -369,8 +369,8 @@ module butterfly_st2(Out_add, Out_sub, in1, in2);
     input signed[9-1:0] in1;
     input signed[9-1:0] in2;
 
-    assign Out_add = $unsigned(in1) + $unsigned(in2);
-    assign Out_sub = $unsigned(in1) - $unsigned(in2);
+    assign Out_add = in1 + in2;
+    assign Out_sub = in1 - in2;
 
 endmodule
 
@@ -392,8 +392,8 @@ module butterfly_st3(Out_add, Out_sub, in1, in2);
     input signed[10-1:0] in1;
     input signed[10-1:0] in2;
 
-    assign Out_add = $unsigned(in1) + $unsigned(in2);
-    assign Out_sub = $unsigned(in1) - $unsigned(in2);
+    assign Out_add = in1 + in2;
+    assign Out_sub = in1 - in2;
 
 endmodule
 // Even의 Odd X[2], X[6], X[10], X[14]를 위한 butterfly 모듈
@@ -414,8 +414,8 @@ module butterfly_st4(Out_add, Out_sub, in1, in2);
     output signed[12-1:0] Out_sub;
     input signed[11-1:0] in1, in2;
 
-    assign Out_add = $unsigned(in1) + $unsigned(in2);
-    assign Out_sub = $unsigned(in1) - $unsigned(in2);
+    assign Out_add = in1 + in2;
+    assign Out_sub = in1 - in2;
 
 endmodule
 

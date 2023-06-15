@@ -26,7 +26,7 @@ module DCT_1D_col
     wire signed[11-1:0] x_13 = $signed(x_n_in[ 2*11 +: 11]);
     wire signed[11-1:0] x_14 = $signed(x_n_in[ 1*11 +: 11]);
     wire signed[11-1:0] x_15 = $signed(x_n_in[ 0*11 +: 11]);
-    // (1.6)
+    // (7.6)
     //wire [7-1:0] C_0  = 7'h10;
     // wire [7-1:0] C_1  = 7'h17;
     // wire [7-1:0] C_2  = 7'h16;
