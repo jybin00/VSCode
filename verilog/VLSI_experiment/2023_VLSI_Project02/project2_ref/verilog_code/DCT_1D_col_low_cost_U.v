@@ -26,7 +26,7 @@ module DCT_1D_col
     wire signed[11-1:0] x_13 = $signed(x_n_in[ 2*11 +: 11]);
     wire signed[11-1:0] x_14 = $signed(x_n_in[ 1*11 +: 11]);
     wire signed[11-1:0] x_15 = $signed(x_n_in[ 0*11 +: 11]);
-    // (1.6)
+    // (7.6)
     //wire [7-1:0] C_0  = 7'h10;
     // wire [7-1:0] C_1  = 7'h17;
     // wire [7-1:0] C_2  = 7'h16;
@@ -54,10 +54,6 @@ module DCT_1D_col
     wire signed[12-1:0] X_6_9_a, X_6_9_s;
     wire signed[12-1:0] X_7_8_a, X_7_8_s;
 
-
-    wire signed[22-1:0] X_4, X_12;
-    wire signed[12-1:0] X_4_trunc, X_12_trunc;
-
     // Common stage (Even, Odd) (12.0)
     buf_col_st1 buf1( X_0_15_a, X_0_15_s, x_0, x_15);
     buf_col_st1 buf2( X_1_14_a, X_1_14_s, x_1, x_14);
@@ -78,7 +74,6 @@ module DCT_1D_col
     buf_col_st2 buf2_4 (X_3_4_11_12_a, X_3_4_11_12_s, X_3_12_a, X_4_11_a);
 
     wire signed[14-1:0] X1, X2, X3, X4;
-    // 11 bit outcome (14.0)
     buf_col_st3 buf3_1 (X2, X4, X_1_6_9_14_a, X_2_5_10_13_a);
     buf_col_st3 buf3_2 (X1, X3, X_0_7_8_15_a,  X_3_4_11_12_a);
 
@@ -87,7 +82,7 @@ module DCT_1D_col
     wire signed[15-1:0] Pre_X_0;
     wire signed[15-1:0] Pre_X_8;
     wire signed[16-1:0] X_0;
-    wire signed[20-1:0] X_8;
+    wire signed[18-1:0] X_8;
     wire signed[12-1:0] X_0_trunc; 
     wire signed[12-1:0] X_8_trunc;
     wire signed[12-1:0] X_0_test;
@@ -95,10 +90,6 @@ module DCT_1D_col
 
     // 15bit outcome (15.0)
     buf_col_st4 buf4_1 (Pre_X_0, Pre_X_8, X1, X2);
-
-    // 19bit outcome (19.4) 승화가 알려준 꿀팁. $unsigned()
-    ///assign overflow0 = ((Pre_X_0[15-1] & ~X1[14-1] & ~X2[14-1])) || ((~Pre_X_0[15-1] & X1[14-1] & X2[14-1]));
-    //assign X_0 = overflow ? 15'b001111111111111 : $signed(Pre_X_0);
     
     assign X_0 = (Pre_X_0);
     // 19bit outcome
@@ -107,14 +98,15 @@ module DCT_1D_col
     // 12bit (12.0)
     assign X_0_test = block_flag ? X_0 >>> 3 : X_0 >>> 1;
     xor(overflow0, X_0_test[12-1], Pre_X_0[15-1]);
-    // + 150 -50
+
     assign X_0_trunc = overflow0 ? (X_0_test[12-1] ? 12'b011111111111 : 12'b100000000000) : X_0_test;
     assign X_8_trunc = X_8[17-1:5];
 
     // Even의 Even의 Odd
     ////////////////////****** X[4], X[12] ******////////////////////
-    // 19bit outcome (19.6)
-    //buf_col_st4_mult buf4_2 (X_4, X_12, X3, X4, C_4, C_12);
+    wire signed[20-1:0] X_4;
+    wire signed[18-1:0] X_12;
+    wire signed[12-1:0] X_4_trunc, X_12_trunc;
 
     assign X_4 = ((X3 << 4)) + ((X3 << 2)) + (X3) + (X4 << 3) + (X4);
     assign X_12 = (X3 << 3) + (X3) - ((X4 << 4) + (X4 << 2) + X4);
@@ -125,8 +117,8 @@ module DCT_1D_col
 
     // Even의 Odd
     ////////////////////****** X[2], X[6], X[10], X[14] ******////////////////////
-    // 18.6
-    wire signed [21-1:0] Pre_X_10_1, Pre_X_6_1, Pre_X_10_2, Pre_X_6_2;
+    wire signed [18-1:0] Pre_X_6_1, Pre_X_6_2;
+    wire signed [17-1:0] Pre_X_10_1, Pre_X_10_2;
     //buf_col_st3_mult buf3_3 (Pre_X_10_1, Pre_X_6_1, X_0_7_8_15_s, X_3_4_11_12_s, C_10, C_6);
     //buf_col_st3_mult buf3_4 (Pre_X_6_2, Pre_X_10_2, X_1_6_9_14_s, X_2_5_10_13_s, C_14, C_2);
 
@@ -142,9 +134,8 @@ module DCT_1D_col
     assign Pre_X_6_2 = (X_1_6_9_14_s << 2)  + (X_2_5_10_13_s << 4) + (X_2_5_10_13_s << 2) + (X_2_5_10_13_s << 1);
     assign Pre_X_10_2 = -((X_2_5_10_13_s << 2)) + ((X_1_6_9_14_s << 4) + (X_1_6_9_14_s << 2) + (X_1_6_9_14_s << 1));
     
-    // 22.6
-    wire signed [22-1:0] X_10, X_6;
-    // 22bit outcome
+    wire signed [20-1:0] X_6;
+    wire signed [18-1:0] X_10;
     assign X_10 = Pre_X_10_1 - Pre_X_10_2;
     assign X_6 = Pre_X_6_1 - Pre_X_6_2;
 
@@ -154,10 +145,9 @@ module DCT_1D_col
     assign X_6_trunc = X_6[17-1:5];
 
     // X[2], X[6]
-    wire signed [21-1:0] Pre_X_2_1, Pre_X_14_1, Pre_X_2_2, Pre_X_14_2;
-    //buf_col_st3_mult buf3_5 (Pre_X_2_1, Pre_X_14_1, X_0_7_8_15_s, X_3_4_11_12_s, C_2, C_14);
-    //buf_col_st3_mult buf3_6 (Pre_X_2_2, Pre_X_14_2, X_2_5_10_13_s, X_1_6_9_14_s, C_10, C_6);
-
+    wire signed [20-1:0] Pre_X_2_1, Pre_X_2_2;
+    wire signed [17-1:0] Pre_X_14_1, Pre_X_14_2;
+    
     // C2 = 0010110, C14 = 0000100
     // C2 * X_0_7_8_15_s + C14 * X_3_4_11_12_s
     // -C2 * X_3_4_11_12_s + C14 * X_0_7_8_15_s
@@ -170,7 +160,8 @@ module DCT_1D_col
     assign Pre_X_2_2 = (X_2_5_10_13_s << 3) + (X_2_5_10_13_s << 2) + (X_2_5_10_13_s) + (X_1_6_9_14_s << 4) + (X_1_6_9_14_s << 1) + (X_1_6_9_14_s);
     assign Pre_X_14_2 = -((X_1_6_9_14_s << 3) + (X_1_6_9_14_s << 2) + (X_1_6_9_14_s)) + ((X_2_5_10_13_s << 4) + (X_2_5_10_13_s << 1) + (X_2_5_10_13_s));
 
-    wire signed [22-1:0] X_2, X_14;
+    wire signed [21-1:0] X_2;
+    wire signed [18-1:0] X_14;
     // 19bit outcome
     assign X_2 = Pre_X_2_1 + Pre_X_2_2;
     assign X_14 = Pre_X_14_1 + Pre_X_14_2;
@@ -182,17 +173,14 @@ module DCT_1D_col
 
     // Odd part
     ////////////////////****** X[1], X[15] ******////////////////////
-
-    wire signed [22-1:0] Pre_X_1, Pre_X_15;
-    wire signed [20-1:0] X1_1, X15_1, X1_2, X15_2, X1_3, X15_3, X1_4, X15_4;
+    ///// 여기 바꾸면 아래도 바꿀 것 ///////////
+    wire signed [21-1:0] Pre_X_1;
+    wire signed [17-1:0] Pre_X_15;
+    wire signed [19-1:0] X1_1, X1_2, X1_3, X1_4;
+    wire signed [15-1:0] X15_1, X15_2, X15_3, X15_4;
     wire signed [12-1:0] X_1_test;
     wire overflow_chk1;
     
-    //buf_col_st2_mult buf_1_15_1 (X1_1, X15_1, X_0_15_s, X_7_8_s, C_1, C_15);
-    //buf_col_st2_mult buf_1_15_2 (X1_2, X15_2, X_1_14_s, X_6_9_s, C_3, C_13);
-    //buf_col_st2_mult buf_1_15_3 (X1_3, X15_3, X_2_13_s, X_5_10_s, C_5, C_11);
-    //buf_col_st2_mult buf_1_15_4 (X1_4, X15_4, X_3_12_s, X_4_11_s, C_7, C_9);
-
     // C1 = 0010111, C15 = 0000010
     // C1 * X_0_15_s + C15 * X_7_8_s
     // -C1 * X_7_8_s + C15 * X_0_15_s
@@ -221,9 +209,9 @@ module DCT_1D_col
     assign X_1_test = Pre_X_1[17-1:5];
     assign Pre_X_15 = X15_1 - X15_2 + X15_3 - X15_4;
 
-    xor(overflow_chk1, X_1_test[12-1], Pre_X_1[22-1]);
-
-    // 11bit truncation
+    ///////////////////////////////// !!!!!!!중요!!!!! ///////////////////////////////////////
+    xor(overflow_chk1, X_1_test[12-1], Pre_X_1[21-1]);
+    // 12bit truncation
     wire signed [12-1:0] X_1_trunc, X_15_trunc;
     assign X_1_trunc = overflow_chk1? (X_1_test[12-1] ? 12'b011111111111 : 12'b100000000000) : X_1_test;
     assign X_15_trunc = Pre_X_15[17-1:5];
@@ -231,13 +219,10 @@ module DCT_1D_col
 
     ////////////////////****** X[3], X[13] ******////////////////////
 
-    wire signed [23-1:0] Pre_X_3, Pre_X_13;
-    wire signed [20-1:0] X3_1, X13_1, X3_2, X13_2, X3_3, X13_3, X3_4, X13_4;
-
-    //buf_col_st2_mult buf_3_13_1 (X3_1, X13_1, X_0_15_s, -X_7_8_s, C_3, C_13);
-    //buf_col_st2_mult buf_3_13_2 (X3_2, X13_2, X_1_14_s, -X_6_9_s, C_9, C_7);
-    //buf_col_st2_mult buf_3_13_3 (X3_3, X13_3, X_2_13_s, -X_5_10_s, C_15, C_1);
-    //buf_col_st2_mult buf_3_13_4 (X3_4, X13_4, X_3_12_s, X_4_11_s, C_11, C_5);
+    wire signed [20-1:0] Pre_X_3;
+    wire signed [18-1:0] Pre_X_13;
+    wire signed [18-1:0] X3_1, X3_2, X3_3, X3_4;
+    wire signed [16-1:0] X13_1, X13_2, X13_3, X13_4;
 
     // C3 = 0010110, C13 = 0000111
     // C3 * X_0_15_s  C13 * X_7_8_s
@@ -269,20 +254,17 @@ module DCT_1D_col
     assign Pre_X_3 = X3_1 + X3_2 + X3_3 - X3_4;
     assign Pre_X_13 = X13_1 - X13_2 + X13_3 - X13_4;
 
-    // 11bit truncation
+    // 12bit truncation
     wire signed [12-1:0] X_3_trunc, X_13_trunc;
     assign X_3_trunc = Pre_X_3[17-1:5];
     assign X_13_trunc = Pre_X_13[17-1:5];
 
     ////////////////////****** X[5], X[11] ******////////////////////
 
-    wire signed [23-1:0] Pre_X_5, Pre_X_11;
-    wire signed [20-1:0] X5_1, X11_1, X5_2, X11_2, X5_3, X11_3, X5_4, X11_4;
-    
-    //buf_col_st2_mult buf_5_11_1 (X5_1, X11_1, X_0_15_s, X_7_8_s, C_5, C_11);
-    //buf_col_st2_mult buf_5_11_2 (X5_2, X11_2, X_1_14_s, X_6_9_s, C_15, C_1);
-    //buf_col_st2_mult buf_5_11_3 (X5_3, X11_3, X_2_13_s, -X_5_10_s, C_7, C_9);
-    //buf_col_st2_mult buf_5_11_4 (X5_4, X11_4, X_3_12_s, X_4_11_s, C_3, C_13);
+    wire signed [20-1:0] Pre_X_5;
+    wire signed [18-1:0] Pre_X_11;
+    wire signed [18-1:0] X5_1, X5_2, X5_3, X5_4;
+    wire signed [16-1:0] X11_1, X11_2, X11_3, X11_4;
 
     // C5 = 0010100, C11 = 0001011
     // C5 * X_0_15_s + C11 * X_7_8_s
@@ -318,13 +300,8 @@ module DCT_1D_col
 
     ////////////////////****** X[7], X[9] ******////////////////////
 
-    wire signed [23-1:0] Pre_X_7, Pre_X_9;
-    wire signed [20-1:0] X7_1, X9_1, X7_2, X9_2, X7_3, X9_3, X7_4, X9_4;
-
-    //buf_col_st2_mult buf_7_9_1 (X7_1, X9_1, X_0_15_s, -X_7_8_s, C_7, C_9);
-    //buf_col_st2_mult buf_7_9_2 (X7_2, X9_2, X_1_14_s, X_6_9_s, C_11, C_5);
-    //buf_col_st2_mult buf_7_9_3 (X7_3, X9_3, X_2_13_s, -X_5_10_s, C_3, C_13);
-    //buf_col_st2_mult buf_7_9_4 (X7_4, X9_4, X_3_12_s, X_4_11_s, C_15, C_1);
+    wire signed [19-1:0] Pre_X_7, Pre_X_9;
+    wire signed [18-1:0] X7_1, X9_1, X7_2, X9_2, X7_3, X9_3, X7_4, X9_4;
 
     // C7 = 0010001, C9 = 0001110
     // C7 * X_0_15_s + C9 * X_7_8_s
