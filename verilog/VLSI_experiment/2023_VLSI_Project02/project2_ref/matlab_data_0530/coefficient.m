@@ -136,7 +136,7 @@ for image_number = 1:8 %-------------"Change this number" to test many different
 
              Max_Block_DCT = max(Max_Block_DCT, Block_DCT_final((16*i-15):16*i,(16*j-15):16*j));
 
-             Block_DCT = Block_DCT_final((16*i-15):16*i,(16*j-15):16*j);
+             Block_DCT = Block_DCT_1D_quant((16*i-15):16*i,(16*j-15):16*j);
 
              
 

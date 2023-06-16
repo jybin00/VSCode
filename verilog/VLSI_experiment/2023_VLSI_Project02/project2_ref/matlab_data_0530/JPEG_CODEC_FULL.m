@@ -2,6 +2,9 @@ clear all
 close all
 %clc
 tic
+     
+Block_DCT = zeros(16,16);
+Max_Block_DCT = zeros(16,16);
 
 for image_number = 1:8 %-------------"Change this number" to test many different images------
     fprintf("image %d\n", image_number);
@@ -115,8 +118,6 @@ for image_number = 1:8 %-------------"Change this number" to test many different
      %--------------------------- DCT OPERATION -----------------------------
      Image_tran = zeros(m,n);
 %      image5_X_k = fopen('./image5_2D_Xk.txt','w');
-     Block_DCT = zeros(16,16, length(image_number));
-     Max_Block_DCT = zeros(16,16, length(image_number));
      for i=1:m/16
          
          for j=1:n/16
@@ -134,23 +135,23 @@ for image_number = 1:8 %-------------"Change this number" to test many different
              Block_DCT_final((16*i-15):16*i,(16*j-15):16*j) = func_DCTquant_trunc(Block_DCT_2D_quant((16*i-15):16*i,(16*j-15):16*j));
 
 
-             Max_Block_DCT(:,:,image_number) = max(Block_DCT(:,:,image_number), Block_DCT_final((16*i-15):16*i,(16*j-15):16*j));
+             Max_Block_DCT = max(Block_DCT, Block_DCT_final((16*i-15):16*i,(16*j-15):16*j));
 
              Block_DCT = Block_DCT_final((16*i-15):16*i,(16*j-15):16*j);
 
              
 
-%              for k = 1:16
-%                  for l = 1:16
-%                      DCT_quant = (Block_DCT_final(16*(i-1)+l,k+(j-1)*16));
-%                      if(DCT_quant <0)
-%                          DCT_quant = (DCT_quant + power(2, Result_1D_DCT_quantization_bit));
-%                      end
-%                      DCT_quant = DCT_quant * 2;
-%                     fprintf(image5_X_k,'%X ', DCT_quant);
-%                  end
-%                 fprintf(image5_X_k,'\n');
-%              end
+             for k = 1:16
+                 for l = 1:16
+                     DCT_quant = (Block_DCT_final(16*(i-1)+l,k+(j-1)*16));
+                     if(DCT_quant <0)
+                         DCT_quant = (DCT_quant + power(2, Result_1D_DCT_quantization_bit));
+                     end
+                     DCT_quant = DCT_quant * 2;
+                    fprintf(image5_X_k,'%X ', DCT_quant);
+                 end
+                fprintf(image5_X_k,'\n');
+             end
 
              Block_r = round(Q_pre.\Block_DCT);
 
