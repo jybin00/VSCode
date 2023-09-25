@@ -5,7 +5,7 @@ tic
 
 Max_Block_DCT = zeros(16,16);
 
-for image_number = 1 %-------------"Change this number" to test many different images------
+for image_number = 1:8 %-------------"Change this number" to test many different images------
     fprintf("image %d\n", image_number);
     %---------------------------- Get the Image data Input ----------------------------------
     input_image_512x512 = double( imread( sprintf( 'image_in_%d.tif',image_number ),'tiff' ) );
@@ -134,7 +134,7 @@ for image_number = 1 %-------------"Change this number" to test many different i
 
              Block_DCT_final((16*i-15):16*i,(16*j-15):16*j) = func_DCTquant_trunc(Block_DCT_2D_quant((16*i-15):16*i,(16*j-15):16*j));
 
-             Max_Block_DCT = max(Max_Block_DCT, Block_DCT_final((16*i-15):16*i,(16*j-15):16*j));
+             Max_Block_DCT = max(abs(Max_Block_DCT), abs(Block_DCT_1D_quant((16*i-15):16*i,(16*j-15):16*j)));
 
              Block_DCT = Block_DCT_1D_quant((16*i-15):16*i,(16*j-15):16*j);
 

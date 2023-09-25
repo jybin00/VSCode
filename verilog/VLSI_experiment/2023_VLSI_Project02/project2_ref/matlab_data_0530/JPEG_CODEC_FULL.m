@@ -98,8 +98,6 @@ for image_number = 1:8 %-------------"Change this number" to test many different
          fprintf(image1_X_k,'%x \n',T(k,1)*2^(C_quantization_bit-1));
      end
 
-
-
      %--------------------------- DCT OPERATION ---------------------------
      
      %---------------------Quatization bit setup-----------------------------
@@ -111,7 +109,6 @@ for image_number = 1:8 %-------------"Change this number" to test many different
      % The number of integer bits for Result of 1D-DCT
      % Original = 12;
      % quantization bit - num_int 한 만큼 소수점 quntization
-     % 생각해보니까 X[k]는 한번 곱해진게 아니라 16번 계수와 곱해진게 더해진거네,, 
      % 당연히 4정도 곱해지면 정수 부분이 커져야 맞다.
      num_int = 11; % BW 중에서 int의 범위
      
