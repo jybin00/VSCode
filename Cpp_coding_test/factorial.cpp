@@ -12,9 +12,10 @@ int fact_for(int n){
         ret *= i;
     return ret;
 }
-int n = 5;
+int a;
 int main() {
-    cout << fact_for(n) << '\n';
-    cout << fact_rec(n) << '\n';
+    cin >> a;
+    cout << fact_for(a) << '\n';
+    // cout << fact_rec(n) << '\n';
     return 0;
 }

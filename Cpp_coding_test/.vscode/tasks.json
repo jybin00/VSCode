@@ -1,5 +1,47 @@
 {
+    "version": "2.0.0",
     "tasks": [
+        {
+            "label": "C++ compiler",
+            "type": "shell",
+            "command": "/Users/yubeenjo/VSCode/Cpp_coding_test/cpp_compiler.sh",
+            "args": [
+                "${file}"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "C++ compiler",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "revealProblems": "onProblem",
+                "close": false
+            }
+        },
+        {
+            "type": "shell",
+            "label": "C++ runner ",
+            "command": "/Users/yubeenjo/VSCode/Cpp_coding_test/cpp_simulator.sh",
+            "args": [
+                "${file}"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "C++ simulator",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "revealProblems": "onProblem",
+                "close": false
+            }
+        },
         {
             "type": "cppbuild",
             "label": "C/C++: g++ 활성 파일 빌드",
@@ -23,6 +65,5 @@
             },
             "detail": "디버거에서 생성된 작업입니다."
         }
-    ],
-    "version": "2.0.0"
+    ]
 }
