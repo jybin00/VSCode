@@ -4,27 +4,18 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug",
-            "program": "${workspaceFolder}/${fileBasenameNoExtension}",
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        // {
-        //     "name": "(lldb) Launch",
-        //     "type": "cppdbg",
-        //     "request": "launch",
-        //     "program": "${fileDirname}/${fileBasenameNoExtension}.out",
-        //     "args": [],
-        //     "stopAtEntry": false,
-        //     "cwd": "${workspaceFolder}",
-        //     "environment": [],
-        //     "externalConsole": false,
-        //     "MIMode": "lldb",
-        //     "preLaunchTask": "C++ compiler",
-        //     "miDebuggerPath": "/usr/bin/lldb"
-        // }
+      {
+        "name": "clang++ - Build and debug active file",
+        "type": "lldb",
+        "request": "launch",
+        "program": "${fileDirname}/${fileBasenameNoExtension}",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb",
+        "preLaunchTask": "clang++ build active file"
+      }
     ]
-}
+  }

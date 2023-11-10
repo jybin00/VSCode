@@ -22,7 +22,8 @@ file_name="${file_name%%.c*}"
 # %%{특정 문자열}* => 해당 문자열 기준 앞 부분 가져오기.
 echo "compile file : ${file_name}"
 
-filename_out=$file_name$out
+# filename_out=$file_name$out
+filename_out=$file_name
 
 sleep .5
 
