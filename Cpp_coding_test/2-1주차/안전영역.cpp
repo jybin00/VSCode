@@ -3,63 +3,52 @@ using namespace std;
 
 const int dy[] = {-1, 0, 1, 0};
 const int dx[] = {0, 1, 0, -1}; 
+int ny, nx = 0;
+int ret = 1;
 
-int Map[100][100] = {0,};
-int visited[100][100] = {0,};
-int N = 0;
-int new_Map[100][100] = {0,};
+int Map[101][101] = {0,};
+int visited[101][101] = {0,};
+int N = 1;
 
-int searching_map(int y, int x, int height){
-    queue<pair<int,int>> q;
-    q.push({0,0});
-    visited[0][0] = 1;
-    while(!q.empty()){
-        int y = q.front().first;
-        int x = q.front().second;
-        q.pop();
-        if(y == N-1 && x == N-1){
-            return 0;
-        }
-        for(int i = 0; i < 4; i++){
-            int ny = y + dy[i];
-            int nx = x + dx[i]; 
-            if(ny < 0 || ny >= N || nx < 0 || nx >= N) continue;
-            if(visited[ny][nx]) continue;
-            
-            else
-                visited[ny][nx] = 1;
-                if(Map[ny][nx] >= N)
-                    new_Map[ny][nx] = 1;
-            q.push({ny,nx}); 
-            }  
-        }
-    return 0;
-}
-
-int safety_zone(){
-
-    for(int i = 0; i < N; i++){
-        for(int j = 0; j < N; j++){
-            if(new_Map[i][j] == 1){
-                Map[i][j] = 0;
-            }
+void dfs(int y, int x, int d){
+    visited[y][x] = 1;
+    for(int i = 0; i < 4; i++){
+        ny = y + dy[i];
+        nx = x + dx[i];
+        // 오버플로우 언더플로우 방지
+        if(ny < 0 || ny >= N || nx < 0 || nx >= N) continue;
+        // 방문하지 않았고, 육지인데 d보다 높다면
+        if(!visited[ny][nx] && Map[ny][nx] > d){
+            dfs(ny, nx, d);
         }
     }
-    return 0;
 }
 
 int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL); 
     cin >> N;
-    int maxheight;
     for(int i = 0; i < N; i++){
         for(int j = 0; j < N; j++){
             cin >> Map[i][j];
-
-            if (Map[i][j] > maxheight)
-                maxheight = Map[i][j];
         }
     }
-    searching_map();
-    safety_zone();
+    int tmp_ret = 1;
+    for(int d = 1; d < 101; d++){
+        fill(&visited[0][0], &visited[0][0] + 101 * 101, 0);
+        tmp_ret = 0;
+        for(int i = 0; i < N; i++){
+            for(int j = 0; j < N; j++){
+                // 방문하지 않았고, 육지가 d보다 높다면,
+                if(!visited[i][j] && Map[i][j] > d){
+                    dfs(i, j, d);
+                    tmp_ret++; }
+            }
+        }
+        //cout << "d: " << d << " tmp_ret: " << tmp_ret << '\n';
+        ret = max(ret, tmp_ret);
+    }
+    cout << ret << '\n';
     return 0;
 }
